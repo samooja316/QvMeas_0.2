@@ -179,21 +179,12 @@ public class Window extends JFrame implements ActionListener {
 		_resultFrame.setLocation(250,335);
 		this.getContentPane().add(_resultFrame);
 		
-		/*
-		// 1. main container panel and JInternalFrame for graphs (eg. c-v graph)
-		_graphCont = new JPanel();
-		_graphFrame = createFrame("C-V Graph");
-		_graphFrame.setContentPane(_graphCont);
-		_graphFrame.setSize(485,335);
-		_graphFrame.setLocation(500, 0);
-		this.getContentPane().add(_graphFrame);
-		
-		*/
 		
 		
-		//following is partly for testing purposes-> real results will be got in the real runs
+		//following test result from the test.txt file is just for testing purposes-> real results will be from the real runs
 		
 		String testString="";
+		/*
 		BufferedReader br = null;
 	    try {
 	    	br = new BufferedReader(new FileReader("C:\\Users\\samoja\\workspace\\QvMeas0.2KDev\\src\\main\\test.txt"));
@@ -217,27 +208,7 @@ public class Window extends JFrame implements ActionListener {
 	        	br.close();
 	        } catch(Exception e) {}	
 	    }
-	   // System.out.println(testString);
-		/*
-		try{
-			FileInputStream file = new FileInputStream("testResString.txt");
-			DataInputStream dataFile = new DataInputStream(file);
-			
-	         while(dataFile.available()>0)
-	         {
-	            // reads characters encoded with modified UTF-8
-	            String k = dataFile.readUTF();
-	            
-	            // print
-	            testString+=k;
-	            
-	         }
-	         dataFile.close();
-			System.out.println(testString);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		*/
+	*/
 		initCvGraph(new Result("test",testString,"","-10E-12"));
 		
 		// main container panel and JInternalFrame for graphs (eg. v-t graph)
@@ -551,13 +522,15 @@ public class Window extends JFrame implements ActionListener {
 	 * Test function for initializing a test graph to the bottom graph window
 	 */
 	public void initGraphComponents() {
-        LineChartDemo6 demo = new LineChartDemo6("testi");
+      /*
+		LineChartDemo6 demo = new LineChartDemo6("testi");
 		XYDataset dataset = demo.createDataset();
         JFreeChart chart = demo.createChart(dataset);
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(450, 270));
         //setContentPane(chartPanel);
         _graphCont2.add(chartPanel);
+        */
 	}
 	
 	
