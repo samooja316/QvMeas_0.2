@@ -57,29 +57,12 @@ public class Core {
 		} catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-		/*
-	    JDesktopPane desktop = new JDesktopPane();
-	    desktop.setPreferredSize(new Dimension(1000,800));
-	   
-	   
-	    
-	    //Make dragging a little faster but perhaps uglier.
-	    desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
-		*/
+
+		
 		//creating window
 		_window = new Window();
 		_window.setController(this);
 		_window.setVisible(true);
-		//desktop.add(_window);
-		//desktop.setVisible(true);
-		
-		
-		//linechart test
-       // final LineChartDemo6 demo = new LineChartDemo6("Line Chart Demo 6");
-       // demo.pack();
-        //RefineryUtilities.centerFrameOnScreen(demo);      
-        //demo.setVisible(true);
-        //_window.add(demo);
 		
 		
 		//testing system state and printing info for user
