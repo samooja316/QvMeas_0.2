@@ -22,8 +22,6 @@ import be.ac.ulb.gpib.GPIBDeviceIdentifier;
  */
 public class Core {
 	
-	//instrument class
-	//private Instrument inst;
 	
 	//mainframe
 	private JDesktopPane _mainPane;
