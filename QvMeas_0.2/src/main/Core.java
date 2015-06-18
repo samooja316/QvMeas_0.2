@@ -15,10 +15,13 @@ import be.ac.ulb.gpib.GPIBDeviceIdentifier;
 /*
  * This class is the implements the core logic of the system
  * Basic idea: own an Instrument-object, use the instrument, pass results to a file and the result console
+ *
  * @author Aleksi Oja
  * @email alejee@live.com
  * @date 6/2015
  * @.version 0.1
+ * 
+ * 
  */
 public class Core {
 	
