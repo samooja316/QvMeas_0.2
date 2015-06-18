@@ -546,39 +546,56 @@ public class Window extends JFrame implements ActionListener {
 		//ArrayList<Float> xValues = r.getVoltageSerie();
 		//ArrayList<Float> yValues = r.getCapacitanceSerie();
 		XYSeries resSerie = new XYSeries("C-V");
+		resSerie.add(-2.0, 2.7);
+		resSerie.add(-1.0, 1.2);
+		resSerie.add(0.0, 1.0);
 		resSerie.add(1.0, 1.0);
 		resSerie.add(2.0, 4.0);
 		resSerie.add(3.0, 3.0);
 		resSerie.add(4.0, 5.0);
 		resSerie.add(5.0, 5.0);
 		resSerie.add(6.0, 7.0);
-		resSerie.add(7.0, 7.0);
+		resSerie.add(7.0, 17.0);
 		resSerie.add(8.0, 8.0);
+		
+		//creating series from the result's data
 	/*	for(int i = 0; i <= xValues.size(); i++) {
 			resSerie.add(xValues.get(i), yValues.get(i));										
 		}*/
+		
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		dataset.addSeries(resSerie);
         JFreeChart chart = ChartFactory.createXYLineChart(
     		"C-V",      // chart title
-            "C[F]",                      // x axis label
-            "V[V]",                      // y axis label
+            "Bias [V]",                      // x axis label
+            "C [pF]",                      // y axis label
             dataset,                  // data
             PlotOrientation.VERTICAL,
             true,                     // include legend
             true,                     // tooltips
             false                     // urls
         );
+        
+        //chart color selections
         chart.setBackgroundPaint(Color.WHITE);
         XYPlot plot = chart.getXYPlot();
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setDomainGridlinePaint(Color.WHITE);
-        plot.setRangeGridlinePaint(Color.WHITE);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.BLACK);
+        plot.setRangeGridlinePaint(Color.BLACK);
+                
+        //renderer object
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesLinesVisible(0, true);
+        renderer.setSeriesShapesVisible(1, false);
+        plot.setRenderer(renderer);
         
+        //Panel for the graph
         ChartPanel cPanel = new ChartPanel(chart);
-        
+        cPanel.setPreferredSize(new Dimension(450,300)); //important to set the whole chart to right size
 		//xValues.forEach(xVal -> resSerie.add(item);
 		JPanel panel = new JPanel();
+		
+		//frame for the graph
 		JInternalFrame frame = createFrame("C-V Graph");
 		frame.setContentPane(panel);
 		frame.setSize(485,335);
@@ -587,6 +604,8 @@ public class Window extends JFrame implements ActionListener {
 		//add graph to the frame
 		frame.getContentPane().add(cPanel);
 		_graphList.add(frame);
+		
+		//frame to the main window
 		this.getContentPane().add(frame);	
 	}
 	
