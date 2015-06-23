@@ -43,9 +43,9 @@ import org.jfree.ui.RefineryUtilities;
 /*
  * This class is the UI of the QvMeas system
  * 
- * @author Aleksi Oja, alejee@live.com
+ * @author 	Aleksi Oja, alejee@live.com
  * @version 0.2
- * @since 0.1
+ * @since 	0.1
  * 
  */
 public class Window extends JFrame implements ActionListener {
@@ -388,6 +388,7 @@ public class Window extends JFrame implements ActionListener {
 				.createEtchedBorder(EtchedBorder.LOWERED)
 				, "Output File"));
 		_selectFile = new JButton("Browse");
+		setEnterPress(_selectFile);
 		
 		_selectFile.addActionListener(this);
 		fileTopPanel.add(_selectFile);
@@ -472,17 +473,20 @@ public class Window extends JFrame implements ActionListener {
 		//init button
 		_init = new JButton("INIT");
 		_init.addActionListener(this);
+		setEnterPress(_init);
 		buttonTopPanel.add(_init);
 		
 		//start button
 		_measure = new JButton("START");
 		_measure.addActionListener(this);
+		setEnterPress(_measure);
 		_measure.setEnabled(false);
 		buttonTopPanel.add(_measure);
 		
 		//stop button
 		_stop = new JButton("STOP");
 		_stop.addActionListener(this);
+		setEnterPress(_stop);
 		_stop.setEnabled(false);
 		buttonTopPanel.add(_stop);
 		
@@ -492,15 +496,31 @@ public class Window extends JFrame implements ActionListener {
 
 	
 	
+	/*
+	 * Method for setting VK_ENTER-KeyEvent to fire JButtons action
+	 *	
+	 * @version 0.1
+	 * @since 	0.2
+	 * 
+	 * @.pre 	true
+	 * @.post 	JButton given as a parameter will be fired with ENTER
+	 * 			when focused
+	 */
+	private void setEnterPress(JButton b) {
+		b.registerKeyboardAction(this, 
+				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), 
+				JComponent.WHEN_FOCUSED);
+	}
+	
 	
 	
 	/*
 	 * Method for creating console view related components
 	 * 
-	 * @version 0.1
-	 * @since 0.1
-	 * @.pre true
-	 * @.post (ui window's console views - console and result console - shown on the screen)
+	 * @version 	0.1
+	 * @since 		0.1
+	 * @.pre 		true
+	 * @.post 		(ui window's console views - console and result console - shown on the screen)
 	 */
 	public void initConsoleComponents() {
 		/*
@@ -531,20 +551,6 @@ public class Window extends JFrame implements ActionListener {
         _resultCont.add(_sp2);
 	}
 	
-	/*
-	 * Test function for initializing a test graph to the bottom graph window
-	 */
-	public void initGraphComponents() {
-      /*
-		LineChartDemo6 demo = new LineChartDemo6("testi");
-		XYDataset dataset = demo.createDataset();
-        JFreeChart chart = demo.createChart(dataset);
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(450, 270));
-        //setContentPane(chartPanel);
-        _graphCont2.add(chartPanel);
-        */
-	}
 	
 	
 	/*
@@ -627,13 +633,13 @@ public class Window extends JFrame implements ActionListener {
 	/*
 	 * Method for creating basic JInternalFrame without size or position or contents
 	 * 
-	 * @version 0.1
-	 * @since 0.2
+	 * @version 	0.1
+	 * @since 		0.2
 	 * 
-	 * @return empty JInternalFrame without size or position
+	 * @return 		empty JInternalFrame without size or position
 	 * 
-	 * @.pre true
-	 * @.post (new JInternalFrame will be added to the corresponding ArrayList)
+	 * @.pre 		true
+	 * @.post 		(new JInternalFrame will be added to the corresponding ArrayList)
 	 */
     private JInternalFrame createFrame(String t) {
     	JInternalFrame f = new JInternalFrame(t);
@@ -650,11 +656,11 @@ public class Window extends JFrame implements ActionListener {
 	/*
 	 * Method for setting start measurement button active or inactive 
 	 * 
-	 * @version 0.1
-	 * @since 0.1
-	 * @.pre b != null
-	 * @.post (mearurement control buttons start and stop will be active or
-	 * 			inactive depending on the boolean b parameter 
+	 * @version		0.1
+	 * @since 		0.1
+	 * @.pre 		b != null
+	 * @.post 		(mearurement control buttons start and stop will be active or
+	 * 				inactive depending on the boolean b parameter) 
 	 */
 	public void setMeasStatus(boolean b) {
 		_measure.setEnabled(b);
@@ -667,12 +673,13 @@ public class Window extends JFrame implements ActionListener {
 	/*
 	 * Method for giving a reference to a Core object for this
 	 * Then the UI events can be passed for the Core controller object
-	 * @version 0.1
-	 * @since 0.1
-	 * @.pre controller != null
-	 * @.post (Core-type controller object will be added to this so 
-	 * 			user event's can be passed forward) 
-	 */
+	 * 
+	 * @version	 0.1
+	 * @since	 0.1
+	 * @.pre	 controller != null
+	 * @.post	 (Core-type controller object will be added to this so 
+	 * 			 	user event's can be passed forward) 
+	 */	
 	public void setController(Core controller) {
 		_controller = controller;
 		System.out.println("controller set for window");
@@ -688,7 +695,7 @@ public class Window extends JFrame implements ActionListener {
 	 * @version 0.1
 	 * @since 0.1
 	 * @.pre event != null
-	 * @.post (Core objects corresponding event handler method will be called 
+	 * @.post (Core objects corresponding the event handler method will be called) 
 	 *  
 	 */	
 	public void actionPerformed(ActionEvent event) {
@@ -718,7 +725,7 @@ public class Window extends JFrame implements ActionListener {
 				params.add(_yLinLog.getSelectedItem().toString());
 			_controller.initMeas(params);
 			} else {
-				printToConsole("Couldn't access hardware");
+				printToConsole("Couldn't access hardware\n");
 			}
 		} else if(event.getSource().equals(_exit)) {
 			System.exit(0);
