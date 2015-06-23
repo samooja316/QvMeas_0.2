@@ -44,6 +44,7 @@ public class Core {
 	//meas initialized
 	private boolean _measInitialized = false;
 	 
+	private ArrayList<Result> _results = new ArrayList<Result>();
 	
 	/*
 	 * the Constructor
@@ -201,6 +202,22 @@ public class Core {
 	}
 
 	
+	/*
+	 * Method for handling result object data 
+	 * 
+	 * @version 0.1
+	 * @since 0.2
+	 *  
+	 * @.pre resData != null
+	 * @.post (Result will be written to the file specified AND
+	 * 			Result will be printed to the result console AND
+	 * 			Result will be added to the list keeping results in Core)
+	 */	
+	public void resultReady(Result res) {
+		System.out.println("core got a result object..");	
+		System.out.println("under construction");
+		_results.add(res);
+	}
 	
 	
 	/*

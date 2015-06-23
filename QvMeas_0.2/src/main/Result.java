@@ -147,6 +147,9 @@ public class Result {
 	public String getRawSettingsData(){
 		return rawSettingsData;
 	}
+	public String getMeasurementId() {
+		return id;
+	}
 	public String getMeasurementName(){
 		return measurementName;
 	}

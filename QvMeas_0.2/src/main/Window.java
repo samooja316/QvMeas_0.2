@@ -114,6 +114,11 @@ public class Window extends JFrame implements ActionListener {
 	//File menu menuitems
 	private JMenuItem _exit;
 	
+	//list of GraphFrame ui-objects
+	private ArrayList<GraphFrame> _graphFrames = new ArrayList<GraphFrame>();
+	
+	
+	
 	/*
      * constructor which creates the UI window and shows it 
 	 */
@@ -209,20 +214,28 @@ public class Window extends JFrame implements ActionListener {
 	        } catch(Exception e) {}	
 	    }
 	*/
-		initCvGraph(new Result("test",testString,"","-10E-12"));
+		//initCvGraph(new Result("test",testString,"","-10E-12"));
 		
 		// main container panel and JInternalFrame for graphs (eg. v-t graph)
+	/*
 		_graphCont2 = new JPanel();
 		_graphFrame2 = createFrame("V-T Graph");
 		_graphFrame2.setContentPane(_graphCont2);
 		_graphFrame2.setSize(485,335);
 		_graphFrame2.setLocation(500,335);
 		this.getContentPane().add(_graphFrame2);
+	*/
 		
+		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.CV));
+		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.VT));
+		
+		Result testres = new Result("5e-12","foo","5","bar");
+		drawGraph(testres, GraphType.CV);
+		drawGraph(testres, GraphType.VT);
 		
 		initParamComponents();
 		initConsoleComponents();
-		initGraphComponents();
+		//initGraphComponents();
 	}
 	
 	
@@ -788,4 +801,22 @@ public class Window extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/*
+	 * draw to the screen  
+	 * @version 0.1
+	 * @since 	0.2
+	 * @.pre 	true
+	 * @.post 	graph - type defined by type-param - will be plotted from
+	 * 			the data in the Result-parameter 
+	 * 			AND the last element int the getGraphs() -list will be the Result-parameter
+	 */
+	public void drawGraph(Result res, GraphType type) {	
+		GraphFrame gf = new GraphFrame(res, type);
+		this.getContentPane().add(gf);
+		_graphFrames.add(gf);
+	}
+	
+	public ArrayList<GraphFrame> getGraphs() { return _graphFrames; } 
 }
