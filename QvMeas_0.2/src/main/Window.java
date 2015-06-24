@@ -553,7 +553,7 @@ public class Window extends JFrame implements ActionListener {
 		// Spline
 		CubicSpline QvSpline = r.getQvSpline();
 		//
-
+		System.out.println(r.getCurrent());
 		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
 			resSerie.add(QvSpline.interpolate_for_y_and_dydx(i)[0], r.getCurrent()/QvSpline.interpolate_for_y_and_dydx(i)[1]);
 		}

@@ -149,7 +149,7 @@ public class Result {
 		int currentInt = 0;
 		for (int i = 0;i < currentString.length();i++){
 			if (currentString.charAt(i)=='E'){
-				currentInt = Integer.parseInt(currentString.substring(0,i-1));
+				currentInt = Integer.parseInt(currentString.substring(0,i));
 			}
 		}
 		return currentInt;
