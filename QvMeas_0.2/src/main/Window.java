@@ -192,11 +192,11 @@ public class Window extends JFrame implements ActionListener {
 		//following test result from the test.txt file is just for testing purposes-> real results will be from the real runs
 		
 		String testString="";
-		/*
+		
 		BufferedReader br = null;
 	    try {
-	    	br = new BufferedReader(new FileReader("C:\\Users\\samoja\\workspace\\QvMeas0.2KDev\\src\\main\\test.txt"));
-	    
+	    	br = new BufferedReader(new FileReader("C:\\Users\\samoja\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
+	    	
 	
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
@@ -216,8 +216,8 @@ public class Window extends JFrame implements ActionListener {
 	        	br.close();
 	        } catch(Exception e) {}	
 	    }
-	*/
-		//initCvGraph(new Result("test",testString,"","-10E-12"));
+	
+		initCvGraph(new Result("test",testString,"","-10E-12"));
 		
 		// main container panel and JInternalFrame for graphs (eg. v-t graph)
 	/*
@@ -232,9 +232,9 @@ public class Window extends JFrame implements ActionListener {
 		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.CV));
 		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.VT));
 		
-		Result testres = new Result("5e-12","foo","5","bar");
-		drawGraph(testres, GraphType.CV);
-		drawGraph(testres, GraphType.VT);
+		//Result testres = new Result("5e-12","foo","5","bar");
+		//drawGraph(testres, GraphType.CV);
+		//drawGraph(testres, GraphType.VT);
 		
 		initParamComponents();
 		initConsoleComponents();
@@ -299,7 +299,7 @@ public class Window extends JFrame implements ActionListener {
 		timeTopPanel.setPreferredSize(new Dimension(220,100));
 		timeTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
 				.createEtchedBorder(EtchedBorder.LOWERED)
-				, "Mesurement Time"));
+				, "Measurement Time"));
 		
 		//step value
 		JPanel stepPanel = new JPanel();
