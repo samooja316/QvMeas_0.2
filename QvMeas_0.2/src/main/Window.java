@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 
 import java.io.FileReader;
 
+
 //JFreeChart imports
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -38,6 +39,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+
+import flanagan.interpolation.CubicSpline;
 
 
 /*
@@ -184,10 +187,10 @@ public class Window extends JFrame implements ActionListener {
 		//following test result from the test.txt file is just for testing purposes-> real results will be from the real runs
 		
 		String testString="";
-		/*
+		
 		BufferedReader br = null;
 	    try {
-	    	br = new BufferedReader(new FileReader("C:\\Users\\samoja\\workspace\\QvMeas0.2KDev\\src\\main\\test.txt"));
+	    	br = new BufferedReader(new FileReader("C:\\Users\\tujupan\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
 	    
 	
 	        StringBuilder sb = new StringBuilder();
@@ -208,7 +211,7 @@ public class Window extends JFrame implements ActionListener {
 	        	br.close();
 	        } catch(Exception e) {}	
 	    }
-	*/
+	    System.out.println(testString);
 		initCvGraph(new Result("test",testString,"","-10E-12"));
 		
 		// main container panel and JInternalFrame for graphs (eg. v-t graph)
@@ -535,34 +538,30 @@ public class Window extends JFrame implements ActionListener {
 	
 	
 	/*
-	 * Initialize C-V graphe and place it in the top right corner of the main window
-	 * (it might overlap preceding C-V graphes)
+	 * Initialize C-V graph and place it in the top right corner of the main window
+	 * (it might overlap preceding C-V graphs)
 	 */
 	public void initCvGraph(Result r) {
 		//question: is there a possibility to get multiple meas data from one result?
 		//XYseries will be added to XYDatasset collection		
 		
 		
-		//ArrayList<Float> xValues = r.getVoltageSerie();
-		//ArrayList<Float> yValues = r.getCapacitanceSerie();
+		ArrayList<Float> xValues = r.getTimeSerie();
+		ArrayList<Float> yValues = r.getVoltageSerie();
 		XYSeries resSerie = new XYSeries("C-V");
-		resSerie.add(-2.0, 2.7);
-		resSerie.add(-1.0, 1.2);
-		resSerie.add(0.0, 1.0);
-		resSerie.add(1.0, 1.0);
-		resSerie.add(2.0, 4.0);
-		resSerie.add(3.0, 3.0);
-		resSerie.add(4.0, 5.0);
-		resSerie.add(5.0, 5.0);
-		resSerie.add(6.0, 7.0);
-		resSerie.add(7.0, 17.0);
-		resSerie.add(8.0, 8.0);
-		
+
+		// Spline
+		CubicSpline QvSpline = r.getQvSpline();
+		//
+
+		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
+			resSerie.add(QvSpline.interpolate_for_y_and_dydx(i)[0], r.getCurrent()/QvSpline.interpolate_for_y_and_dydx(i)[1]);
+		}
+//		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
+//			resSerie.add(i, QvSpline.interpolate(i));
+//		}
 		//creating series from the result's data
-	/*	for(int i = 0; i <= xValues.size(); i++) {
-			resSerie.add(xValues.get(i), yValues.get(i));										
-		}*/
-		
+
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		dataset.addSeries(resSerie);
         JFreeChart chart = ChartFactory.createXYLineChart(
@@ -584,7 +583,7 @@ public class Window extends JFrame implements ActionListener {
         plot.setRangeGridlinePaint(Color.BLACK);
                 
         //renderer object
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,false);
         renderer.setSeriesLinesVisible(0, true);
         renderer.setSeriesShapesVisible(1, false);
         plot.setRenderer(renderer);
