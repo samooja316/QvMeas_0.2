@@ -74,7 +74,20 @@ public class Measurement extends Thread {
 			System.out.println("Print done!");
 			controller.toConsole("Print done!\n");
 			this.resData = resData;
-			instrument.measurementReady(resData);
+			//data for result
+			String id;
+			try {
+				String prevId = controller.getLastResultIndex(); 
+				int parseid = Integer.parseInt(prevId)+1; 
+				id = Integer.toString(++parseid); // =)
+			} catch (NoResultsException e) {
+				id = "1";
+			}
+			Result res = new Result(id, resData, "", query.getCurrent());
+			System.out.println("Result no. "+res.getMeasurementId()+" ready\n");
+			controller.toConsole("Result no. "+res.getMeasurementId()+" ready\n");
+			instrument.measurementReady(res);
+			//instrument.measurementReady(resData);  //this is the old way to do the thing 24.6. by Aleware
 		} catch(IOException e){
 			e.printStackTrace();
 		}

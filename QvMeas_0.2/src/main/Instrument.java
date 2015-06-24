@@ -48,6 +48,11 @@ public class Instrument {
 		meas.interrupt();
 	}
 
+	public void measurementReady(Result res) {
+		System.out.println("Instrument got the Result object");
+		controller.resultReady(res);
+	}
+	
 	public void measurementReady(String resData) {
 		System.out.println("Instrument got its result");
 		//controller.toConsole("Instrument got its result");

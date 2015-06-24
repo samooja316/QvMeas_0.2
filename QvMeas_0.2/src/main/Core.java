@@ -80,6 +80,41 @@ public class Core {
 	}
 	
 	
+	/*
+	 * Method for accessing Measurements done
+	 * 
+	 * @version 	0.1
+	 * @since 		0.2
+	 * @.pre		true
+	 * @.post		true
+	 * @.result		ArrayList<Result> (empty or not)
+	 */
+	public ArrayList<Result> getResults() {
+		return _results;
+	}
+	
+	
+	/*
+	 * Method for getting last (and greatest) index of the
+	 * getResults() -array
+	 * 
+	 * @version 	0.1
+	 * @since		0.2
+	 * 
+	 * @.pre		true
+	 * @.post		true
+	 * @.return		(index of the last measurement's result as a String)
+	 */
+	public String getLastResultIndex() throws NoResultsException {
+		
+		String index;
+		
+		if(_results.size()!=0) {
+			index = _results.get(_results.size()-1).getMeasurementId();
+		} else throw new NoResultsException("No previous measurements");
+		
+		return index;
+	}
 	
 	
 	/*
@@ -210,13 +245,15 @@ public class Core {
 	 *  
 	 * @.pre resData != null
 	 * @.post (Result will be written to the file specified AND
-	 * 			Result will be printed to the result console AND
+	 * 			Result will be printed to the result console (from the IOWrapper) AND
 	 * 			Result will be added to the list keeping results in Core)
 	 */	
 	public void resultReady(Result res) {
 		System.out.println("core got a result object..");	
-		System.out.println("under construction");
 		_results.add(res);
+		_io.writeData(_window.readFilePath(), res.getRawData());		
+		_window.drawGraph(res, GraphType.CV);
+		_window.drawGraph(res, GraphType.VT);
 	}
 	
 	

@@ -11,3 +11,5 @@ package main;
 public enum GraphType {
 	CV, VT;
 }
+
+

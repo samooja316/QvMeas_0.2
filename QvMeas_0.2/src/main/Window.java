@@ -195,8 +195,9 @@ public class Window extends JFrame implements ActionListener {
 		
 		BufferedReader br = null;
 	    try {
-	    	br = new BufferedReader(new FileReader("C:\\Users\\tujupan\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
+	    	//br = new BufferedReader(new FileReader("C:\\Users\\tujupan\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
 	    	
+	    	br = new BufferedReader(new FileReader("E:\\git\\QvMeas_0.2\\src\\main\\test.txt"));
 	
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
@@ -235,6 +236,7 @@ public class Window extends JFrame implements ActionListener {
 		Result testres = new Result("test",testString,"","-10E-12");
 		drawGraph(testres, GraphType.CV);
 		drawGraph(testres, GraphType.VT);
+		initCvGraph(testres);
 		
 		initParamComponents();
 		initConsoleComponents();

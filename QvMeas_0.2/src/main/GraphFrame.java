@@ -37,7 +37,13 @@ public class GraphFrame extends JInternalFrame {
 	private Result _result;
 	
 	public GraphFrame(Result r, GraphType type) {
-		super();
+		super(type.toString());
+		
+    	setResizable(true);
+    	setClosable(true);
+    	setMaximizable(true);
+    	setIconifiable(true);
+    	setVisible(true);
 		_result = r;
 		this.setContentPane(createChartPanel(r, type));
 		this.setVisible(true);
