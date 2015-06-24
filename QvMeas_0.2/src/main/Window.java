@@ -46,9 +46,9 @@ import flanagan.interpolation.CubicSpline;
 /*
  * This class is the UI of the QvMeas system
  * 
- * @author Aleksi Oja, alejee@live.com
+ * @author 	Aleksi Oja, alejee@live.com
  * @version 0.2
- * @since 0.1
+ * @since 	0.1
  * 
  */
 public class Window extends JFrame implements ActionListener {
@@ -116,6 +116,11 @@ public class Window extends JFrame implements ActionListener {
 	
 	//File menu menuitems
 	private JMenuItem _exit;
+	
+	//list of GraphFrame ui-objects
+	private ArrayList<GraphFrame> _graphFrames = new ArrayList<GraphFrame>();
+	
+	
 	
 	/*
      * constructor which creates the UI window and shows it 
@@ -190,8 +195,8 @@ public class Window extends JFrame implements ActionListener {
 		
 		BufferedReader br = null;
 	    try {
-	    	br = new BufferedReader(new FileReader("C:\\Users\\tujupan\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
-	    
+	    	br = new BufferedReader(new FileReader("C:\\Users\\samoja\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
+	    	
 	
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
@@ -211,21 +216,29 @@ public class Window extends JFrame implements ActionListener {
 	        	br.close();
 	        } catch(Exception e) {}	
 	    }
-	    System.out.println(testString);
+	
 		initCvGraph(new Result("test",testString,"","-10E-12"));
 		
 		// main container panel and JInternalFrame for graphs (eg. v-t graph)
+	/*
 		_graphCont2 = new JPanel();
 		_graphFrame2 = createFrame("V-T Graph");
 		_graphFrame2.setContentPane(_graphCont2);
 		_graphFrame2.setSize(485,335);
 		_graphFrame2.setLocation(500,335);
 		this.getContentPane().add(_graphFrame2);
+	*/
 		
+		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.CV));
+		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.VT));
+		
+		//Result testres = new Result("5e-12","foo","5","bar");
+		//drawGraph(testres, GraphType.CV);
+		//drawGraph(testres, GraphType.VT);
 		
 		initParamComponents();
 		initConsoleComponents();
-		initGraphComponents();
+		//initGraphComponents();
 	}
 	
 	
@@ -286,7 +299,7 @@ public class Window extends JFrame implements ActionListener {
 		timeTopPanel.setPreferredSize(new Dimension(220,100));
 		timeTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
 				.createEtchedBorder(EtchedBorder.LOWERED)
-				, "Mesurement Time"));
+				, "Measurement Time"));
 		
 		//step value
 		JPanel stepPanel = new JPanel();
@@ -378,6 +391,7 @@ public class Window extends JFrame implements ActionListener {
 				.createEtchedBorder(EtchedBorder.LOWERED)
 				, "Output File"));
 		_selectFile = new JButton("Browse");
+		setEnterPress(_selectFile);
 		
 		_selectFile.addActionListener(this);
 		fileTopPanel.add(_selectFile);
@@ -462,17 +476,20 @@ public class Window extends JFrame implements ActionListener {
 		//init button
 		_init = new JButton("INIT");
 		_init.addActionListener(this);
+		setEnterPress(_init);
 		buttonTopPanel.add(_init);
 		
 		//start button
 		_measure = new JButton("START");
 		_measure.addActionListener(this);
+		setEnterPress(_measure);
 		_measure.setEnabled(false);
 		buttonTopPanel.add(_measure);
 		
 		//stop button
 		_stop = new JButton("STOP");
 		_stop.addActionListener(this);
+		setEnterPress(_stop);
 		_stop.setEnabled(false);
 		buttonTopPanel.add(_stop);
 		
@@ -482,15 +499,31 @@ public class Window extends JFrame implements ActionListener {
 
 	
 	
+	/*
+	 * Method for setting VK_ENTER-KeyEvent to fire JButtons action
+	 *	
+	 * @version 0.1
+	 * @since 	0.2
+	 * 
+	 * @.pre 	true
+	 * @.post 	JButton given as a parameter will be fired with ENTER
+	 * 			when focused
+	 */
+	private void setEnterPress(JButton b) {
+		b.registerKeyboardAction(this, 
+				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), 
+				JComponent.WHEN_FOCUSED);
+	}
+	
 	
 	
 	/*
 	 * Method for creating console view related components
 	 * 
-	 * @version 0.1
-	 * @since 0.1
-	 * @.pre true
-	 * @.post (ui window's console views - console and result console - shown on the screen)
+	 * @version 	0.1
+	 * @since 		0.1
+	 * @.pre 		true
+	 * @.post 		(ui window's console views - console and result console - shown on the screen)
 	 */
 	public void initConsoleComponents() {
 		/*
@@ -522,22 +555,6 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	/*
-	 * Test function for initializing a test graph to the bottom graph window
-	 */
-	public void initGraphComponents() {
-      /*
-		LineChartDemo6 demo = new LineChartDemo6("testi");
-		XYDataset dataset = demo.createDataset();
-        JFreeChart chart = demo.createChart(dataset);
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(450, 270));
-        //setContentPane(chartPanel);
-        _graphCont2.add(chartPanel);
-        */
-	}
-	
-	
-	/*
 	 * Initialize C-V graph and place it in the top right corner of the main window
 	 * (it might overlap preceding C-V graphs)
 	 */
@@ -553,7 +570,7 @@ public class Window extends JFrame implements ActionListener {
 		// Spline
 		CubicSpline QvSpline = r.getQvSpline();
 		//
-		System.out.println(r.getCurrent());
+
 		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
 			resSerie.add(QvSpline.interpolate_for_y_and_dydx(i)[0], r.getCurrent()/QvSpline.interpolate_for_y_and_dydx(i)[1]);
 		}
@@ -609,17 +626,91 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	
+	/*
+	 * Initialize C-V graphe and place it in the top right corner of the main window
+	 * (it might overlap preceding C-V graphes)
+	 
+	public void initCvGraph(Result r) {
+		//question: is there a possibility to get multiple meas data from one result?
+		//XYseries will be added to XYDatasset collection		
+		
+		
+		//ArrayList<Float> xValues = r.getVoltageSerie();
+		//ArrayList<Float> yValues = r.getCapacitanceSerie();
+		XYSeries resSerie = new XYSeries("C-V");
+		resSerie.add(-2.0, 2.7);
+		resSerie.add(-1.0, 1.2);
+		resSerie.add(0.0, 1.0);
+		resSerie.add(1.0, 1.0);
+		resSerie.add(2.0, 4.0);
+		resSerie.add(3.0, 3.0);
+		resSerie.add(4.0, 5.0);
+		resSerie.add(5.0, 5.0);
+		resSerie.add(6.0, 7.0);
+		resSerie.add(7.0, 17.0);
+		resSerie.add(8.0, 8.0);
+		
+		//creating series from the result's data
+
+		
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(resSerie);
+        JFreeChart chart = ChartFactory.createXYLineChart(
+    		"C-V",      // chart title
+            "Bias [V]",                      // x axis label
+            "C [pF]",                      // y axis label
+            dataset,                  // data
+            PlotOrientation.VERTICAL,
+            true,                     // include legend
+            true,                     // tooltips
+            false                     // urls
+        );
+        
+        //chart color selections
+        chart.setBackgroundPaint(Color.WHITE);
+        XYPlot plot = chart.getXYPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.BLACK);
+        plot.setRangeGridlinePaint(Color.BLACK);
+                
+        //renderer object
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesLinesVisible(0, true);
+        renderer.setSeriesShapesVisible(1, false);
+        plot.setRenderer(renderer);
+        
+        //Panel for the graph
+        ChartPanel cPanel = new ChartPanel(chart);
+        cPanel.setPreferredSize(new Dimension(450,300)); //important to set the whole chart to right size
+		//xValues.forEach(xVal -> resSerie.add(item);
+		JPanel panel = new JPanel();
+		
+		//frame for the graph
+		JInternalFrame frame = createFrame("C-V Graph");
+		frame.setContentPane(panel);
+		frame.setSize(485,335);
+		frame.setLocation(500, 0);
+		
+		//add graph to the frame
+		frame.getContentPane().add(cPanel);
+		_graphList.add(frame);
+		
+		//frame to the main window
+		this.getContentPane().add(frame);	
+	}
+	*/
+	
 	
 	/*
 	 * Method for creating basic JInternalFrame without size or position or contents
 	 * 
-	 * @version 0.1
-	 * @since 0.2
+	 * @version 	0.1
+	 * @since 		0.2
 	 * 
-	 * @return empty JInternalFrame without size or position
+	 * @return 		empty JInternalFrame without size or position
 	 * 
-	 * @.pre true
-	 * @.post (new JInternalFrame will be added to the corresponding ArrayList)
+	 * @.pre 		true
+	 * @.post 		(new JInternalFrame will be added to the corresponding ArrayList)
 	 */
     private JInternalFrame createFrame(String t) {
     	JInternalFrame f = new JInternalFrame(t);
@@ -636,11 +727,11 @@ public class Window extends JFrame implements ActionListener {
 	/*
 	 * Method for setting start measurement button active or inactive 
 	 * 
-	 * @version 0.1
-	 * @since 0.1
-	 * @.pre b != null
-	 * @.post (mearurement control buttons start and stop will be active or
-	 * 			inactive depending on the boolean b parameter 
+	 * @version		0.1
+	 * @since 		0.1
+	 * @.pre 		b != null
+	 * @.post 		(mearurement control buttons start and stop will be active or
+	 * 				inactive depending on the boolean b parameter) 
 	 */
 	public void setMeasStatus(boolean b) {
 		_measure.setEnabled(b);
@@ -653,12 +744,13 @@ public class Window extends JFrame implements ActionListener {
 	/*
 	 * Method for giving a reference to a Core object for this
 	 * Then the UI events can be passed for the Core controller object
-	 * @version 0.1
-	 * @since 0.1
-	 * @.pre controller != null
-	 * @.post (Core-type controller object will be added to this so 
-	 * 			user event's can be passed forward) 
-	 */
+	 * 
+	 * @version	 0.1
+	 * @since	 0.1
+	 * @.pre	 controller != null
+	 * @.post	 (Core-type controller object will be added to this so 
+	 * 			 	user event's can be passed forward) 
+	 */	
 	public void setController(Core controller) {
 		_controller = controller;
 		System.out.println("controller set for window");
@@ -674,7 +766,7 @@ public class Window extends JFrame implements ActionListener {
 	 * @version 0.1
 	 * @since 0.1
 	 * @.pre event != null
-	 * @.post (Core objects corresponding event handler method will be called 
+	 * @.post (Core objects corresponding the event handler method will be called) 
 	 *  
 	 */	
 	public void actionPerformed(ActionEvent event) {
@@ -704,7 +796,7 @@ public class Window extends JFrame implements ActionListener {
 				params.add(_yLinLog.getSelectedItem().toString());
 			_controller.initMeas(params);
 			} else {
-				printToConsole("Couldn't access hardware");
+				printToConsole("Couldn't access hardware\n");
 			}
 		} else if(event.getSource().equals(_exit)) {
 			System.exit(0);
@@ -787,4 +879,22 @@ public class Window extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/*
+	 * draw to the screen  
+	 * @version 0.1
+	 * @since 	0.2
+	 * @.pre 	true
+	 * @.post 	graph - type defined by type-param - will be plotted from
+	 * 			the data in the Result-parameter 
+	 * 			AND the last element int the getGraphs() -list will be the Result-parameter
+	 */
+	public void drawGraph(Result res, GraphType type) {	
+		GraphFrame gf = new GraphFrame(res, type);
+		this.getContentPane().add(gf);
+		_graphFrames.add(gf);
+	}
+	
+	public ArrayList<GraphFrame> getGraphs() { return _graphFrames; } 
 }

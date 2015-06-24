@@ -43,10 +43,12 @@ public class IOWrapper {
 	public String giveFilePath() {
 		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
 		fd.setDirectory("C:\\");
-		fd.setFile("*.txt");
+		fd.setFile("*.*");
 		fd.setVisible(true);
 		String path = fd.getDirectory();
+		if (path.equals(null)) path = "";
 		String name = fd.getFile();
+		if (name.equals(null)) name = "";
 		String filePath = path + name;	
 		return(filePath);
 	}

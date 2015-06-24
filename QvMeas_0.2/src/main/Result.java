@@ -149,7 +149,7 @@ public class Result {
 		int currentInt = 0;
 		for (int i = 0;i < currentString.length();i++){
 			if (currentString.charAt(i)=='E'){
-				currentInt = Integer.parseInt(currentString.substring(0,i));
+				currentInt = Integer.parseInt(currentString.substring(0,i-1));
 			}
 		}
 		return currentInt;
@@ -162,6 +162,9 @@ public class Result {
 	}
 	public String getRawSettingsData(){
 		return rawSettingsData;
+	}
+	public String getMeasurementId() {
+		return id;
 	}
 	public String getMeasurementName(){
 		return measurementName;
