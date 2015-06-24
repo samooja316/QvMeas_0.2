@@ -59,6 +59,7 @@ public class GraphFrame extends JInternalFrame {
 		//ArrayList<Float> yValues;
 		
 		XYSeries resSerie = null;
+		if (r != null) { //check if there we're just initializing an empty frame and graph 
 		if (type==GraphType.CV) { 
 			resSerie = new XYSeries("C-V");
 			//xValues = r.getVoltageSerie();
@@ -111,7 +112,19 @@ public class GraphFrame extends JInternalFrame {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		
+		} // checking null result
+		else {
+	    	_chart = ChartFactory.createXYLineChart(
+	    		type.toString(),      // chart title
+	            "Bias [V]",                      // x axis label
+	            "Capacitance [pF]",                      // y axis label
+	            null,                  // data
+	            PlotOrientation.VERTICAL,
+	            true,                     // include legend
+	            true,                     // tooltips
+	            false                     // urls
+	        );
+		}
 
 		
 		//creating series from the result's data

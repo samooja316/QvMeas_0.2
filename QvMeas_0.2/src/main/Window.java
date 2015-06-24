@@ -120,6 +120,11 @@ public class Window extends JFrame implements ActionListener {
 	//list of GraphFrame ui-objects
 	private ArrayList<GraphFrame> _graphFrames = new ArrayList<GraphFrame>();
 	
+	//empty C-V graphFrame for init
+	private GraphFrame _emptyCV;
+	
+	//empty V-T graphFrame for starters
+	private GraphFrame _emptyVT;
 	
 	
 	/*
@@ -189,8 +194,14 @@ public class Window extends JFrame implements ActionListener {
 		
 		
 		
-		//following test result from the test.txt file is just for testing purposes-> real results will be from the real runs
 		
+		/*
+		 * TEST SECTION CAN BE REMOVED WHEN PUBLISHING v0.2
+		 */
+		
+		
+		//following test result from the test.txt file is just for testing purposes-> real results will be from the real runs
+		/*
 		String testString="";
 		
 		BufferedReader br = null;
@@ -217,10 +228,14 @@ public class Window extends JFrame implements ActionListener {
 	        	br.close();
 	        } catch(Exception e) {}	
 	    }
-	
+	*/
+		
+		
 		//initCvGraph(new Result("test",testString,"","-10E-12"));
 		
 		// main container panel and JInternalFrame for graphs (eg. v-t graph)
+	
+		
 	/*
 		_graphCont2 = new JPanel();
 		_graphFrame2 = createFrame("V-T Graph");
@@ -232,11 +247,33 @@ public class Window extends JFrame implements ActionListener {
 		
 		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.CV));
 		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.VT));
+	    
 		
-		Result testres = new Result("test",testString,"","-10E-12");
-		drawGraph(testres, GraphType.CV);
-		drawGraph(testres, GraphType.VT);
-		initCvGraph(testres);
+		
+	    /*
+	     * test section for graph plotting
+	     */
+	    
+	    //drawGraph(null, GraphType.VT); //plotting empty initializing graphs
+	    //drawGraph(null, GraphType.CV);
+	    
+		//Result testres = new Result("test",testString,"","-10E-12");
+		//drawGraph(testres, GraphType.CV); //plotting test result containing graphs
+		//drawGraph(testres, GraphType.VT);
+
+		
+		/*
+		 * TEST SECTION ENDS HERE
+		 */
+		
+		
+		
+		
+		/*
+		 * Initializing empty graphs for placeholders while waiting test results
+		 */
+	    drawGraph(null, GraphType.VT); //plotting empty initializing graphs
+	    drawGraph(null, GraphType.CV);
 		
 		initParamComponents();
 		initConsoleComponents();
@@ -897,7 +934,20 @@ public class Window extends JFrame implements ActionListener {
 	public void drawGraph(Result res, GraphType type) {	
 		GraphFrame gf = new GraphFrame(res, type);
 		this.getContentPane().add(gf);
-		_graphFrames.add(gf);
+		if(res!=null) {
+			_graphFrames.add(gf);
+			if(type.equals(GraphType.CV)) {
+				_emptyCV.setVisible(false);
+				_emptyCV = null;
+			}
+			else if(type.equals(GraphType.VT)) {
+				_emptyVT.setVisible(false);
+				_emptyVT = null;
+			}
+		} else {
+			if(type.equals(GraphType.CV)) _emptyCV = gf;
+			else if(type.equals(GraphType.VT)) _emptyVT = gf;
+		}
 	}
 	
 	public ArrayList<GraphFrame> getGraphs() { return _graphFrames; } 
