@@ -12,6 +12,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import flanagan.interpolation.CubicSpline;
+
 import java.util.*;
 import java.awt.*;
 
@@ -55,6 +57,14 @@ public class GraphFrame extends JInternalFrame {
 			resSerie = new XYSeries("C-V");
 			//xValues = r.getVoltageSerie();
 			//yValues = r.getCapacitanceSerie();
+			ArrayList<Float> xValues = r.getTimeSerie();
+			// Spline
+			CubicSpline QvSpline = r.getQvSpline();
+			//
+
+			for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
+				resSerie.add(QvSpline.interpolate_for_y_and_dydx(i)[0], r.getCurrent()/QvSpline.interpolate_for_y_and_dydx(i)[1]);
+			}
 			XYSeriesCollection dataset = new XYSeriesCollection();
 			dataset.addSeries(resSerie);
 	        _chart = ChartFactory.createXYLineChart(
@@ -72,6 +82,14 @@ public class GraphFrame extends JInternalFrame {
 			resSerie = new XYSeries("V-T");
 			//yValues = r.getVoltageSerie();
 			//xValues = r.getTimeSerie();
+			ArrayList<Float> xValues = r.getTimeSerie();
+			// Spline
+			CubicSpline QvSpline = r.getQvSpline();
+			//
+
+			for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
+				resSerie.add(i, QvSpline.interpolate(i));
+			}
 			XYSeriesCollection dataset = new XYSeriesCollection();
 			dataset.addSeries(resSerie);
 	        _chart = ChartFactory.createXYLineChart(
@@ -89,17 +107,6 @@ public class GraphFrame extends JInternalFrame {
 		}
 		
 
-		resSerie.add(-2.0, 2.7);
-		resSerie.add(-1.0, 1.2);
-		resSerie.add(0.0, 1.0);
-		resSerie.add(1.0, 1.0);
-		resSerie.add(2.0, 4.0);
-		resSerie.add(3.0, 3.0);
-		resSerie.add(4.0, 5.0);
-		resSerie.add(5.0, 5.0);
-		resSerie.add(6.0, 7.0);
-		resSerie.add(7.0, 17.0);
-		resSerie.add(8.0, 8.0);
 		
 		//creating series from the result's data
 	/*	for(int i = 0; i <= xValues.size(); i++) {
@@ -114,7 +121,7 @@ public class GraphFrame extends JInternalFrame {
         plot.setRangeGridlinePaint(Color.BLACK);
                 
         //renderer object
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,false);
         renderer.setSeriesLinesVisible(0, true);
         renderer.setSeriesShapesVisible(1, false);
         plot.setRenderer(renderer);

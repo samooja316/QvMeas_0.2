@@ -195,7 +195,7 @@ public class Window extends JFrame implements ActionListener {
 		
 		BufferedReader br = null;
 	    try {
-	    	br = new BufferedReader(new FileReader("C:\\Users\\samoja\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
+	    	br = new BufferedReader(new FileReader("C:\\Users\\tujupan\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
 	    	
 	
 	        StringBuilder sb = new StringBuilder();
@@ -217,7 +217,7 @@ public class Window extends JFrame implements ActionListener {
 	        } catch(Exception e) {}	
 	    }
 	
-		initCvGraph(new Result("test",testString,"","-10E-12"));
+		//initCvGraph(new Result("test",testString,"","-10E-12"));
 		
 		// main container panel and JInternalFrame for graphs (eg. v-t graph)
 	/*
@@ -232,9 +232,9 @@ public class Window extends JFrame implements ActionListener {
 		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.CV));
 		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.VT));
 		
-		//Result testres = new Result("5e-12","foo","5","bar");
-		//drawGraph(testres, GraphType.CV);
-		//drawGraph(testres, GraphType.VT);
+		Result testres = new Result("test",testString,"","-10E-12");
+		drawGraph(testres, GraphType.CV);
+		drawGraph(testres, GraphType.VT);
 		
 		initParamComponents();
 		initConsoleComponents();
@@ -264,6 +264,8 @@ public class Window extends JFrame implements ActionListener {
 		/*
 		 * Current setting
 		 */
+
+		
 		JPanel currentPanel = new JPanel();
 		currentPanel.setPreferredSize(new Dimension(80,60));		
 		JLabel currentLabel = new JLabel("current:");
