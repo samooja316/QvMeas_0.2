@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 
 import java.io.FileReader;
 
+
 //JFreeChart imports
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -38,6 +39,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+
+import flanagan.interpolation.CubicSpline;
 
 
 /*
@@ -551,12 +554,82 @@ public class Window extends JFrame implements ActionListener {
         _resultCont.add(_sp2);
 	}
 	
+	/*
+	 * Initialize C-V graph and place it in the top right corner of the main window
+	 * (it might overlap preceding C-V graphs)
+	 */
+	public void initCvGraph(Result r) {
+		//question: is there a possibility to get multiple meas data from one result?
+		//XYseries will be added to XYDatasset collection		
+		
+		
+		ArrayList<Float> xValues = r.getTimeSerie();
+		ArrayList<Float> yValues = r.getVoltageSerie();
+		XYSeries resSerie = new XYSeries("C-V");
+
+		// Spline
+		CubicSpline QvSpline = r.getQvSpline();
+		//
+
+		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
+			resSerie.add(QvSpline.interpolate_for_y_and_dydx(i)[0], r.getCurrent()/QvSpline.interpolate_for_y_and_dydx(i)[1]);
+		}
+//		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
+//			resSerie.add(i, QvSpline.interpolate(i));
+//		}
+		//creating series from the result's data
+
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(resSerie);
+        JFreeChart chart = ChartFactory.createXYLineChart(
+    		"C-V",      // chart title
+            "Bias [V]",                      // x axis label
+            "C [pF]",                      // y axis label
+            dataset,                  // data
+            PlotOrientation.VERTICAL,
+            true,                     // include legend
+            true,                     // tooltips
+            false                     // urls
+        );
+        
+        //chart color selections
+        chart.setBackgroundPaint(Color.WHITE);
+        XYPlot plot = chart.getXYPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.BLACK);
+        plot.setRangeGridlinePaint(Color.BLACK);
+                
+        //renderer object
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,false);
+        renderer.setSeriesLinesVisible(0, true);
+        renderer.setSeriesShapesVisible(1, false);
+        plot.setRenderer(renderer);
+        
+        //Panel for the graph
+        ChartPanel cPanel = new ChartPanel(chart);
+        cPanel.setPreferredSize(new Dimension(450,300)); //important to set the whole chart to right size
+		//xValues.forEach(xVal -> resSerie.add(item);
+		JPanel panel = new JPanel();
+		
+		//frame for the graph
+		JInternalFrame frame = createFrame("C-V Graph");
+		frame.setContentPane(panel);
+		frame.setSize(485,335);
+		frame.setLocation(500, 0);
+		
+		//add graph to the frame
+		frame.getContentPane().add(cPanel);
+		_graphList.add(frame);
+		
+		//frame to the main window
+		this.getContentPane().add(frame);	
+	}
 	
 	
 	/*
 	 * Initialize C-V graphe and place it in the top right corner of the main window
 	 * (it might overlap preceding C-V graphes)
-	 */
+	 
 	public void initCvGraph(Result r) {
 		//question: is there a possibility to get multiple meas data from one result?
 		//XYseries will be added to XYDatasset collection		
@@ -578,9 +651,7 @@ public class Window extends JFrame implements ActionListener {
 		resSerie.add(8.0, 8.0);
 		
 		//creating series from the result's data
-	/*	for(int i = 0; i <= xValues.size(); i++) {
-			resSerie.add(xValues.get(i), yValues.get(i));										
-		}*/
+
 		
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		dataset.addSeries(resSerie);
@@ -627,7 +698,7 @@ public class Window extends JFrame implements ActionListener {
 		//frame to the main window
 		this.getContentPane().add(frame);	
 	}
-	
+	*/
 	
 	
 	/*
