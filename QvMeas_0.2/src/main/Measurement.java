@@ -83,7 +83,7 @@ public class Measurement extends Thread {
 			} catch (NoResultsException e) {
 				id = "1";
 			}
-			Result res = new Result(id, resData, "", query.getCurrent());
+			Result res = new Result(id, resData, query.getComments(), query.getCurrent());
 			System.out.println("Result no. "+res.getMeasurementId()+" ready\n");
 			controller.toConsole("Result no. "+res.getMeasurementId()+" ready\n");
 			instrument.measurementReady(res);

@@ -13,6 +13,7 @@ public class Query {
 	private String yMin;
 	private String yMax;
 	private String yLinLog;
+	private String comments;
 
 	public Query(ArrayList<String> settings) {
 		current = settings.get(0);
@@ -25,6 +26,7 @@ public class Query {
 		yMin = settings.get(7);
 		yMax = settings.get(8);
 		yLinLog = settings.get(9);
+		comments = settings.get(10);
 	}
 
 	public String getxMin() {
@@ -67,6 +69,10 @@ public class Query {
 		return voltageCompliance;
 	}
 
+	public String getComments() {
+		return comments;
+	}
+	
 	public String toString() {
 		return 	"### Settings ###"+"\n"+
 				"SMU1;mode:I"+"\n"+

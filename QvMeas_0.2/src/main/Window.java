@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 
 
+
 //JFreeChart imports
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -104,6 +105,9 @@ public class Window extends JFrame implements ActionListener {
 	//ArrayList for multiple c-v graphs
 	private ArrayList<JInternalFrame> _graphList;
 	
+	//comments JTextPane
+	private JTextArea _comments;
+	
 	//console and result console JTextAreas and JScrollPanes
 	private JTextPane _console;
 	private JTextPane _result;
@@ -132,8 +136,8 @@ public class Window extends JFrame implements ActionListener {
 	 */
 	public Window() {	
 		setTitle("QvMeas");
-		setSize(1000, 730);
-		setLocation(200,200);
+		setSize(1000, 830);
+		setLocation(100,100);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new GridLayout(1,2));		
 		JDesktopPane mainPane = new JDesktopPane();
@@ -169,7 +173,7 @@ public class Window extends JFrame implements ActionListener {
 		 */
 		_paramCont = new JPanel();
 		_paramFrame = createFrame("Meas Parameters");
-		_paramFrame.setSize(250,670);
+		_paramFrame.setSize(250,770);
 		_paramFrame.setLocation(0, 0);
 		_paramFrame.setContentPane(_paramCont);
 		this.getContentPane().add(_paramFrame);
@@ -179,7 +183,7 @@ public class Window extends JFrame implements ActionListener {
 		_consoleCont = new JPanel();
 		_consoleFrame = createFrame("Console");
 		_consoleFrame.setContentPane(_consoleCont);
-		_consoleFrame.setSize(250,335);
+		_consoleFrame.setSize(250,385);
 		_consoleFrame.setLocation(250,0);
 		//_consoleCont.setPreferredSize(new Dimension(250,670));		
 		this.getContentPane().add(_consoleFrame);
@@ -188,85 +192,9 @@ public class Window extends JFrame implements ActionListener {
 		_resultCont = new JPanel();
 		_resultFrame = createFrame("Result");
 		_resultFrame.setContentPane(_resultCont);
-		_resultFrame.setSize(250,335);
-		_resultFrame.setLocation(250,335);
+		_resultFrame.setSize(250,385);
+		_resultFrame.setLocation(250,385);
 		this.getContentPane().add(_resultFrame);
-		
-		
-		
-		
-		/*
-		 * TEST SECTION CAN BE REMOVED WHEN PUBLISHING v0.2
-		 */
-		
-		
-		//following test result from the test.txt file is just for testing purposes-> real results will be from the real runs
-		/*
-		String testString="";
-		
-		BufferedReader br = null;
-	    try {
-	    	//br = new BufferedReader(new FileReader("C:\\Users\\tujupan\\git\\QvMeas_0.2\\QvMeas_0.2\\src\\main\\test.txt"));
-	    	
-	    	br = new BufferedReader(new FileReader("E:\\git\\QvMeas_0.2\\src\\main\\test.txt"));
-	
-	        StringBuilder sb = new StringBuilder();
-	        String line = br.readLine();
-
-	        while (line != null) {
-	            sb.append(line);
-	            sb.append(System.lineSeparator());
-	            line = br.readLine();
-	        }
-	        testString = sb.toString();
-	        
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    } 
-	    finally {
-	        try {
-	        	br.close();
-	        } catch(Exception e) {}	
-	    }
-	*/
-		
-		
-		//initCvGraph(new Result("test",testString,"","-10E-12"));
-		
-		// main container panel and JInternalFrame for graphs (eg. v-t graph)
-	
-		
-	/*
-		_graphCont2 = new JPanel();
-		_graphFrame2 = createFrame("V-T Graph");
-		_graphFrame2.setContentPane(_graphCont2);
-		_graphFrame2.setSize(485,335);
-		_graphFrame2.setLocation(500,335);
-		this.getContentPane().add(_graphFrame2);
-	*/
-		
-		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.CV));
-		//this.getContentPane().add(new GraphFrame(new Result("5e-12","foo","5","bar"),GraphType.VT));
-	    
-		
-		
-	    /*
-	     * test section for graph plotting
-	     */
-	    
-	    //drawGraph(null, GraphType.VT); //plotting empty initializing graphs
-	    //drawGraph(null, GraphType.CV);
-	    
-		//Result testres = new Result("test",testString,"","-10E-12");
-		//drawGraph(testres, GraphType.CV); //plotting test result containing graphs
-		//drawGraph(testres, GraphType.VT);
-
-		
-		/*
-		 * TEST SECTION ENDS HERE
-		 */
-		
-		
 		
 		
 		/*
@@ -278,6 +206,14 @@ public class Window extends JFrame implements ActionListener {
 		initParamComponents();
 		initConsoleComponents();
 		//initGraphComponents();
+		/*
+		//footerpanel
+		JPanel footer = new JPanel();
+		footer.setPreferredSize(new Dimension(1000,30));
+		footer.setLocation(0,970);
+		footer.setBackground(Color.BLACK);
+		this.getContentPane().add(footer);
+		*/
 	}
 	
 	
@@ -423,25 +359,6 @@ public class Window extends JFrame implements ActionListener {
 		_paramCont.add(compTopPanel);
 			
 		
-		/*
-		 * file browsing
-		 */
-		JPanel fileTopPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); //filebrowsing top container
-		fileTopPanel.setPreferredSize(new Dimension(220,100));
-		fileTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
-				.createEtchedBorder(EtchedBorder.LOWERED)
-				, "Output File"));
-		_selectFile = new JButton("Browse");
-		setEnterPress(_selectFile);
-		
-		_selectFile.addActionListener(this);
-		fileTopPanel.add(_selectFile);
-		_filePathField = new JTextField(18); //filepath
-		_filePathField.setText("");
-		fileTopPanel.add(_filePathField);
-		
-		_paramCont.add(fileTopPanel);
-		
 		
 		/*
 		 * Set plotting parameters
@@ -502,6 +419,44 @@ public class Window extends JFrame implements ActionListener {
 		
 		plotTopPanel.add(yPanel);
 		_paramCont.add(plotTopPanel);
+		
+		
+		/*
+		 * comments 
+		 */
+		JPanel commentTopPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		commentTopPanel.setPreferredSize(new Dimension(220,100));
+		commentTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory	
+			.createEtchedBorder(EtchedBorder.LOWERED),
+			 "Comments"));
+		_comments = new JTextArea(4,18);
+		_comments.setLineWrap(true);
+		_comments.setWrapStyleWord(true);
+		JScrollPane com = new JScrollPane(_comments);
+		com.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		com.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		commentTopPanel.add(com);
+		_paramCont.add(commentTopPanel);
+		
+		_paramCont.add(commentTopPanel);
+		/*
+		 * file browsing
+		 */
+		JPanel fileTopPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); //filebrowsing top container
+		fileTopPanel.setPreferredSize(new Dimension(220,100));
+		fileTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
+				.createEtchedBorder(EtchedBorder.LOWERED)
+				, "Output File"));
+		_selectFile = new JButton("Browse");
+		setEnterPress(_selectFile);
+		
+		_selectFile.addActionListener(this);
+		fileTopPanel.add(_selectFile);
+		_filePathField = new JTextField(18); //filepath
+		_filePathField.setText("");
+		fileTopPanel.add(_filePathField);
+		
+		_paramCont.add(fileTopPanel);
 		
 		
 		/*
@@ -573,7 +528,7 @@ public class Window extends JFrame implements ActionListener {
 		//JLabel consoleLabel = new JLabel("Console");
 		//_consoleCont.add(consoleLabel);
 		_console = new JTextPane();
-		_console.setPreferredSize(new Dimension(220,290));
+		_console.setPreferredSize(new Dimension(220,340));
 		_sp1 = new JScrollPane(_console);
 		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -589,158 +544,14 @@ public class Window extends JFrame implements ActionListener {
 		//_resultCont.add(resultLabel);
 		_result = new JTextPane();
 		_sp2 = new JScrollPane(_result);
-		_result.setPreferredSize(new Dimension(220,290));
+		_result.setPreferredSize(new Dimension(220,340));
 		_result.setBorder(BorderFactory.createEtchedBorder());
 		_result.setFont(font);
         _resultCont.add(_sp2);
 	}
 	
-	/*
-	 * Initialize C-V graph and place it in the top right corner of the main window
-	 * (it might overlap preceding C-V graphs)
-	 */
-	public void initCvGraph(Result r) {
-		//question: is there a possibility to get multiple meas data from one result?
-		//XYseries will be added to XYDatasset collection		
-		
-		
-		ArrayList<Float> xValues = r.getTimeSerie();
-		ArrayList<Float> yValues = r.getVoltageSerie();
-		XYSeries resSerie = new XYSeries("C-V");
-
-		// Spline
-		CubicSpline QvSpline = r.getQvSpline();
-		//
-
-		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
-			resSerie.add(QvSpline.interpolate_for_y_and_dydx(i)[0], r.getCurrent()/QvSpline.interpolate_for_y_and_dydx(i)[1]);
-		}
-//		for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
-//			resSerie.add(i, QvSpline.interpolate(i));
-//		}
-		//creating series from the result's data
-
-		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(resSerie);
-        JFreeChart chart = ChartFactory.createXYLineChart(
-    		"C-V",      // chart title
-            "Bias [V]",                      // x axis label
-            "C [pF]",                      // y axis label
-            dataset,                  // data
-            PlotOrientation.VERTICAL,
-            true,                     // include legend
-            true,                     // tooltips
-            false                     // urls
-        );
-        
-        //chart color selections
-        chart.setBackgroundPaint(Color.WHITE);
-        XYPlot plot = chart.getXYPlot();
-        plot.setBackgroundPaint(Color.WHITE);
-        plot.setDomainGridlinePaint(Color.BLACK);
-        plot.setRangeGridlinePaint(Color.BLACK);
-                
-        //renderer object
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,false);
-        renderer.setSeriesLinesVisible(0, true);
-        renderer.setSeriesShapesVisible(1, false);
-        plot.setRenderer(renderer);
-        
-        //Panel for the graph
-        ChartPanel cPanel = new ChartPanel(chart);
-        cPanel.setPreferredSize(new Dimension(450,300)); //important to set the whole chart to right size
-		//xValues.forEach(xVal -> resSerie.add(item);
-		JPanel panel = new JPanel();
-		
-		//frame for the graph
-		JInternalFrame frame = createFrame("C-V Graph");
-		frame.setContentPane(panel);
-		frame.setSize(485,335);
-		frame.setLocation(500, 0);
-		
-		//add graph to the frame
-		frame.getContentPane().add(cPanel);
-		_graphList.add(frame);
-		
-		//frame to the main window
-		this.getContentPane().add(frame);	
-	}
 	
-	
-	/*
-	 * Initialize C-V graphe and place it in the top right corner of the main window
-	 * (it might overlap preceding C-V graphes)
-	 
-	public void initCvGraph(Result r) {
-		//question: is there a possibility to get multiple meas data from one result?
-		//XYseries will be added to XYDatasset collection		
-		
-		
-		//ArrayList<Float> xValues = r.getVoltageSerie();
-		//ArrayList<Float> yValues = r.getCapacitanceSerie();
-		XYSeries resSerie = new XYSeries("C-V");
-		resSerie.add(-2.0, 2.7);
-		resSerie.add(-1.0, 1.2);
-		resSerie.add(0.0, 1.0);
-		resSerie.add(1.0, 1.0);
-		resSerie.add(2.0, 4.0);
-		resSerie.add(3.0, 3.0);
-		resSerie.add(4.0, 5.0);
-		resSerie.add(5.0, 5.0);
-		resSerie.add(6.0, 7.0);
-		resSerie.add(7.0, 17.0);
-		resSerie.add(8.0, 8.0);
-		
-		//creating series from the result's data
 
-		
-		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(resSerie);
-        JFreeChart chart = ChartFactory.createXYLineChart(
-    		"C-V",      // chart title
-            "Bias [V]",                      // x axis label
-            "C [pF]",                      // y axis label
-            dataset,                  // data
-            PlotOrientation.VERTICAL,
-            true,                     // include legend
-            true,                     // tooltips
-            false                     // urls
-        );
-        
-        //chart color selections
-        chart.setBackgroundPaint(Color.WHITE);
-        XYPlot plot = chart.getXYPlot();
-        plot.setBackgroundPaint(Color.WHITE);
-        plot.setDomainGridlinePaint(Color.BLACK);
-        plot.setRangeGridlinePaint(Color.BLACK);
-                
-        //renderer object
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, true);
-        renderer.setSeriesShapesVisible(1, false);
-        plot.setRenderer(renderer);
-        
-        //Panel for the graph
-        ChartPanel cPanel = new ChartPanel(chart);
-        cPanel.setPreferredSize(new Dimension(450,300)); //important to set the whole chart to right size
-		//xValues.forEach(xVal -> resSerie.add(item);
-		JPanel panel = new JPanel();
-		
-		//frame for the graph
-		JInternalFrame frame = createFrame("C-V Graph");
-		frame.setContentPane(panel);
-		frame.setSize(485,335);
-		frame.setLocation(500, 0);
-		
-		//add graph to the frame
-		frame.getContentPane().add(cPanel);
-		_graphList.add(frame);
-		
-		//frame to the main window
-		this.getContentPane().add(frame);	
-	}
-	*/
-	
 	
 	/*
 	 * Method for creating basic JInternalFrame without size or position or contents
@@ -766,25 +577,24 @@ public class Window extends JFrame implements ActionListener {
     
     
 	/*
-	 * Method for setting start measurement button active or inactive 
+	 * Following three methods for setting start and measurement buttons active or inactive 
 	 * 
-	 * @version		0.1
+	 * @version		0.2
 	 * @since 		0.1
 	 * @.pre 		b != null
-	 * @.post 		(mearurement control buttons start and stop will be active or
+	 * @.post 		(mearurement control buttons start, stop and init will be active or
 	 * 				inactive depending on the boolean b parameter) 
 	 */
 	public void setStartStatus(boolean b) {
 		_measure.setEnabled(b);		
-	}
-	
+	}	
 	public void setInitStatus(boolean b) {
 		_init.setEnabled(b);
 	}
-	
 	public void setStopStatus(boolean b) {
 		_stop.setEnabled(b);
 	}
+	
 	
 	
 	
@@ -811,7 +621,7 @@ public class Window extends JFrame implements ActionListener {
 	 * ActionListener for ui events. Method will call Core object's corresponding
 	 * event handler methods
 	 * 
-	 * @version 0.1
+	 * @version 0.2
 	 * @since 0.1
 	 * @.pre event != null
 	 * @.post (Core objects corresponding the event handler method will be called) 
@@ -830,7 +640,7 @@ public class Window extends JFrame implements ActionListener {
 			_controller.stopMeas();
 		} else if(event.getSource().equals(_init)) { 
 			if(_controller.instrumentCreated()){			
-				//meas params: current, step, nosteps, currentcomp, voltagecomp, xMin, xMax, yMin, yMax, yLinLog			
+				//meas params: current, step, nosteps, currentcomp, voltagecomp, xMin, xMax, yMin, yMax, yLinLog, comments			
 				ArrayList<String> params = new ArrayList<String>();
 				params.add(_current.getText()+convertToExpVal(_currentScale.getSelectedItem().toString()));
 				params.add(_step.getText());
@@ -842,6 +652,7 @@ public class Window extends JFrame implements ActionListener {
 				params.add(_yMin.getText()+convertToExpVal(_yScale.getSelectedItem().toString()));
 				params.add(_yMax.getText()+convertToExpVal(_yScale.getSelectedItem().toString()));
 				params.add(_yLinLog.getSelectedItem().toString());
+				params.add(_comments.getText());
 			_controller.initMeas(params);
 			} else {
 				printToConsole("Couldn't access hardware\n");
@@ -929,6 +740,8 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	
+	
+	
 	/*
 	 * draw to the screen  
 	 * @version 0.1
@@ -958,5 +771,13 @@ public class Window extends JFrame implements ActionListener {
 		}
 	}
 	
+	/*
+	 * Return all GraphFrames representing results measured during the session
+	 * @version 	0.1
+	 * @since 		0.2
+	 * @.pre 		true
+	 * @.post		true
+	 * @.result		(All graphframes from this session)
+	 */
 	public ArrayList<GraphFrame> getGraphs() { return _graphFrames; } 
 }

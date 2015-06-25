@@ -223,26 +223,6 @@ public class Core {
 	}
 	
 	
-	
-	
-	/*
-	 * Method for passing results to IOWrapper for printing to file
-	 * and to the result console 
-	 * 
-	 * @version 0.1
-	 * @since 0.1
-	 *  
-	 * @.pre resData != null
-	 * @.post (Result will be written to the file specified AND
-	 * 			Result will be printed to the result console)
-	 */
-	public void resultReady(String resData) {
-		System.out.println("core got a result..");		
-		_window.setInitStatus(true);
-		_window.setStartStatus(false);
-		_window.setStopStatus(false);
-		_io.writeData(_window.readFilePath(), resData);
-	}
 
 	
 	/*
@@ -262,7 +242,7 @@ public class Core {
 		_window.setStartStatus(false);
 		_window.setStopStatus(false);
 		_results.add(res);
-		_io.writeData(_window.readFilePath(), res.getRawData());		
+		_io.writeData(_window.readFilePath(), res);		
 		_window.drawGraph(res, GraphType.CV);
 		_window.drawGraph(res, GraphType.VT);
 	}

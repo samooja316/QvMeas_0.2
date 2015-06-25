@@ -64,14 +64,43 @@ public class IOWrapper {
 	* @.pre true
 	* @.post (resData is written to a file specified in the filePath
  	*/
+	/*
 	public void writeData(String filePath, String resData) {
 		try {
 			_file = new FileOutputStream(filePath, true);
 			_dataFile = new DataOutputStream(_file);
 			System.out.println("Trying to write data to the file");
 			System.out.println(formatResultData(resData));
+			_dataFile.writeUTF(_result);
 			_dataFile.writeUTF(formatResultData(resData));
 			controller.toResultConsole(formatResultData(resData));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally{
+			if (_dataFile!=null) {
+				try{
+					_dataFile.close();
+					System.out.println("Datafile closed");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	} */
+	
+	public void writeData(String filePath, Result res) {
+		try {
+			_file = new FileOutputStream(filePath, true);
+			_dataFile = new DataOutputStream(_file);
+			System.out.println("Trying to write data to the file");
+			System.out.println(formatResultData(res.getRawData()));
+			_dataFile.writeUTF(res.getMeasurementName());
+			_dataFile.writeUTF(res.getComment());
+			_dataFile.writeUTF(formatResultData(res.getRawData()));
+			controller.toResultConsole(res.getMeasurementName());
+			controller.toResultConsole(res.getComment());
+			controller.toResultConsole(formatResultData(res.getRawData()));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

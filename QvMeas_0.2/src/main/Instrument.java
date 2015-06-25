@@ -53,12 +53,6 @@ public class Instrument {
 		controller.resultReady(res);
 	}
 	
-	public void measurementReady(String resData) {
-		System.out.println("Instrument got its result");
-		//controller.toConsole("Instrument got its result");
-		controller.resultReady(resData);
-	}
-	
 	public void setController(Core control) {
 		controller = control;
 	}

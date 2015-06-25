@@ -29,8 +29,8 @@ public class GraphFrame extends JInternalFrame {
 
 	//size and positions for different graphs
 	private static final Point _CVLOCATION = new Point(500,0);
-	private static final Point _VTLOCATION = new Point(500,335);
-	private static final Dimension _SIZE = new Dimension(485,335);
+	private static final Point _VTLOCATION = new Point(500,385);
+	private static final Dimension _SIZE = new Dimension(485,385);
 	private JFreeChart _chart;
 	
 	//Result of this frame
@@ -75,7 +75,9 @@ public class GraphFrame extends JInternalFrame {
 			XYSeriesCollection dataset = new XYSeriesCollection();
 			dataset.addSeries(resSerie);
 	        _chart = ChartFactory.createXYLineChart(
-	    		"C-V",      // chart title
+	        	"Qv c-v"+
+	        	_result.getCurrent()+" "+
+	        	_result.getMeasurementName(),      // chart title
 	            "Bias [V]",                      // x axis label
 	            "Capacitance [pF]",                      // y axis label
 	            dataset,                  // data
@@ -100,7 +102,9 @@ public class GraphFrame extends JInternalFrame {
 			XYSeriesCollection dataset = new XYSeriesCollection();
 			dataset.addSeries(resSerie);
 	        _chart = ChartFactory.createXYLineChart(
-	    		"V-T",      // chart title
+		        "Qv v-t"+
+		    	_result.getCurrent()+" "+
+		    	_result.getMeasurementName(),      // chart title
 	            "Time [s]",                      // x axis label
 	            "Voltage [V]",                      // y axis label
 	            dataset,                  // data

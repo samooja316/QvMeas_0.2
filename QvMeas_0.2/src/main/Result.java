@@ -20,7 +20,7 @@ public class Result {
 	private ArrayList<Float> voltageSerie = new ArrayList<Float>();
 	private ArrayList<Float> timeSerie = new ArrayList<Float>();
 	private ArrayList<Float> capacitanceSerie = new ArrayList<Float>();
-	String current;
+	private String current;
 	
 	//When object is initialized it should have the next parameters:
 	// - identification string
