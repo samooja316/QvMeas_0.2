@@ -66,6 +66,9 @@ public class Window extends JFrame implements ActionListener {
 					_currentLimit, _voltageLimit;
 	private JComboBox<String> _currentScale, _currentCompScale, _voltageCompScale;
 	
+	//generate outputfile path
+	private JButton _generatePath;
+	
 	//Output filepath selsection button
 	private JButton _selectFile;
 	
@@ -442,11 +445,16 @@ public class Window extends JFrame implements ActionListener {
 		/*
 		 * file browsing
 		 */
-		JPanel fileTopPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); //filebrowsing top container
+		JPanel fileTopPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); //filebrowsing top container
 		fileTopPanel.setPreferredSize(new Dimension(220,100));
 		fileTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
 				.createEtchedBorder(EtchedBorder.LOWERED)
 				, "Output File"));
+		_generatePath = new JButton("Generate");
+		setEnterPress(_generatePath);
+		_generatePath.addActionListener(this);
+		fileTopPanel.add(_generatePath);
+		
 		_selectFile = new JButton("Browse");
 		setEnterPress(_selectFile);
 		
@@ -630,7 +638,22 @@ public class Window extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource().equals(_selectFile)) {
 			_controller.chooseFile();
-		} else if (event.getSource().equals(_measure)){					
+		} else if(event.getSource().equals(_generatePath)){
+			Date date = new Date();
+			String ind = "";
+			try {
+					ind = Integer.toString(Integer.parseInt(_controller.getLastResultIndex())+1);					
+			} catch (NoResultsException e) {
+				ind = "1";
+			}
+			String genpath = "";
+			genpath+=_current.getText()+"A "+
+					_step.getText()+"s "+
+					"e"+ind+" "+
+					date.toString()+".qv";
+			_filePathField.setText(genpath);
+		}
+		else if (event.getSource().equals(_measure)){					
 			try {
 				_controller.start();
 			} catch(MeasNotInitException e) {
