@@ -173,7 +173,8 @@ public class Core {
 	public void initMeas(ArrayList<String> params) {
 		_query = new Query(params);
 		_instrument.init(_query);
-		_window.setMeasStatus(true);
+		_window.setInitStatus(false);
+		_window.setStartStatus(true);
 		toConsole(_query.toString());
 		_measInitialized = true;	
 	}
@@ -194,7 +195,9 @@ public class Core {
 	public void start() throws MeasNotInitException {		
 		if(_measInitialized) {
 			_instrument.measure();
-			_window.setMeasStatus(false);
+			_window.setInitStatus(false);
+			_window.setStartStatus(false);
+			_window.setStopStatus(true);
 			_measInitialized = false;
 		} 
 		else { 
@@ -214,7 +217,10 @@ public class Core {
 	 * @.post (Measurement will be stopped)
 	 */
 	public void stopMeas() {
-		_instrument.stop();
+		_window.setStartStatus(false);
+		_window.setStopStatus(false);
+		_window.setInitStatus(true);
+		_instrument.stop();		
 	}
 	
 	
@@ -233,6 +239,9 @@ public class Core {
 	 */
 	public void resultReady(String resData) {
 		System.out.println("core got a result..");		
+		_window.setInitStatus(true);
+		_window.setStartStatus(false);
+		_window.setStopStatus(false);
 		_io.writeData(_window.readFilePath(), resData);
 	}
 
@@ -250,6 +259,9 @@ public class Core {
 	 */	
 	public void resultReady(Result res) {
 		System.out.println("core got a result object..");	
+		_window.setInitStatus(true);
+		_window.setStartStatus(false);
+		_window.setStopStatus(false);
 		_results.add(res);
 		_io.writeData(_window.readFilePath(), res.getRawData());		
 		_window.drawGraph(res, GraphType.CV);

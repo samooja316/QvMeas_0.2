@@ -774,8 +774,15 @@ public class Window extends JFrame implements ActionListener {
 	 * @.post 		(mearurement control buttons start and stop will be active or
 	 * 				inactive depending on the boolean b parameter) 
 	 */
-	public void setMeasStatus(boolean b) {
-		_measure.setEnabled(b);
+	public void setStartStatus(boolean b) {
+		_measure.setEnabled(b);		
+	}
+	
+	public void setInitStatus(boolean b) {
+		_init.setEnabled(b);
+	}
+	
+	public void setStopStatus(boolean b) {
 		_stop.setEnabled(b);
 	}
 	
@@ -936,11 +943,11 @@ public class Window extends JFrame implements ActionListener {
 		this.getContentPane().add(gf);
 		if(res!=null) {
 			_graphFrames.add(gf);
-			if(type.equals(GraphType.CV)) {
+			if(type.equals(GraphType.CV)&&_emptyCV!=null) {
 				_emptyCV.setVisible(false);
 				_emptyCV = null;
 			}
-			else if(type.equals(GraphType.VT)) {
+			else if(type.equals(GraphType.VT)&&_emptyVT!=null) {
 				_emptyVT.setVisible(false);
 				_emptyVT = null;
 			}

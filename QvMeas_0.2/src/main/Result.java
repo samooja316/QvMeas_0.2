@@ -183,11 +183,11 @@ public class Result {
 	}
 	
 	public CubicSpline getQvSpline(){
-		double[] doubleTimes = new double[timeSerie.size()/2+1];
-		double[] doubleVoltages = new double[voltageSerie.size()/2+1];
-		for (int i=0;i<timeSerie.size()/2+1;i++){
-			doubleTimes[i] = timeSerie.get(i*2);
-			doubleVoltages[i] = voltageSerie.get(i*2);
+		double[] doubleTimes = new double[timeSerie.size()];
+		double[] doubleVoltages = new double[voltageSerie.size()];
+		for (int i=0;i<timeSerie.size();i++){
+			doubleTimes[i] = timeSerie.get(i);
+			doubleVoltages[i] = voltageSerie.get(i);
 			
 		}
 		CubicSpline QvSpline = new CubicSpline(doubleTimes,doubleVoltages);
