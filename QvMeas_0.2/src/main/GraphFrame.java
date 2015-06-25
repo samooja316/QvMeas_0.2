@@ -59,7 +59,7 @@ public class GraphFrame extends JInternalFrame {
 			//yValues = r.getCapacitanceSerie();
 			ArrayList<Float> xValues = r.getTimeSerie();
 			// Spline
-			CubicSpline QvSpline = r.getQvSpline();
+			CubicSpline QvSpline = r.getRoundedQvSpline();
 			//
 
 			for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
