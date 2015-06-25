@@ -941,6 +941,7 @@ public class Window extends JFrame implements ActionListener {
 	public void drawGraph(Result res, GraphType type) {	
 		GraphFrame gf = new GraphFrame(res, type);
 		this.getContentPane().add(gf);
+		gf.moveToFront();
 		if(res!=null) {
 			_graphFrames.add(gf);
 			if(type.equals(GraphType.CV)&&_emptyCV!=null) {
