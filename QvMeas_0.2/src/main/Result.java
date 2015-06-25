@@ -6,9 +6,14 @@ import java.util.Scanner;
 
 import flanagan.interpolation.CubicSpline;
 
-//Result class containing all information of a
-//conducted measurement
+/*
+ * Result class containing all information of a conducted measurement
+ */
 
+/**
+ * @author Tuukka Panula
+ * @since 0.2
+ */
 public class Result {
 	
 	private String id;
@@ -22,12 +27,12 @@ public class Result {
 	private ArrayList<Float> capacitanceSerie = new ArrayList<Float>();
 	private String current;
 	
-	//When object is initialized it should have the next parameters:
-	// - identification string
-	// - raw measurement data from HP4145B Print
-	// - comment line inserted by user
-	// - current used in the measurement (String)
-	
+	/*
+	 * @param	id, identification string
+	 * 			rawData, raw measurement data from HP4145B Print
+	 * 			comment, comment line inserted by user
+	 * 			current, current used in the measurement (String)
+	 */
 	public Result(String id, String rawData, String comment, String current) {
 		super();
 		
@@ -39,13 +44,13 @@ public class Result {
 		calculateCapacitanceSerie(current);
 		
 	}
-	
-	//This method is called when an object is initialized.
-	//It parses parses the raw print data and returns
-	//a string variable that can be directly imported to e.g. excel.
-	//The method also parses voltage and time into their individual
-	//data series.
-	
+	/*
+	 * This method is called when an object is initialized.
+	 * It parses parses the raw print data and returns
+	 * a string variable that can be directly imported to e.g. excel.
+	 * The method also parses voltage and time into their individual
+	 * data series.
+	 */
 	public void parseRawData(String rawData){
 		Scanner scanner = new Scanner(rawData);
 		char currentChar;
@@ -81,12 +86,9 @@ public class Result {
 		}
 	    finalResData = finalResData+"\n"+resLine;
 		scanner.close();
-		//System.out.println(finalResData);
 		for (int i = 0;i < finalResData.length();i++){
-			//System.out.println(finalResData.substring(i,i+21));
 			if (i<finalResData.length()-22){
 				if ((finalResData.substring(i,i+23)).equals("TIME       VG    -Ch1 \n")){
-					//System.out.println("ee");
 
 					rawSettingsData = finalResData.substring(0,i-1);
 					infoDataRead = true; //true when the setup data at the beginning is passed
@@ -96,19 +98,15 @@ public class Result {
 			}
 			if (infoDataRead==true){
 				if (finalResData.charAt(i)=='\n'){
-					//System.out.println("jj");
+
 					timeStartVoltEnd = i;
 					if (timeEndVoltStart!=timeStartVoltEnd){
 						voltageString = finalResData.substring(timeEndVoltStart+1,timeStartVoltEnd);
-						//System.out.println(timeEndVoltStart + " " + timeStartVoltEnd);
-						//System.out.println(voltageString);
-
 						voltageSerie.add(Float.parseFloat(voltageString.replace(" ","")));
 					}
 				}
 				if (finalResData.charAt(i)=='\t'){
 					timeEndVoltStart = i;
-					//System.out.println("kk");
 
 					timeString = finalResData.substring(timeStartVoltEnd+1,timeEndVoltStart);
 
@@ -124,9 +122,10 @@ public class Result {
 		}
 		this.finalDataString=finalResData;
 	}
-	
-	//This is a method for attaining capacitance using differentiation
-
+	/*
+	 * This is a method for attaining capacitance using differentiation.
+	 * Probably irrelevant due to the spline function
+	 */
 	public void calculateCapacitanceSerie(String currentString){
 
 		float singleCapacitance = 0;
@@ -138,12 +137,17 @@ public class Result {
 			capacitanceSerie.add(singleCapacitance);
 		}
 	}
+	/*
+	 * 
+	 */
 	public void generateMeasurementName(String id, int current){
 		Date date = new Date();
 		measurementName = id +" "+current+" A "+ date.toString();
 	}
-		
-	//Getters
+	
+	/*	
+	 * Getters
+	 */
 	public int getCurrent(){
 		String currentString = current;
 		int currentInt = 0;
@@ -181,27 +185,30 @@ public class Result {
 	public String getComment(){
 		return comment;
 	}
-	
+	/*
+	 * A method for producing a piecewise-defined function (spline) from the
+	 * data series. This allows e.g. easier differentiation.
+	 */
 	public CubicSpline getQvSpline(){
 		double[] doubleTimes = new double[timeSerie.size()];
 		double[] doubleVoltages = new double[voltageSerie.size()];
 		for (int i=0;i<timeSerie.size();i++){
 			doubleTimes[i] = timeSerie.get(i);
-			doubleVoltages[i] = voltageSerie.get(i);
+			doubleVoltages[i] = voltageSerie.get(i);			
+		}
+		CubicSpline QvSpline = new CubicSpline(doubleTimes,doubleVoltages);
+		return QvSpline;
+	}
+	public CubicSpline getRoundedQvSpline(){
+		double[] doubleTimes = new double[(int) ((double) timeSerie.size()/2+0.5)];
+		double[] doubleVoltages = new double[(int) ((double) voltageSerie.size()/2+0.5)];
+		for (int i=0;i<((int) ((double) timeSerie.size()/2+0.5));i++){
+			doubleTimes[i] = timeSerie.get(i*2);
+			doubleVoltages[i] = voltageSerie.get(i*2);
 			
 		}
 		CubicSpline QvSpline = new CubicSpline(doubleTimes,doubleVoltages);
 		return QvSpline;
 	}
-//	public CubicSpline getCvSpline(){
-//		double[] doubleTimes = new double[timeSerie.size()];
-//		double[] doubleVoltages = new double[voltageSerie.size()];
-//		for (int i=0;i<timeSerie.size();i++){
-//			doubleTimes[i] = timeSerie.get(i);
-//			doubleVoltages[i] = voltageSerie.get(i);
-//		}
-//		CubicSpline QvSpline = new CubicSpline(doubleTimes,doubleVoltages);
-//		CubicSpline CvSpline = new CubicSpline(doubleTimes,doubleVoltages);
-//		return CvSpline;
-//	}
+
 }
