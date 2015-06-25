@@ -172,8 +172,7 @@ public class Core {
 	 */
 	public void initMeas(ArrayList<String> params) {
 		_query = new Query(params);
-		_instrument.init(_query);
-		_window.setInitStatus(false);
+		_instrument.init(_query);		
 		_window.setStartStatus(true);
 		toConsole(_query.toString());
 		_measInitialized = true;	
