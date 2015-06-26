@@ -1,5 +1,6 @@
 package main;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -141,8 +142,12 @@ public class Result {
 	 * 
 	 */
 	public void generateMeasurementName(String id, int current){
-		Date date = new Date();
-		measurementName = id +" "+current+" A "+ date.toString();
+		//Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+		Date rawdate = new Date();
+		String date= sdf.format(rawdate);
+		//measurementName = id +" "+current+" A "+ date.toString();
+		measurementName = id +" "+current+" A "+ date;
 	}
 	
 	/*	

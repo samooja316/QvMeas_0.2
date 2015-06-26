@@ -14,6 +14,7 @@ public class Query {
 	private String yMax;
 	private String yLinLog;
 	private String comments;
+	private String name;
 
 	public Query(ArrayList<String> settings) {
 		current = settings.get(0);
@@ -27,6 +28,7 @@ public class Query {
 		yMax = settings.get(8);
 		yLinLog = settings.get(9);
 		comments = settings.get(10);
+		name = settings.get(11);
 	}
 
 	public String getxMin() {
@@ -71,6 +73,10 @@ public class Query {
 
 	public String getComments() {
 		return comments;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public String toString() {

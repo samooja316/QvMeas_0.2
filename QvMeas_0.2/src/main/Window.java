@@ -9,6 +9,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYDataset;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -24,6 +25,7 @@ import java.io.FileOutputStream;
 
 
 import java.io.FileReader;
+
 
 
 
@@ -110,6 +112,9 @@ public class Window extends JFrame implements ActionListener {
 	
 	//comments JTextPane
 	private JTextArea _comments;
+	
+	//name of the structure measured
+	private JTextField _name;
 	
 	//console and result console JTextAreas and JScrollPanes
 	private JTextPane _console;
@@ -432,7 +437,11 @@ public class Window extends JFrame implements ActionListener {
 		commentTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory	
 			.createEtchedBorder(EtchedBorder.LOWERED),
 			 "Comments"));
-		_comments = new JTextArea(4,18);
+		JLabel nameLabel = new JLabel("name"); 
+		commentTopPanel.add(nameLabel);
+		_name = new JTextField(14);		
+		commentTopPanel.add(_name);
+		_comments = new JTextArea(2,18);
 		_comments.setLineWrap(true);
 		_comments.setWrapStyleWord(true);
 		JScrollPane com = new JScrollPane(_comments);
@@ -639,18 +648,21 @@ public class Window extends JFrame implements ActionListener {
 		if(event.getSource().equals(_selectFile)) {
 			_controller.chooseFile();
 		} else if(event.getSource().equals(_generatePath)){
-			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+			Date rawdate = new Date();
+			String date= sdf.format(rawdate);
 			String ind = "";
 			try {
-					ind = Integer.toString(Integer.parseInt(_controller.getLastResultIndex())+1);					
+				ind = Integer.toString(Integer.parseInt(_controller.getLastResultIndex())+1);					
 			} catch (NoResultsException e) {
 				ind = "1";
 			}
 			String genpath = "";
-			genpath+=_current.getText()+"A "+
+			genpath+=_name.getText()+
+					_current.getText()+"A "+
 					_step.getText()+"s "+
 					"e"+ind+" "+
-					date.toString()+".qv";
+					date+".qv";
 			_filePathField.setText(genpath);
 		}
 		else if (event.getSource().equals(_measure)){					
@@ -663,7 +675,7 @@ public class Window extends JFrame implements ActionListener {
 			_controller.stopMeas();
 		} else if(event.getSource().equals(_init)) { 
 			if(_controller.instrumentCreated()){			
-				//meas params: current, step, nosteps, currentcomp, voltagecomp, xMin, xMax, yMin, yMax, yLinLog, comments			
+				//meas params: current, step, nosteps, currentcomp, voltagecomp, xMin, xMax, yMin, yMax, yLinLog, comments, name (of the struct)			
 				ArrayList<String> params = new ArrayList<String>();
 				params.add(_current.getText()+convertToExpVal(_currentScale.getSelectedItem().toString()));
 				params.add(_step.getText());
@@ -676,6 +688,7 @@ public class Window extends JFrame implements ActionListener {
 				params.add(_yMax.getText()+convertToExpVal(_yScale.getSelectedItem().toString()));
 				params.add(_yLinLog.getSelectedItem().toString());
 				params.add(_comments.getText());
+				params.add(_name.getText());
 			_controller.initMeas(params);
 			} else {
 				printToConsole("Couldn't access hardware\n");
