@@ -91,6 +91,9 @@ public class Window extends JFrame implements ActionListener {
 	private JPanel _paramCont;
 	private JInternalFrame _paramFrame;
 	
+	//frame for measurement control
+	private JInternalFrame _controlFrame;
+	
 	//panel for console view
 	private JPanel _consoleCont;
 	private JInternalFrame _consoleFrame;
@@ -207,6 +210,14 @@ public class Window extends JFrame implements ActionListener {
 		_resultFrame.setLocation(250,385);
 		this.getContentPane().add(_resultFrame);
 		
+		//console main container panel
+		JPanel controlCont = new JPanel();
+		_controlFrame = createFrame("Measurement Control");
+		_controlFrame.setContentPane(controlCont);
+		_controlFrame.setSize(250, 120);
+		_controlFrame.setLocation(250,770);
+		this.getContentPane().add(_controlFrame);
+		
 		
 		/*
 		 * Initializing empty graphs for placeholders while waiting test results
@@ -214,8 +225,11 @@ public class Window extends JFrame implements ActionListener {
 	    drawGraph(null, GraphType.VT); //plotting empty initializing graphs
 	    drawGraph(null, GraphType.CV);
 		
+	    //init components
 		initParamComponents();
+		initControlComponents();
 		initConsoleComponents();
+		
 		//initGraphComponents();
 		/*
 		//footerpanel
@@ -518,7 +532,7 @@ public class Window extends JFrame implements ActionListener {
 		/*
 		 * start/stop the system
 		 */
-		
+	/*	
 		JPanel buttonTopPanel = new JPanel();
 		buttonTopPanel.setPreferredSize(new Dimension(220,70));
 		buttonTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
@@ -546,10 +560,42 @@ public class Window extends JFrame implements ActionListener {
 		buttonTopPanel.add(_stop);
 		
 		_paramCont.add(buttonTopPanel);
-		
+		*/
 	}//End of initParamComponents()
 
-	
+	private void initControlComponents() {
+		/*
+		 * start/stop the system
+		 */
+		
+		JPanel buttonTopPanel = new JPanel();
+		buttonTopPanel.setPreferredSize(new Dimension(220,70));
+		buttonTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
+				.createEtchedBorder(EtchedBorder.LOWERED)
+				, "Measurement Control"));
+		
+		//init button
+		_init = new JButton("INIT");
+		_init.addActionListener(this);
+		setEnterPress(_init);
+		buttonTopPanel.add(_init);
+		
+		//start button
+		_measure = new JButton("START");
+		_measure.addActionListener(this);
+		setEnterPress(_measure);
+		_measure.setEnabled(false);
+		buttonTopPanel.add(_measure);
+		
+		//stop button
+		_stop = new JButton("STOP");
+		_stop.addActionListener(this);
+		setEnterPress(_stop);
+		_stop.setEnabled(false);
+		buttonTopPanel.add(_stop);
+		
+		_controlFrame.getContentPane().add(buttonTopPanel);
+	}
 	
 	/*
 	 * Method for setting VK_ENTER-KeyEvent to fire JButtons action
