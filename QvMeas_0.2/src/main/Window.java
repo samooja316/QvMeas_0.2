@@ -567,7 +567,7 @@ public class Window extends JFrame implements ActionListener {
 		/*
 		 * start/stop the system
 		 */
-		
+		 
 		JPanel buttonTopPanel = new JPanel();
 		buttonTopPanel.setPreferredSize(new Dimension(220,70));
 		buttonTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
