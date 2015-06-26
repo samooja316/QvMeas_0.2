@@ -28,9 +28,9 @@ public class GraphFrame extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 
 	//size and positions for different graphs
-	private static final Point _CVLOCATION = new Point(500,0);
-	private static final Point _VTLOCATION = new Point(500,385);
-	private static final Dimension _SIZE = new Dimension(485,385);
+	private static final Point _CVLOCATION = new Point(500,200);
+	private static final Point _VTLOCATION = new Point(500,500);
+	private static final Dimension _SIZE = new Dimension(485,300);
 	private JFreeChart _chart;
 	
 	//Result of this frame

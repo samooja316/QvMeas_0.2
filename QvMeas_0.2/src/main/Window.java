@@ -102,6 +102,9 @@ public class Window extends JFrame implements ActionListener {
 	private JPanel _resultCont;
 	private JInternalFrame _resultFrame;
 	
+	//frame for the meas history
+	private JInternalFrame _historyFrame;
+	
 	//panel for top graph view
 	private JPanel _graphCont;
 	private JInternalFrame _graphFrame;
@@ -150,7 +153,7 @@ public class Window extends JFrame implements ActionListener {
 	 */
 	public Window() {	
 		setTitle("QvMeas");
-		setSize(1000, 930);
+		setSize(1000, 860);
 		setLocation(100,100);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new GridLayout(1,2));		
@@ -187,18 +190,26 @@ public class Window extends JFrame implements ActionListener {
 		 */
 		_paramCont = new JPanel();
 		_paramFrame = createFrame("Meas Parameters");
-		_paramFrame.setSize(250,770);
-		_paramFrame.setLocation(0, 0);
+		_paramFrame.setSize(250,800);
+		_paramFrame.setLocation(0,0);
 		_paramFrame.setContentPane(_paramCont);
 		this.getContentPane().add(_paramFrame);
+		
+		//control main container panel
+		JPanel controlCont = new JPanel();
+		_controlFrame = createFrame("Controls");
+		_controlFrame.setContentPane(controlCont);
+		_controlFrame.setSize(250, 120);
+		_controlFrame.setLocation(250,0);
+		this.getContentPane().add(_controlFrame);
 		
 		
 		//console main container panel
 		_consoleCont = new JPanel();
 		_consoleFrame = createFrame("Console");
 		_consoleFrame.setContentPane(_consoleCont);
-		_consoleFrame.setSize(250,385);
-		_consoleFrame.setLocation(250,0);
+		_consoleFrame.setSize(250,400);
+		_consoleFrame.setLocation(250,120);
 		//_consoleCont.setPreferredSize(new Dimension(250,670));		
 		this.getContentPane().add(_consoleFrame);
 		
@@ -206,17 +217,17 @@ public class Window extends JFrame implements ActionListener {
 		_resultCont = new JPanel();
 		_resultFrame = createFrame("Result");
 		_resultFrame.setContentPane(_resultCont);
-		_resultFrame.setSize(250,385);
-		_resultFrame.setLocation(250,385);
+		_resultFrame.setSize(250,280);
+		_resultFrame.setLocation(250,520);
 		this.getContentPane().add(_resultFrame);
 		
-		//console main container panel
-		JPanel controlCont = new JPanel();
-		_controlFrame = createFrame("Measurement Control");
-		_controlFrame.setContentPane(controlCont);
-		_controlFrame.setSize(250, 120);
-		_controlFrame.setLocation(250,770);
-		this.getContentPane().add(_controlFrame);
+		//measurement history main frame
+		JPanel historyCont = new JPanel();
+		_historyFrame = createFrame("History");
+		_historyFrame.setContentPane(historyCont);
+		_historyFrame.setSize(485,200);
+		_historyFrame.setLocation(500,0);
+		this.getContentPane().add(_historyFrame);
 		
 		
 		/*
@@ -528,39 +539,7 @@ public class Window extends JFrame implements ActionListener {
 		
 		_paramCont.add(fileTopPanel);
 		
-		
-		/*
-		 * start/stop the system
-		 */
-	/*	
-		JPanel buttonTopPanel = new JPanel();
-		buttonTopPanel.setPreferredSize(new Dimension(220,70));
-		buttonTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
-				.createEtchedBorder(EtchedBorder.LOWERED)
-				, "Measurement Control"));
-		
-		//init button
-		_init = new JButton("INIT");
-		_init.addActionListener(this);
-		setEnterPress(_init);
-		buttonTopPanel.add(_init);
-		
-		//start button
-		_measure = new JButton("START");
-		_measure.addActionListener(this);
-		setEnterPress(_measure);
-		_measure.setEnabled(false);
-		buttonTopPanel.add(_measure);
-		
-		//stop button
-		_stop = new JButton("STOP");
-		_stop.addActionListener(this);
-		setEnterPress(_stop);
-		_stop.setEnabled(false);
-		buttonTopPanel.add(_stop);
-		
-		_paramCont.add(buttonTopPanel);
-		*/
+	
 	}//End of initParamComponents()
 
 	private void initControlComponents() {
@@ -572,7 +551,7 @@ public class Window extends JFrame implements ActionListener {
 		buttonTopPanel.setPreferredSize(new Dimension(220,70));
 		buttonTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
 				.createEtchedBorder(EtchedBorder.LOWERED)
-				, "Measurement Control"));
+				, "Main controls"));
 		
 		//init button
 		_init = new JButton("INIT");
@@ -630,10 +609,11 @@ public class Window extends JFrame implements ActionListener {
 		//JLabel consoleLabel = new JLabel("Console");
 		//_consoleCont.add(consoleLabel);
 		_console = new JTextPane();
-		_console.setPreferredSize(new Dimension(220,340));
+		_console.setPreferredSize(new Dimension(220,350));
 		_sp1 = new JScrollPane(_console);
 		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_console.setEditable(false);
 		_console.setBorder(BorderFactory.createEtchedBorder());
         Font font = new Font("Monospaced", Font.PLAIN, 12);
         _console.setFont(font);
@@ -646,7 +626,10 @@ public class Window extends JFrame implements ActionListener {
 		//_resultCont.add(resultLabel);
 		_result = new JTextPane();
 		_sp2 = new JScrollPane(_result);
-		_result.setPreferredSize(new Dimension(220,340));
+		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_result.setEditable(false);
+		_result.setPreferredSize(new Dimension(220,230));
 		_result.setBorder(BorderFactory.createEtchedBorder());
 		_result.setFont(font);
         _resultCont.add(_sp2);
@@ -774,6 +757,7 @@ public class Window extends JFrame implements ActionListener {
 				params.add(_yLinLog.getSelectedItem().toString());
 				params.add(_comments.getText());
 				params.add(_name.getText());
+				params.add(_number.getText());
 			_controller.initMeas(params);
 			} else {
 				printToConsole("Couldn't access hardware\n");

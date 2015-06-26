@@ -15,7 +15,8 @@ public class Query {
 	private String yLinLog;
 	private String comments;
 	private String name;
-
+	private String number;
+	
 	public Query(ArrayList<String> settings) {
 		current = settings.get(0);
 		step = settings.get(1);
@@ -29,6 +30,7 @@ public class Query {
 		yLinLog = settings.get(9);
 		comments = settings.get(10);
 		name = settings.get(11);
+		number = settings.get(12);
 	}
 
 	public String getxMin() {
@@ -77,6 +79,10 @@ public class Query {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getNumber() {
+		return number;
 	}
 	
 	public String toString() {
