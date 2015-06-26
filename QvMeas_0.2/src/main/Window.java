@@ -116,6 +116,9 @@ public class Window extends JFrame implements ActionListener {
 	//name of the structure measured
 	private JTextField _name;
 	
+	//number of the measurement
+	private JTextField _number;
+	
 	//console and result console JTextAreas and JScrollPanes
 	private JTextPane _console;
 	private JTextPane _result;
@@ -144,7 +147,7 @@ public class Window extends JFrame implements ActionListener {
 	 */
 	public Window() {	
 		setTitle("QvMeas");
-		setSize(1000, 830);
+		setSize(1000, 930);
 		setLocation(100,100);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new GridLayout(1,2));		
@@ -237,21 +240,61 @@ public class Window extends JFrame implements ActionListener {
 	 * @.post (ui window's measurement parameter controls shown on the screen)
 	 */
 	public void initParamComponents() {
-						
+			
+		
+		/*
+		 * Panel for the name of the struct measured
+		 */
+		JPanel nameTopPanel = new JPanel(); //current settings top container
+		nameTopPanel.setPreferredSize(new Dimension(220,100));
+		nameTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
+				.createEtchedBorder(EtchedBorder.LOWERED)
+				, "Title"));				
+
+		/*
+		 * name setting
+		 */		
+		JPanel namePanel = new JPanel();
+		namePanel.setPreferredSize(new Dimension(80,60));		
+		JLabel nameLabel = new JLabel("name");
+		nameLabel.setBounds(new Rectangle(80,20));
+		namePanel.add(nameLabel);
+		_name = new JTextField(6);		
+		namePanel.add(_name);
+		nameTopPanel.add(namePanel);
+		
+		/*
+		 * Meas no settings
+		 */
+		JPanel numberPanel = new JPanel();
+		numberPanel.setPreferredSize(new Dimension(80,60));		
+		JLabel numberLabel = new JLabel("number");
+		numberLabel.setBounds(new Rectangle(80,20));
+		numberPanel.add(numberLabel);
+		_number = new JTextField(4);		
+		numberPanel.add(_number);
+		
+		nameTopPanel.add(numberPanel);		
+					
+		_paramCont.add(nameTopPanel);
+		
+		
+		/*
+		 * Panel for all current related settings
+		 */
 		JPanel currentTopPanel = new JPanel(); //current settings top container
 		currentTopPanel.setPreferredSize(new Dimension(220,100));
 		currentTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
 				.createEtchedBorder(EtchedBorder.LOWERED)
 				, "Current"));
 		
+		
 		/*
 		 * Current setting
-		 */
-
-		
+		 */		
 		JPanel currentPanel = new JPanel();
 		currentPanel.setPreferredSize(new Dimension(80,60));		
-		JLabel currentLabel = new JLabel("current:");
+		JLabel currentLabel = new JLabel("current");
 		currentLabel.setBounds(new Rectangle(80,20));
 		currentPanel.add(currentLabel);
 		_current = new JTextField(4);
@@ -260,7 +303,7 @@ public class Window extends JFrame implements ActionListener {
 			
 		//current unit ("scale") selection
 		JPanel currentScalePanel = new JPanel();
-		currentScalePanel.setPreferredSize(new Dimension(80,70));
+		currentScalePanel.setPreferredSize(new Dimension(80,60));
 		JLabel currentScaleLabel = new JLabel("        ");
 		currentScaleLabel.setBounds(new Rectangle(80,20));
 		currentScalePanel.add(currentScaleLabel);
@@ -289,7 +332,7 @@ public class Window extends JFrame implements ActionListener {
 		//step value
 		JPanel stepPanel = new JPanel();
 		stepPanel.setPreferredSize(new Dimension(80,70));
-		JLabel stepLabel = new JLabel("step:  ");
+		JLabel stepLabel = new JLabel("step   ");
 		stepLabel.setBounds(new Rectangle(60,20));
 		stepPanel.add(stepLabel);
 		_step = new JTextField(3);
@@ -302,7 +345,7 @@ public class Window extends JFrame implements ActionListener {
 		//numberOfSteps value
 		JPanel numberOfStepsPanel = new JPanel();
 		numberOfStepsPanel.setPreferredSize(new Dimension(80,70));
-		JLabel numberOfStepsLabel = new JLabel("step count:");
+		JLabel numberOfStepsLabel = new JLabel("step count");
 		numberOfStepsLabel.setBounds(new Rectangle(80,20));
 		numberOfStepsPanel.add(numberOfStepsLabel);
 		_numberOfSteps = new JTextField(3);
@@ -437,10 +480,6 @@ public class Window extends JFrame implements ActionListener {
 		commentTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory	
 			.createEtchedBorder(EtchedBorder.LOWERED),
 			 "Comments"));
-		JLabel nameLabel = new JLabel("name"); 
-		commentTopPanel.add(nameLabel);
-		_name = new JTextField(14);		
-		commentTopPanel.add(_name);
 		_comments = new JTextArea(2,18);
 		_comments.setLineWrap(true);
 		_comments.setWrapStyleWord(true);
