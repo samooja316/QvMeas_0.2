@@ -106,7 +106,11 @@ public class Core {
 	 * @.return		(id of the last measurement's result + 1)
 	 */
 	public int getNextResultIndex() {
-		return getResults().get(_results.size()-1).getMeasurementId() + 1;
+		if (getResults().size()>0) {
+			return getResults().get(_results.size()-1).getMeasurementId() + 1;
+		} else {
+			return 1;
+		}
 	}
 	
 	/*

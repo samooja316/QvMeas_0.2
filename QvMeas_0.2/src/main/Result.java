@@ -39,10 +39,11 @@ public class Result {
 		this.query = query;
 		this.id = id;
 		this.rawData = rawData;
+		this.current = query.getCurrent();
 		generateMeasurementName();
 		date = new Date();
 		parseRawData(rawData);
-		calculateCapacitanceSerie(query.getCurrent());
+		calculateCapacitanceSerie(current);
 		
 	}
 	/*

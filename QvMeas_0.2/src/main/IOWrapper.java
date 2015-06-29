@@ -77,6 +77,9 @@ public class IOWrapper {
 			_dataFile.writeUTF(res.getComment());
 			_dataFile.writeUTF(formatResultData(res.getRawData()));
 			//consoleprint
+			System.out.println("measname: "+res.getMeasurementName());
+			System.out.println("meascomment: "+res.getComment());
+			System.out.println("date: "+sdf.format(res.getDate()));
 			controller.toResultConsole(res.getMeasurementName());
 			controller.toResultConsole(res.getComment());
 			controller.toResultConsole(formatResultData(res.getRawData()));

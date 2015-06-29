@@ -723,7 +723,7 @@ public class Window extends JFrame implements ActionListener {
 			genpath+=_name.getText()+
 					_current.getText()+"A "+
 					_step.getText()+"s "+
-					"e"+_number+" "+
+					"e"+_number.getText()+" "+
 					date+".qv";
 			_filePathField.setText(genpath);
 		}

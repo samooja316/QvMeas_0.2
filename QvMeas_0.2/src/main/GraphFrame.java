@@ -56,18 +56,23 @@ public class GraphFrame extends JInternalFrame {
 	 */
 	private ChartPanel createChartPanel(Result r, GraphType type) 
 			throws IllegalArgumentException {
-		Date rawDate = r.getDate();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-		String date = sdf.format(rawDate);
+		Date rawDate = null;
+		String date = null;
+		
 		
 		XYSeries resSerie = null;
-		if (r != null) { //check if there we're just initializing an empty frame and graph 
+		if (r != null) { 
+			rawDate = r.getDate(); //date from result
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+			date = sdf.format(rawDate);
+			//check if there we're just initializing an empty frame and graph 
 		if (type==GraphType.CV) { 
 			resSerie = new XYSeries("C-V");
-
+			sdf = new SimpleDateFormat("yyyy.MM.dd");
+		//	String date = sdf.format(rawDate);
 			ArrayList<Float> xValues = r.getTimeSerie();
 			// Spline
-			CubicSpline QvSpline = r.getRoundedQvSpline();
+			CubicSpline QvSpline = r.getQvSpline();
 			//
 
 			for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
