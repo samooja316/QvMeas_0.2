@@ -505,7 +505,7 @@ public class Window extends JFrame implements ActionListener {
 		commentTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory	
 			.createEtchedBorder(EtchedBorder.LOWERED),
 			 "Comments"));
-		_comments = new JTextArea(2,18);
+		_comments = new JTextArea(4,18);
 		_comments.setLineWrap(true);
 		_comments.setWrapStyleWord(true);
 		JScrollPane com = new JScrollPane(_comments);
@@ -719,17 +719,11 @@ public class Window extends JFrame implements ActionListener {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 			Date rawdate = new Date();
 			String date= sdf.format(rawdate);
-			String ind = "";
-			try {
-				ind = Integer.toString(Integer.parseInt(_controller.getLastResultIndex())+1);					
-			} catch (NoResultsException e) {
-				ind = "1";
-			}
 			String genpath = "";
 			genpath+=_name.getText()+
 					_current.getText()+"A "+
 					_step.getText()+"s "+
-					"e"+ind+" "+
+					"e"+_number+" "+
 					date+".qv";
 			_filePathField.setText(genpath);
 		}

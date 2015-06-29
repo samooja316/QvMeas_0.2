@@ -7,8 +7,8 @@ import be.ac.ulb.gpib.*;
  * The Entry point of the program, 
  * QvMeas class contains just the main method
  * 
- * @author Aleksi Oja
- * @email alejee@live.com
+ * @author Aleksi Oja, Tuukka Panula
+ * @email alejee@live.com, tujupan@utu.fi
  * @date 6/2015
  * @.version 0.1
  */

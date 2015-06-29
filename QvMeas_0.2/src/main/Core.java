@@ -103,20 +103,22 @@ public class Core {
 	 * 
 	 * @.pre		true
 	 * @.post		true
-	 * @.return		(index of the last measurement's result as a String)
+	 * @.return		(id of the last measurement's result + 1)
 	 */
-	public String getLastResultIndex() throws NoResultsException {
-		
-		String index;
-		
-		if(_results.size()!=0) {
-			index = _results.get(_results.size()-1).getMeasurementId();
-		} else throw new NoResultsException("No previous measurements");
-		
-		return index;
+	public int getNextResultIndex() {
+		return getResults().get(_results.size()-1).getMeasurementId() + 1;
 	}
 	
-	
+	/*
+	 * Method for getting next result index
+	 * 
+	 * @version 0.1
+	 * @since 0.2
+	 * 
+	 * @.pre		true
+	 * @.post		true
+	 * @.return		(index of the last measurement's result as a String)
+	 */
 	/*
 	 * Call IOWrapper -object to choose outputfile path for result data
 	 * 

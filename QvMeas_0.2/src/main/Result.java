@@ -17,32 +17,29 @@ import flanagan.interpolation.CubicSpline;
  */
 public class Result {
 	
-	private String id;
+	private int id;
 	private String rawData;
 	private String finalDataString;
-	private String comment;
 	private String rawSettingsData;
 	private String measurementName;
 	private ArrayList<Float> voltageSerie = new ArrayList<Float>();
 	private ArrayList<Float> timeSerie = new ArrayList<Float>();
 	private ArrayList<Float> capacitanceSerie = new ArrayList<Float>();
 	private String current;
+	private Query query;
 	
 	/*
 	 * @param	id, identification string
 	 * 			rawData, raw measurement data from HP4145B Print
-	 * 			comment, comment line inserted by user
-	 * 			current, current used in the measurement (String)
+	 * 			query, measurement query which lead to this result
 	 */
-	public Result(String id, String rawData, String comment, String current) {
+	public Result(int id, String rawData, Query query) {
 		super();
-		
+		this.query = query;
 		this.id = id;
 		this.rawData = rawData;
-		this.current = current;
-		this.comment = comment;
 		parseRawData(rawData);
-		calculateCapacitanceSerie(current);
+		calculateCapacitanceSerie(query.getCurrent());
 		
 	}
 	/*
@@ -172,7 +169,7 @@ public class Result {
 	public String getRawSettingsData(){
 		return rawSettingsData;
 	}
-	public String getMeasurementId() {
+	public int getMeasurementId() {
 		return id;
 	}
 	public String getMeasurementName(){
@@ -188,7 +185,7 @@ public class Result {
 		return capacitanceSerie;
 	}
 	public String getComment(){
-		return comment;
+		return query.getCurrent();
 	}
 	/*
 	 * A method for producing a piecewise-defined function (spline) from the

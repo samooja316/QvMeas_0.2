@@ -75,15 +75,9 @@ public class Measurement extends Thread {
 			controller.toConsole("Print done!\n");
 			this.resData = resData;
 			//data for result
-			String id;
-			try {
-				String prevId = controller.getLastResultIndex(); 
-				int parseid = Integer.parseInt(prevId)+1; 
-				id = Integer.toString(++parseid); // =)
-			} catch (NoResultsException e) {
-				id = "1";
-			}
-			Result res = new Result(id, resData, query.getComments(), query.getCurrent());
+			int id = controller.getNextResultIndex(); //id for new result 
+		//	Result res = new Result(id, resData, query.getComments(), query.getCurrent());
+			Result res = new Result(id, resData, query);
 			System.out.println("Result no. "+res.getMeasurementId()+" ready\n");
 			controller.toConsole("Result no. "+res.getMeasurementId()+" ready\n");
 			instrument.measurementReady(res);
