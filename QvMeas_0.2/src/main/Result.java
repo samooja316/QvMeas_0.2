@@ -27,6 +27,7 @@ public class Result {
 	private ArrayList<Float> capacitanceSerie = new ArrayList<Float>();
 	private String current;
 	private Query query;
+	private Date date;
 	
 	/*
 	 * @param	id, identification string
@@ -38,6 +39,8 @@ public class Result {
 		this.query = query;
 		this.id = id;
 		this.rawData = rawData;
+		generateMeasurementName();
+		date = new Date();
 		parseRawData(rawData);
 		calculateCapacitanceSerie(query.getCurrent());
 		
@@ -138,8 +141,11 @@ public class Result {
 	/*
 	 * 
 	 */
-	public void generateMeasurementName(String id, int current){
+	public void generateMeasurementName(){
 		//Date date = new Date();
+		/*
+		 * this arrangement is occasional, will be changed to query date from the query 
+		 */
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 		Date rawdate = new Date();
 		String date= sdf.format(rawdate);
@@ -159,6 +165,9 @@ public class Result {
 			}
 		}
 		return currentInt;
+	}
+	public Date getDate() { 
+		return date; 
 	}
 	public String getFinalDataString(){
 		return finalDataString;

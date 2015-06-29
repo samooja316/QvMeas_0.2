@@ -717,8 +717,8 @@ public class Window extends JFrame implements ActionListener {
 			_controller.chooseFile();
 		} else if(event.getSource().equals(_generatePath)){
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-			Date rawdate = new Date();
-			String date= sdf.format(rawdate);
+			Date rawDate = new Date();
+			String date = sdf.format(rawDate);
 			String genpath = "";
 			genpath+=_name.getText()+
 					_current.getText()+"A "+
@@ -751,7 +751,7 @@ public class Window extends JFrame implements ActionListener {
 				params.add(_yLinLog.getSelectedItem().toString());
 				params.add(_comments.getText());
 				params.add(_name.getText());
-				params.add(_number.getText());
+				params.add(_number.getText());				
 			_controller.initMeas(params);
 			} else {
 				printToConsole("Couldn't access hardware\n");

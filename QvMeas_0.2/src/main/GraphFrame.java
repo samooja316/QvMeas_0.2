@@ -14,6 +14,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import flanagan.interpolation.CubicSpline;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.awt.*;
 
@@ -55,15 +56,15 @@ public class GraphFrame extends JInternalFrame {
 	 */
 	private ChartPanel createChartPanel(Result r, GraphType type) 
 			throws IllegalArgumentException {
-		//ArrayList<Float> xValues; 
-		//ArrayList<Float> yValues;
+		Date rawDate = r.getDate();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+		String date = sdf.format(rawDate);
 		
 		XYSeries resSerie = null;
 		if (r != null) { //check if there we're just initializing an empty frame and graph 
 		if (type==GraphType.CV) { 
 			resSerie = new XYSeries("C-V");
-			//xValues = r.getVoltageSerie();
-			//yValues = r.getCapacitanceSerie();
+
 			ArrayList<Float> xValues = r.getTimeSerie();
 			// Spline
 			CubicSpline QvSpline = r.getRoundedQvSpline();
@@ -77,9 +78,10 @@ public class GraphFrame extends JInternalFrame {
 	        _chart = ChartFactory.createXYLineChart(
 	        	"Qv c-v"+
 	        	_result.getCurrent()+" "+
-	        	_result.getMeasurementName(),      // chart title
-	            "Bias [V]",                      // x axis label
-	            "Capacitance [pF]",                      // y axis label
+	        	_result.getMeasurementName()+" "+
+	        	date,				      // chart title
+	            "Bias [V]",               // x axis label
+	            "Capacitance [pF]",       // y axis label
 	            dataset,                  // data
 	            PlotOrientation.VERTICAL,
 	            true,                     // include legend
@@ -104,9 +106,10 @@ public class GraphFrame extends JInternalFrame {
 	        _chart = ChartFactory.createXYLineChart(
 		        "Qv v-t"+
 		    	_result.getCurrent()+" "+
-		    	_result.getMeasurementName(),      // chart title
-	            "Time [s]",                      // x axis label
-	            "Voltage [V]",                      // y axis label
+		    	_result.getMeasurementName()+" "+
+		    	date,				      // chart title
+	            "Time [s]",               // x axis label
+	            "Voltage [V]",            // y axis label
 	            dataset,                  // data
 	            PlotOrientation.VERTICAL,
 	            true,                     // include legend
@@ -116,12 +119,12 @@ public class GraphFrame extends JInternalFrame {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		} // checking null result
+		} // checking that result is not null
 		else {
 	    	_chart = ChartFactory.createXYLineChart(
 	    		type.toString(),      // chart title
-	            "Bias [V]",                      // x axis label
-	            "Capacitance [pF]",                      // y axis label
+	            "",                      // x axis label
+	            "",                      // y axis label
 	            null,                  // data
 	            PlotOrientation.VERTICAL,
 	            true,                     // include legend

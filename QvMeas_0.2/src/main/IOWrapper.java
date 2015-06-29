@@ -2,6 +2,7 @@ package main;
 
 import java.awt.FileDialog;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -65,14 +66,17 @@ public class IOWrapper {
 	* @.post (resData is written to a file specified in the filePath
  	*/
 	public void writeData(String filePath, Result res) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm");		
 		try {
 			_file = new FileOutputStream(filePath, true);
 			_dataFile = new DataOutputStream(_file);
 			System.out.println("Trying to write data to the file");
 			System.out.println(formatResultData(res.getRawData()));
 			_dataFile.writeUTF(res.getMeasurementName());
+			_dataFile.writeUTF(sdf.format(res.getDate()));
 			_dataFile.writeUTF(res.getComment());
 			_dataFile.writeUTF(formatResultData(res.getRawData()));
+			//consoleprint
 			controller.toResultConsole(res.getMeasurementName());
 			controller.toResultConsole(res.getComment());
 			controller.toResultConsole(formatResultData(res.getRawData()));
