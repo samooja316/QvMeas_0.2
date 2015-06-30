@@ -151,7 +151,8 @@ public class Result {
 		Date rawdate = new Date();
 		String date= sdf.format(rawdate);
 		//measurementName = id +" "+current+" A "+ date.toString();
-		measurementName = id +" "+current+" A "+ date;
+		//measurementName = id +" "+current+" A "+ date;
+		measurementName = query.getName()+" "+current+"A "+query.getNumber()+" "+date;
 	}
 	
 	/*	
@@ -182,6 +183,14 @@ public class Result {
 	public int getMeasurementId() {
 		return id;
 	}
+	public String getNumber() {
+		return query.getNumber();
+	}
+	//returns short and simple name of the structure measured
+	public String getName() {
+		return query.getName();
+	}
+	//returns long textual representation of the meas main parameters and date
 	public String getMeasurementName(){
 		return measurementName;
 	}

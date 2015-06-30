@@ -8,6 +8,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -81,9 +82,9 @@ public class GraphFrame extends JInternalFrame {
 			XYSeriesCollection dataset = new XYSeriesCollection();
 			dataset.addSeries(resSerie);
 	        _chart = ChartFactory.createXYLineChart(
-	        	"Qv c-v"+
-	        	_result.getCurrent()+" "+
-	        	_result.getMeasurementName()+" "+
+	        	_result.getName()+
+	        	_result.getCurrent()+"A "+
+	        	_result.getNumber()+" "+
 	        	date,				      // chart title
 	            "Bias [V]",               // x axis label
 	            "Capacitance [pF]",       // y axis label
@@ -108,11 +109,11 @@ public class GraphFrame extends JInternalFrame {
 			}
 			XYSeriesCollection dataset = new XYSeriesCollection();
 			dataset.addSeries(resSerie);
-	        _chart = ChartFactory.createXYLineChart(
-		        "Qv v-t"+
-		    	_result.getCurrent()+" "+
-		    	_result.getMeasurementName()+" "+
-		    	date,				      // chart title
+				_chart = ChartFactory.createXYLineChart(
+		        	_result.getName()+
+		        	_result.getCurrent()+"A "+
+		        	_result.getNumber()+" "+
+		        	date,				      // chart title
 	            "Time [s]",               // x axis label
 	            "Voltage [V]",            // y axis label
 	            dataset,                  // data
@@ -120,7 +121,10 @@ public class GraphFrame extends JInternalFrame {
 	            true,                     // include legend
 	            true,                     // tooltips
 	            false                     // urls
-	        );		
+	        );
+	        
+	        TextTitle tt = _chart.getTitle(); 
+	        tt.setFont(new Font(Font.MONOSPACED,1,12));
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -136,6 +140,8 @@ public class GraphFrame extends JInternalFrame {
 	            true,                     // tooltips
 	            false                     // urls
 	        );
+	        TextTitle tt = _chart.getTitle(); 
+	        tt.setFont(new Font(Font.MONOSPACED,1,14));
 		}
 
 		

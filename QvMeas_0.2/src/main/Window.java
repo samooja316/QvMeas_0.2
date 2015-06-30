@@ -672,12 +672,15 @@ public class Window extends JFrame implements ActionListener {
 	 */
 	public void setStartStatus(boolean b) {
 		_measure.setEnabled(b);		
+		_measure.requestFocus();
 	}	
 	public void setInitStatus(boolean b) {
 		_init.setEnabled(b);
+		_init.requestFocus();
 	}
 	public void setStopStatus(boolean b) {
 		_stop.setEnabled(b);
+		_stop.requestFocus();
 	}
 	
 	
@@ -720,7 +723,7 @@ public class Window extends JFrame implements ActionListener {
 			Date rawDate = new Date();
 			String date = sdf.format(rawDate);
 			String genpath = "";
-			genpath+=_name.getText()+
+			genpath+=_name.getText()+" "+
 					_current.getText()+"A "+
 					_step.getText()+"s "+
 					"e"+_number.getText()+" "+
