@@ -135,6 +135,9 @@ public class Window extends JFrame implements ActionListener {
 	private JMenuBar _menuBar; 
 	private JMenu _menu; 		
 	
+	//File menu item set filepath
+	private JMenuItem _setFilePath;
+	
 	//File menu menuitems
 	private JMenuItem _exit;
 	
@@ -147,6 +150,8 @@ public class Window extends JFrame implements ActionListener {
 	//empty V-T graphFrame for starters
 	private GraphFrame _emptyVT;
 	
+	//new def filepath
+	//private 
 	
 	/*
      * constructor which creates the UI window and shows it 
@@ -171,7 +176,17 @@ public class Window extends JFrame implements ActionListener {
 		_menu = new JMenu("File");
 		_menu.setMnemonic(KeyEvent.VK_A);
 		_menu.getAccessibleContext().setAccessibleDescription(
-		        "File menu");		
+		        "File menu");
+		
+		//set default filepath option
+		_setFilePath = new JMenuItem("Set Filepath", KeyEvent.VK_ESCAPE);
+		_setFilePath.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_F, ActionEvent.ALT_MASK));
+		_setFilePath.setPreferredSize(new Dimension(150,20));
+		_setFilePath.addActionListener(this);
+		_menu.add(_setFilePath);
+		
+		//exit option
 		_exit = new JMenuItem("Exit", KeyEvent.VK_ESCAPE);
 		_exit.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
@@ -716,7 +731,14 @@ public class Window extends JFrame implements ActionListener {
 	 *  
 	 */	
 	public void actionPerformed(ActionEvent event) {
-		if(event.getSource().equals(_selectFile)) {
+		if(event.getSource().equals(_setFilePath)) {
+			System.out.println("new file path setting");
+			JOptionPane.showMessageDialog(new JFrame(),
+				    new JTextField(3),
+				    "Set new default filepath",
+				    JOptionPane.PLAIN_MESSAGE);
+		}
+		else if(event.getSource().equals(_selectFile)) {
 			_controller.chooseFile();
 		} else if(event.getSource().equals(_generatePath)){
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
