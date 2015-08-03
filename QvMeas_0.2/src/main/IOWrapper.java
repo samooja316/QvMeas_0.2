@@ -20,11 +20,15 @@ import javax.swing.JFrame;
  */
 public class IOWrapper {
 
+	//private static final String defFilePath = ""
 	private String _data;
-	
 	private FileOutputStream _file;
 	private DataOutputStream _dataFile;
-	Core controller;
+	private Core controller;
+	
+	/*
+	 * Constructor
+	 */
 	public IOWrapper(Core controller) {
 		this.controller = controller;
 		_data = "Testidatateksti";
@@ -60,16 +64,15 @@ public class IOWrapper {
 	/*
  	* Method for writing data to a file
  	* 
-	* @version 0.1
+	* @version 0.2
 	* @since 0.1
 	* @.pre true
 	* @.post (resData is written to a file specified in the filePath
+	* 		and to the result console)
  	*/
 	public void writeData(String filePath, Result res) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm");		
 		try {
-//			_file = new FileOutputStream(filePath, true);
-//			_dataFile = new DataOutputStream(_file);
 			File file = new File(filePath); 
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			writer.write("Measname: "+res.getMeasurementName()+"\n");
@@ -79,10 +82,6 @@ public class IOWrapper {
 			writer.close();
 			System.out.println("Trying to write data to the file");
 			System.out.println(formatResultData(res.getRawData()));
-//			_dataFile.writeUTF("Measname: "+res.getMeasurementName());
-//			_dataFile.writeUTF("Date: "+sdf.format(res.getDate()));
-//			_dataFile.writeUTF("Meascomment: "+res.getComment());
-//			_dataFile.writeUTF(formatResultData(res.getRawData()));
 			//consoleprint
 			System.out.println("measname: "+res.getMeasurementName());
 			System.out.println("meascomment: "+res.getComment());
