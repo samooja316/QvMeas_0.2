@@ -150,8 +150,6 @@ public class Window extends JFrame implements ActionListener {
 	//empty V-T graphFrame for starters
 	private GraphFrame _emptyVT;
 	
-	//new def filepath
-	//private 
 	
 	/*
      * constructor which creates the UI window and shows it 
@@ -256,15 +254,6 @@ public class Window extends JFrame implements ActionListener {
 		initControlComponents();
 		initConsoleComponents();
 		
-		//initGraphComponents();
-		/*
-		//footerpanel
-		JPanel footer = new JPanel();
-		footer.setPreferredSize(new Dimension(1000,30));
-		footer.setLocation(0,970);
-		footer.setBackground(Color.BLACK);
-		this.getContentPane().add(footer);
-		*/
 	}
 	
 	
@@ -538,16 +527,21 @@ public class Window extends JFrame implements ActionListener {
 		fileTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
 				.createEtchedBorder(EtchedBorder.LOWERED)
 				, "Output File"));
+
+		
+		//Select filepath button
+		_selectFile = new JButton("Browse");
+		setEnterPress(_selectFile);		
+		_selectFile.addActionListener(this);
+		fileTopPanel.add(_selectFile);
+		
+		//Genereate filepath button
 		_generatePath = new JButton("Generate");
 		setEnterPress(_generatePath);
 		_generatePath.addActionListener(this);
 		fileTopPanel.add(_generatePath);
 		
-		_selectFile = new JButton("Browse");
-		setEnterPress(_selectFile);
 		
-		_selectFile.addActionListener(this);
-		fileTopPanel.add(_selectFile);
 		_filePathField = new JTextField(18); //filepath
 		_filePathField.setText("");
 		fileTopPanel.add(_filePathField);
@@ -627,7 +621,7 @@ public class Window extends JFrame implements ActionListener {
 		_console.setPreferredSize(new Dimension(220,350));
 		_sp1 = new JScrollPane(_console);
 		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		_console.setEditable(false);
 		_console.setBorder(BorderFactory.createEtchedBorder());
         Font font = new Font("Monospaced", Font.PLAIN, 12);
@@ -718,6 +712,22 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	
+	/*
+	 * Method for measurement name generation
+	 * 
+	 */
+	private String generateName() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		Date rawDate = new Date();
+		String date = sdf.format(rawDate);
+		String genPath = "";
+		genPath+=_name.getText()+" "+
+				_current.getText()+"A "+
+				_step.getText()+"s "+
+				"e"+_number.getText()+" "+
+				date+".qv";
+		return genPath;
+	}
 	
 	
 	/*
@@ -733,24 +743,25 @@ public class Window extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource().equals(_setFilePath)) {
 			System.out.println("new file path setting");
+			_controller.chooseDirectory();			
+			/*
 			JOptionPane.showMessageDialog(new JFrame(),
 				    new JTextField(3),
 				    "Set new default filepath",
-				    JOptionPane.PLAIN_MESSAGE);
+				    JOptionPane.OK_CANCEL_OPTION);
+			*/	    
 		}
-		else if(event.getSource().equals(_selectFile)) {
-			_controller.chooseFile();
-		} else if(event.getSource().equals(_generatePath)){
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-			Date rawDate = new Date();
-			String date = sdf.format(rawDate);
-			String genpath = "";
-			genpath+=_name.getText()+" "+
-					_current.getText()+"A "+
-					_step.getText()+"s "+
-					"e"+_number.getText()+" "+
-					date+".qv";
-			_filePathField.setText(genpath);
+		else if(event.getSource().equals(_selectFile)) { //file selection 
+			_controller.chooseFile(generateName());
+		} else if(event.getSource().equals(_generatePath)){ //autogenerate filename 
+			if (_controller.getDefaultDirectory().equals("")) {
+				JOptionPane.showMessageDialog(new JFrame(),					    
+					    "First choose the default directory for the results",
+					    "Default path needed",
+					    JOptionPane.OK_CANCEL_OPTION);
+				_controller.chooseDirectory();
+			}
+			_filePathField.setText(_controller.getDefaultDirectory()+"\\"+generateName());
 		}
 		else if (event.getSource().equals(_measure)){					
 			try {

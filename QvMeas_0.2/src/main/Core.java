@@ -113,30 +113,48 @@ public class Core {
 		}
 	}
 	
-	/*
-	 * Method for getting next result index
-	 * 
-	 * @version 0.1
-	 * @since 0.2
-	 * 
-	 * @.pre		true
-	 * @.post		true
-	 * @.return		(index of the last measurement's result as a String)
-	 */
+	
 	/*
 	 * Call IOWrapper -object to choose outputfile path for result data
 	 * 
 	 * @version 0.1
 	 * @since 0.1
 	 * @.pre true
-	 * @.post (filepath for res data will be set)
+	 * @.post (default filepath for results is set)
 	 * 
 	 */
-	public void chooseFile() {
-		String file = _io.giveFilePath();		
+	public void chooseFile(String baseName) {
+		String file = _io.giveFilePath(baseName);		
 		if(file != null) _window.writeFilePath(file);
 	}
 	
+	/*
+	 * Call IOWrapper -object to choose default directory for results
+	 * 
+	 * @version 0.1
+	 * @since 0.2
+	 * @.pre true
+	 * @.post (filepath for res data will be set)
+	 * 
+	 */
+	public void chooseDirectory() {
+		_io.setDefaultDirectory();
+		System.out.println(_io.getDefaultDirectory());
+	}
+	
+	/*
+	 * Get the default directory for results
+	 * 
+	 * @version 	0.1
+	 * @since 		0.2
+	 * @return 		default directory path, String 
+	 * @.pre 		true
+	 * @.post 		true
+	 * 
+	 */
+	public String getDefaultDirectory() {
+		return _io.getDefaultDirectory();
+	}
 	
 	/*
 	 * 

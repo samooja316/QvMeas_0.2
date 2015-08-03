@@ -5,6 +5,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 
@@ -20,7 +21,7 @@ import javax.swing.JFrame;
  */
 public class IOWrapper {
 
-	//private static final String defFilePath = ""
+	private String _defDirPath = "";
 	private String _data;
 	private FileOutputStream _file;
 	private DataOutputStream _dataFile;
@@ -39,26 +40,77 @@ public class IOWrapper {
 	/*
  	* Method for choosing a file to write or read to/from
  	* 
-	* @version 0.1
-	* @since 0.1
-	* @return path to file in which measurement results will be written
-	* @.pre true
-	* @.post true
+	* @version 		0.1
+	* @since 		0.1
+	* @return 		path to file in which measurement results will be written
+	* @params		will use String baseName as a suggestion for a filename
+	* @.pre 		true
+	* @.post 		true
  	*/
-	public String giveFilePath() {
-		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
-		fd.setDirectory("C:\\");
-		fd.setFile("*.*");
+	public String giveFilePath(String baseName) {
+		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);		
+		if (_defDirPath.equals("")) { fd.setDirectory("C:\\"); }
+		else { fd.setDirectory(_defDirPath); }
+		fd.setFile(baseName);
 		fd.setVisible(true);
 		String path = fd.getDirectory();
-		if (path.equals(null)) path = "";
+		if (path==null) path = "";
 		String name = fd.getFile();
-		if (name.equals(null)) name = "";
+		if (name==null) name = "";
 		String filePath = path + name;	
 		return(filePath);
 	}
 	
 	
+	/*
+ 	* Method for choosing a directory 
+ 	* 
+	* @version 		0.1
+	* @since 		0.2
+	* @return 		path (String) to a directory specified by the user
+	* @.pre 		true
+	* @.post 		true
+ 	*/
+	public String getDirPath() {
+		System.out.println("directory selection form");
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.showDialog(new JFrame(), "Open");
+		File f = fc.getSelectedFile();
+		String st = "";
+		st += f.getAbsolutePath();
+		return st;
+	}	
+	
+	
+	/*
+	 * Method for launching directory dialog and 
+	 * setting the dir chosen by the user a a default directory
+	 * for the meas results.
+	 * 
+	 * @version		0.1
+	 * @since		0.2
+	 * @.pre		true
+	 * @.post		getDefaultDirectory() == (path which user chose)
+	 */
+	public void setDefaultDirectory() {
+		_defDirPath = getDirPath();
+		controller.toConsole("New default result directory:\n"+_defDirPath);
+	}
+	
+	
+	/*
+	 * Get the default directory path
+	 * 
+	 * @version		0.1
+	 * @since		0.2
+	 * @return 		String, default directory path
+	 * @.pre		true
+	 * @.post		true
+	 */
+	public String getDefaultDirectory() {
+		return _defDirPath;
+	}
 	
 	
 	/*
