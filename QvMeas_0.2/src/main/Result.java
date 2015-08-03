@@ -100,7 +100,6 @@ public class Result {
 			}
 			if (infoDataRead==true){
 				if (finalResData.charAt(i)=='\n'){
-
 					timeStartVoltEnd = i;
 					if (timeEndVoltStart!=timeStartVoltEnd){
 						voltageString = finalResData.substring(timeEndVoltStart+1,timeStartVoltEnd);
@@ -204,7 +203,7 @@ public class Result {
 		return capacitanceSerie;
 	}
 	public String getComment(){
-		return query.getCurrent();
+		return query.getComments();
 	}
 	/*
 	 * A method for producing a piecewise-defined function (spline) from the

@@ -68,21 +68,29 @@ public class IOWrapper {
 	public void writeData(String filePath, Result res) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm");		
 		try {
-			_file = new FileOutputStream(filePath, true);
-			_dataFile = new DataOutputStream(_file);
+//			_file = new FileOutputStream(filePath, true);
+//			_dataFile = new DataOutputStream(_file);
+			File file = new File(filePath); 
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			writer.write("Measname: "+res.getMeasurementName()+"\n");
+			writer.write("Date: "+sdf.format(res.getDate())+"\n");
+			writer.write("Meascomment: "+res.getComment()+"\n");
+			writer.write(formatResultData(res.getRawData()));
+			writer.close();
 			System.out.println("Trying to write data to the file");
 			System.out.println(formatResultData(res.getRawData()));
-			_dataFile.writeUTF(res.getMeasurementName());
-			_dataFile.writeUTF(sdf.format(res.getDate()));
-			_dataFile.writeUTF(res.getComment());
-			_dataFile.writeUTF(formatResultData(res.getRawData()));
+//			_dataFile.writeUTF("Measname: "+res.getMeasurementName());
+//			_dataFile.writeUTF("Date: "+sdf.format(res.getDate()));
+//			_dataFile.writeUTF("Meascomment: "+res.getComment());
+//			_dataFile.writeUTF(formatResultData(res.getRawData()));
 			//consoleprint
 			System.out.println("measname: "+res.getMeasurementName());
 			System.out.println("meascomment: "+res.getComment());
 			System.out.println("date: "+sdf.format(res.getDate()));
-			controller.toResultConsole(res.getMeasurementName());
-			controller.toResultConsole(res.getComment());
-			controller.toResultConsole(formatResultData(res.getRawData()));
+			controller.toResultConsole("Measname: "+res.getMeasurementName()+"\n");
+			controller.toResultConsole("Date: "+sdf.format(res.getDate())+"\n");
+			controller.toResultConsole("Meascomment: "+res.getComment()+"\n");
+			controller.toResultConsole(formatResultData(res.getRawData())+"\n");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
