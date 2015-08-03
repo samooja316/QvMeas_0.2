@@ -54,7 +54,7 @@ public class Core {
 		//creating io wrapper object
 		_io = new IOWrapper(this);
 		
-		//creating instrument
+		//creating the instrument
 		try {
 		_instrument = new Instrument(); 
 		_instrument.setController(this);
