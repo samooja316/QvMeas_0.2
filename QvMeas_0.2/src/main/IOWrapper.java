@@ -95,7 +95,7 @@ public class IOWrapper {
 	 */
 	public void setDefaultDirectory() {
 		_defDirPath = getDirPath();
-		controller.toConsole("New default result directory:\n"+_defDirPath);
+		controller.toConsole("New default result directory:\n"+_defDirPath+"\n");
 	}
 	
 	

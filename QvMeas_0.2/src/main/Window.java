@@ -619,7 +619,7 @@ public class Window extends JFrame implements ActionListener {
 		_sp1 = new JScrollPane(_console);
 		_sp1.setPreferredSize(new Dimension(220,350));
 		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		_console.setEditable(false);
 		_console.setBorder(BorderFactory.createEtchedBorder());
         Font font = new Font("Monospaced", Font.PLAIN, 12);
@@ -633,7 +633,7 @@ public class Window extends JFrame implements ActionListener {
 		_sp2 = new JScrollPane(_result);
 		_sp2.setPreferredSize(new Dimension(220,230));
 		_sp2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		_sp2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_sp2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		_result.setEditable(false);
 		_result.setPreferredSize(new Dimension(220,230));
 		_result.setBorder(BorderFactory.createEtchedBorder());
@@ -839,11 +839,10 @@ public class Window extends JFrame implements ActionListener {
 	 *  		cosole will be scrolled down with the text
 	 */
 	public void printToConsole(String s) {
-		try {
+		try {			
 			Document doc = _console.getDocument(); //getting document to which JTextArea is writing to
 			doc.insertString(doc.getLength(), s, null);	//insert new text to the end of the document	
 			_console.setCaretPosition(_console.getDocument().getLength()); //set caret position to the end: scroll efect because of JScrollPane usage
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
