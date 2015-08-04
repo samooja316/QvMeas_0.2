@@ -615,33 +615,30 @@ public class Window extends JFrame implements ActionListener {
 		/*
 		 * Console
 		 */
-		//JLabel consoleLabel = new JLabel("Console");
-		//_consoleCont.add(consoleLabel);
 		_console = new JTextPane();
-		_console.setPreferredSize(new Dimension(220,350));
 		_sp1 = new JScrollPane(_console);
+		_sp1.setPreferredSize(new Dimension(220,350));
 		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		_console.setEditable(false);
 		_console.setBorder(BorderFactory.createEtchedBorder());
         Font font = new Font("Monospaced", Font.PLAIN, 12);
         _console.setFont(font);
-		_consoleCont.add(_sp1);
+		_consoleFrame.getContentPane().add(_sp1);
 		
 		/*
 		 * Result console
 		 */
-		//JLabel resultLabel = new JLabel("Result data");
-		//_resultCont.add(resultLabel);
 		_result = new JTextPane();
 		_sp2 = new JScrollPane(_result);
-		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		_sp2.setPreferredSize(new Dimension(220,230));
+		_sp2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		_sp2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		_result.setEditable(false);
 		_result.setPreferredSize(new Dimension(220,230));
 		_result.setBorder(BorderFactory.createEtchedBorder());
 		_result.setFont(font);
-        _resultCont.add(_sp2);
+        _resultFrame.getContentPane().add(_sp2);
 	}
 	
 	
