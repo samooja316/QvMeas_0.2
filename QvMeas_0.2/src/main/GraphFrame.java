@@ -94,6 +94,8 @@ public class GraphFrame extends JInternalFrame {
 	            true,                     // tooltips
 	            false                     // urls
 	        );
+	        TextTitle tt = _chart.getTitle(); 
+	        tt.setFont(new Font(Font.MONOSPACED,1,12));
 		}
 		else if (type==GraphType.VT){
 			resSerie = new XYSeries("V-T");
@@ -128,8 +130,8 @@ public class GraphFrame extends JInternalFrame {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		} // checking that result is not null
-		else {
+		} // end of the not null result case
+		else { // if result is null
 	    	_chart = ChartFactory.createXYLineChart(
 	    		type.toString(),      // chart title
 	            "",                      // x axis label
