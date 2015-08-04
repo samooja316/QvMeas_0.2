@@ -621,7 +621,7 @@ public class Window extends JFrame implements ActionListener {
 		_console.setPreferredSize(new Dimension(220,350));
 		_sp1 = new JScrollPane(_console);
 		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		_console.setEditable(false);
 		_console.setBorder(BorderFactory.createEtchedBorder());
         Font font = new Font("Monospaced", Font.PLAIN, 12);
