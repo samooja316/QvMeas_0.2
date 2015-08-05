@@ -269,6 +269,8 @@ public class Core {
 		_io.writeData(_window.readFilePath(), res);		
 		_window.drawGraph(res, GraphType.CV);
 		_window.drawGraph(res, GraphType.VT);
+		//add results number to the history listing
+		_window.updateHistoryListing(res.getNumber());
 	}
 	
 	

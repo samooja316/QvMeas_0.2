@@ -105,6 +105,12 @@ public class Window extends JFrame implements ActionListener {
 	//frame for the meas history
 	private JInternalFrame _historyFrame;
 	
+	//selectbox for past measurement numbers
+	private JComboBox<String> _historyBox;
+	
+	//textpane to view old datas
+	private JTextPane _historyPane;
+	
 	//panel for top graph view
 	private JPanel _graphCont;
 	private JInternalFrame _graphFrame;
@@ -253,6 +259,7 @@ public class Window extends JFrame implements ActionListener {
 		initParamComponents();
 		initControlComponents();
 		initConsoleComponents();
+		initHistoryComponents();
 		
 	}
 	
@@ -642,7 +649,59 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	
-
+	/*
+	 * Method for creating console view related components
+	 * 
+	 * @version 	0.1
+	 * @since 		0.2
+	 * @.pre 		true
+	 * @.post 		(ui window's History view on the screen)
+	 */
+	public void initHistoryComponents() {
+		//Selectbox for meashistory
+		_historyBox = new JComboBox<String>();
+		_historyBox.setPreferredSize(new Dimension(50,20));		
+		_historyBox.setEditable(false);
+		_historyBox.addItem("test");
+		_historyFrame.getContentPane().add(_historyBox);
+		//textpane for history meas' data
+		_historyPane = new JTextPane();
+		JScrollPane historyScroll = new JScrollPane(_historyPane);
+		historyScroll.setPreferredSize(new Dimension(400,160));
+		_historyFrame.getContentPane().add(historyScroll);
+		
+	}
+	
+	
+	/*
+	 * Method for appending new element to the meas history list 
+	 */
+	public void updateHistoryListing(String newItem) {
+		_historyBox.addItem(newItem);
+	}
+	
+	public void updateHistoryData() {
+		String meas = _historyBox.getSelectedItem().toString();
+		ArrayList<Result> resArray = _controller.getResults();
+		for(Result res : resArray) {
+			if (res.getNumber().equals(meas)){
+				Document doc = _historyPane.getDocument();
+				String nbr = res.getNumber() + "\n";
+				String name = res.getName() + "\n";
+				String comment = res.getComment() + "\n";
+				String data = res.getRawData();
+				//print stuff to the history console		
+				try {
+					doc.insertString(doc.getLength(), "Measurement: e"+nbr, null);
+					doc.insertString(doc.getLength(), name, null);
+					doc.insertString(doc.getLength(), comment, null);
+					doc.insertString(doc.getLength(), data, null);
+				} catch (Exception e) {
+					System.out.println("Couldn't insert to the history console");
+				}
+			}
+		}
+	}
 	
 	/*
 	 * Method for creating basic JInternalFrame without size or position or contents
