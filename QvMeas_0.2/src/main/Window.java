@@ -79,6 +79,8 @@ public class Window extends JFrame implements ActionListener {
 	private JButton _measure;	
 	private JButton _stop;
 	
+	private JRadioButton _calibration;
+	
 	//textfieldd and comboboxes for plotting
 	private JTextField _xMin;
 	private JTextField _xMax;
@@ -165,6 +167,8 @@ public class Window extends JFrame implements ActionListener {
 		JDesktopPane mainPane = new JDesktopPane();
 		setContentPane(mainPane);
 		
+		ImageIcon img = new ImageIcon("C:\\Users\\tujupan\\Downloads\\qv_icon.png");
+		this.setIconImage(img.getImage());
 		/*
 		 * init frameList for graphs
 		 */
@@ -214,7 +218,7 @@ public class Window extends JFrame implements ActionListener {
 		JPanel controlCont = new JPanel();
 		_controlFrame = createFrame("Controls");
 		_controlFrame.setContentPane(controlCont);
-		_controlFrame.setSize(250, 120);
+		_controlFrame.setSize(250, 150);
 		_controlFrame.setLocation(250,0);
 		this.getContentPane().add(_controlFrame);
 		
@@ -223,8 +227,8 @@ public class Window extends JFrame implements ActionListener {
 		_consoleCont = new JPanel();
 		_consoleFrame = createFrame("Console");
 		_consoleFrame.setContentPane(_consoleCont);
-		_consoleFrame.setSize(250,400);
-		_consoleFrame.setLocation(250,120);
+		_consoleFrame.setSize(250,370);
+		_consoleFrame.setLocation(250,150);
 		//_consoleCont.setPreferredSize(new Dimension(250,670));		
 		this.getContentPane().add(_consoleFrame);
 		
@@ -563,7 +567,7 @@ public class Window extends JFrame implements ActionListener {
 		 */
 		 
 		JPanel buttonTopPanel = new JPanel();
-		buttonTopPanel.setPreferredSize(new Dimension(220,70));
+		buttonTopPanel.setPreferredSize(new Dimension(220,100));
 		buttonTopPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
 				.createEtchedBorder(EtchedBorder.LOWERED)
 				, "Main controls"));
@@ -588,6 +592,10 @@ public class Window extends JFrame implements ActionListener {
 		_stop.setEnabled(false);
 		buttonTopPanel.add(_stop);
 		
+		//Auto calibration radio button
+		_calibration = new JRadioButton("AUTO CALIBRATION");
+		buttonTopPanel.add(_calibration);
+
 		_controlFrame.getContentPane().add(buttonTopPanel);
 	}
 	
@@ -719,7 +727,6 @@ public class Window extends JFrame implements ActionListener {
 	
 	
 	
-	
 	/*
 	 * ActionListener for ui events. Method will call Core object's corresponding
 	 * event handler methods
@@ -760,27 +767,42 @@ public class Window extends JFrame implements ActionListener {
 			}		
 		} else if(event.getSource().equals(_stop)){
 			_controller.stopMeas();
-		} else if(event.getSource().equals(_init)) { 
-			if(_controller.instrumentCreated()){			
-				//meas params: current, step, nosteps, currentcomp, voltagecomp, xMin, xMax, yMin, yMax, yLinLog, comments, name (of the struct)			
-				ArrayList<String> params = new ArrayList<String>();
-				params.add(_current.getText()+convertToExpVal(_currentScale.getSelectedItem().toString()));
-				params.add(_step.getText());
-				params.add(_numberOfSteps.getText());
-				params.add(_currentLimit.getText()+convertToExpVal(_currentCompScale.getSelectedItem().toString()));
-				params.add(_voltageLimit.getText()+convertToExpVal(_voltageCompScale.getSelectedItem().toString()));
-				params.add(_xMin.getText());
-				params.add(_xMax.getText());
-				params.add(_yMin.getText()+convertToExpVal(_yScale.getSelectedItem().toString()));
-				params.add(_yMax.getText()+convertToExpVal(_yScale.getSelectedItem().toString()));
-				params.add(_yLinLog.getSelectedItem().toString());
-				params.add(_comments.getText());
-				params.add(_name.getText());
-				params.add(_number.getText());				
-			_controller.initMeas(params);
-			} else {
-				printToConsole("Couldn't access hardware\n");
+		} else if(event.getSource().equals(_init)) {
+
+			try{
+				if(_controller.instrumentCreated()){			
+					//meas params: current, currentscale, step, nosteps, currentcomp, ccscale, voltagecomp, vcscale, xMin, xMax, yMin, yMax, ycompscale, yLinLog, comments, name (of the struct), calibration			
+					ArrayList<String> params = new ArrayList<String>();
+		/* 0 */			params.add(_current.getText());
+		/* 1 */			params.add(convertToExpVal(_currentScale.getSelectedItem().toString()));
+		/* 2 */			params.add(_step.getText());
+		/* 3 */			params.add(_numberOfSteps.getText());
+		/* 4 */			params.add(_currentLimit.getText());
+		/* 5 */			params.add(convertToExpVal(_currentCompScale.getSelectedItem().toString()));
+		/* 6 */			params.add(_voltageLimit.getText());
+		/* 7 */			params.add(convertToExpVal(_voltageCompScale.getSelectedItem().toString()));
+		/* 8 */			params.add(_xMin.getText());
+		/* 9 */			params.add(_xMax.getText());
+		/* 10 */ 		params.add(_yMin.getText());
+		/* 11 */		params.add(_yMax.getText());
+		/* 12 */		params.add(convertToExpVal(_yScale.getSelectedItem().toString()));
+		/* 13 */		params.add(_yLinLog.getSelectedItem().toString());
+		/* 14 */		params.add(_comments.getText());
+		/* 15 */		params.add(_name.getText());
+		/* 16 */		params.add(_number.getText());
+						if(_calibration.isSelected()){
+		/* 17 */				params.add("ON");
+						} else {
+		/* 17 */				params.add("OFF");
+						}
+				_controller.initMeas(params);
+				} else {
+					printToConsole("Couldn't access hardware\n");
+				}
+			} catch(ValuesNotValidException e){
+				printToConsole(e.getMessage()); 
 			}
+		
 		} else if(event.getSource().equals(_exit)) {
 			System.exit(0);
 		}
@@ -828,13 +850,13 @@ public class Window extends JFrame implements ActionListener {
 	 * @since 0.1
 	 * @.pre s != null
 	 * @.post s will be appended to the end of the console text AND
-	 *  		cosole will be scrolled down with the text
+	 *  		console will be scrolled down with the text
 	 */
 	public void printToConsole(String s) {
 		try {
 			Document doc = _console.getDocument(); //getting document to which JTextArea is writing to
 			doc.insertString(doc.getLength(), s, null);	//insert new text to the end of the document	
-			_console.setCaretPosition(_console.getDocument().getLength()); //set caret position to the end: scroll efect because of JScrollPane usage
+			_console.setCaretPosition(_console.getDocument().getLength()); //set caret position to the end: scroll effect because of JScrollPane usage
 
 		} catch (Exception e) {
 			e.printStackTrace();
