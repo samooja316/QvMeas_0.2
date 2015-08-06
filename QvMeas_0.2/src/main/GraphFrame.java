@@ -182,6 +182,17 @@ public class GraphFrame extends JInternalFrame {
 		return cPanel;
 	}
 	
-	
+	/*
+	 * method for getting result related to this graph 
+	 * 
+	 * @version 	0.1
+	 * @since		0.2
+	 * @return 		Result-object
+	 * @.pre		true
+	 * @.post 		true
+	 */
+	public Result getResult() {
+		return _result;
+	}
 
 }

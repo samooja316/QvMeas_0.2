@@ -728,8 +728,14 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 					}
 					//remove old graphwindows and produce new ones
 					for (GraphFrame gf : _graphFrames) {						
-						_graphList.remove(gf);
-						gf.setEnabled(false);
+						System.out.println("found graph"+gf.toString());
+						//gf.setEnabled(false);
+						if(gf.getResult().getNumber().equals(meas)) {
+							gf.setVisible(true);
+						} else {
+							gf.setVisible(false);
+						}
+						
 					}
 					drawGraph(res,GraphType.CV);
 					drawGraph(res,GraphType.VT);					
