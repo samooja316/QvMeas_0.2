@@ -130,11 +130,11 @@ public class Result {
 	public void calculateCapacitanceSerie(String currentString){
 
 		float singleCapacitance = 0;
-		int currentInt = getCurrent();
+		float currentFloat = getCurrent();
 		System.out.println(voltageSerie.size());
 
 		for(int i=0;i<voltageSerie.size()-1;i++){
-			singleCapacitance = currentInt/((voltageSerie.get(i+1)-voltageSerie.get(i))/(timeSerie.get(i+1)-timeSerie.get(i)));
+			singleCapacitance = currentFloat/((voltageSerie.get(i+1)-voltageSerie.get(i))/(timeSerie.get(i+1)-timeSerie.get(i)));
 			capacitanceSerie.add(singleCapacitance);
 		}
 	}
@@ -157,15 +157,15 @@ public class Result {
 	/*	
 	 * Getters
 	 */
-	public int getCurrent(){
+	public Float getCurrent(){
 		String currentString = current;
-		int currentInt = 0;
+		float currentFloat = 0;
 		for (int i = 0;i < currentString.length();i++){
 			if (currentString.charAt(i)=='E'){
-				currentInt = Integer.parseInt(currentString.substring(0,i));
+				currentFloat = Float.parseFloat(currentString.substring(0,i));
 			}
 		}
-		return currentInt;
+		return currentFloat;
 	}
 	public Date getDate() { 
 		return date; 

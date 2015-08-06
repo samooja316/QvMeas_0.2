@@ -106,7 +106,7 @@ public class Measurement extends Thread {
 				case "Lg": linlog = "2";break;
 			}
 			System.out.print("Setting up... ");
-			myDevice.writeCommand("IT3 DR0 BC");
+			myDevice.writeCommand("IT3 DR0 CA"+query.getCalibration()+" BC");
 			myDevice.writeCommand("DE CH1,'VG','IG',2,3;CH2;CH3,'VS','IS',1,3;CH4;");
 			myDevice.writeCommand("VS1;VS2;VM1;VM2;");
 			myDevice.writeCommand("SS IC1,"+query.getCurrent()+","+query.getVoltageCompliance()+";VC3,0,"+query.getCurrentCompliance()+";");

@@ -1,8 +1,10 @@
 package main;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JDesktopPane;
 
@@ -44,6 +46,8 @@ public class Core {
 	//meas initialized
 	private boolean _measInitialized = false;
 	 
+	private boolean _validValues = false;
+	
 	private ArrayList<Result> _results = new ArrayList<Result>();
 	
 	/*
@@ -166,7 +170,8 @@ public class Core {
 	 * 
 	 */
 	public boolean instrumentCreated() {
-		return _instrument != null;
+		return true;
+		//return _instrument != null;
 	}
 	
 	
@@ -178,6 +183,7 @@ public class Core {
 	 * 
 	 * @version 0.1
 	 * @since 0.1
+	 * @throws ValuesNotValidException
 	 * @.pre instrumentCreated == TRUE  AND 
 	 * 		params != null AND params is right form:
 	 * 		for meas params ArrayList<String>: 
@@ -193,13 +199,20 @@ public class Core {
 	 * 			params.get(9) = yLinLog
 	 * @.post (Measurement will be initialized with proper Query object)
 	 * 
-	 */
-	public void initMeas(ArrayList<String> params) {
+	 */	
+	public void initMeas(ArrayList<String> params) throws ValuesNotValidException {
+		ArrayList<Object> returnValues = checkValues(params);
+		_validValues = (boolean) (returnValues.get(0));
+		System.out.println((returnValues.get(0)).toString());
+		if (_validValues) {
 		_query = new Query(params);
 		_instrument.init(_query);		
 		_window.setStartStatus(true);
 		toConsole(_query.toString());
-		_measInitialized = true;	
+		_measInitialized = true;
+		} else {
+				throw new ValuesNotValidException (returnValues.get(1).toString());
+		}
 	}
 	
 	
@@ -215,7 +228,7 @@ public class Core {
 	 * @.post (Measurement will be launched)
 	 * 
 	 */
-	public void start() throws MeasNotInitException {		
+	public void start() throws MeasNotInitException {
 		if(_measInitialized) {
 			_instrument.measure();
 			_window.setInitStatus(false);
@@ -302,4 +315,118 @@ public class Core {
 	public void toConsole(String print) {
 		_window.printToConsole(print);
 	}
+	
+	
+	
+	
+	/*
+	 * method for checking if the entered values are in the correct form
+	 * 
+	 * @version 0.1
+	 * @since 0.2
+	 * 
+	 * @.pre (params created AND values of params are in the right order)
+	 * @.post (user entered values will be verified and specific error messages are displayed if necessary)
+	 */
+	public ArrayList<Object> checkValues(ArrayList<String> params){
+		StringBuilder causes = new StringBuilder();
+		ArrayList<Boolean> checkList = new ArrayList<Boolean>();
+		
+		//current
+		if (params.get(0).matches("^-?\\d+$")|| params.get(0).matches("^-?([0-9]*)\\.([0-9]*)+$")){
+			Float current = Float.parseFloat(params.get(0));
+			switch (params.get(1)){
+			case "E-3":
+				if (Math.abs(current) > 100){
+					checkList.add(false);
+					causes.append("Maximum current is 100mA!\n");
+				} else {
+					checkList.add(true);
+				}
+				break;
+			case "E-12":
+				if (params.get(0).matches("^-?([0-9]*)\\.([0-9]*)+$")){
+					checkList.add(false);
+					causes.append("Current resolution 1pA!\n");
+				} else {
+					checkList.add(true);
+				}
+				break;
+			default: 
+				checkList.add(true);
+				break;
+			}
+
+		} else {
+			checkList.add(false);
+			causes.append("Current must be a number!\n");
+		}
+		
+		//step
+		if (params.get(2).matches("^-?\\d+$")|| params.get(2).matches("^-?([0-9]*)\\.([0-9]*)+$")){
+			Float step = Float.parseFloat(params.get(2));
+			if (step < 0){
+				checkList.add(false);
+				causes.append("Step cannot be negative!\n");
+			} else {
+				checkList.add(true);
+			}
+
+		} else {
+			checkList.add(false);
+			causes.append("Step must be a number!\n");
+		}
+		
+		//step count
+		if (params.get(3).matches("^-?\\d+$")){
+			Float stepCount = Float.parseFloat(params.get(3));
+			if (stepCount >= 0 && stepCount <= 1024){
+				checkList.add(true);
+			} else {
+				checkList.add(false);
+				causes.append("Step count must be between 0 and 1024!\n");
+
+			}
+
+		} else {
+			checkList.add(false);
+			causes.append("Step count must be an integer!\n");
+		}
+		
+		//compliances
+		if ((params.get(4).matches("^-?\\d+$")|| params.get(4).matches("^-?([0-9]*)\\.([0-9]*)+$")) && (params.get(6).matches("^-?\\d+$")|| params.get(6).matches("^-?([0-9]*)\\.([0-9]*)+$"))){
+			Float voltComp = Float.parseFloat(params.get(4));
+			Float currComp = Float.parseFloat(params.get(6));
+
+			if (voltComp < 0 || currComp < 0){
+				checkList.add(false);
+				causes.append("Compliance cannot be negative!\n");
+			} else {
+				checkList.add(true);
+			}
+
+		} else {
+			checkList.add(false);
+			causes.append("Compliance must be a number!\n");
+		}
+		
+		//Axis values
+		if ((params.get(8).matches("^-?\\d+$")|| params.get(8).matches("^-?([0-9]*)\\.([0-9]*)+$")) && (params.get(9).matches("^-?\\d+$")|| params.get(9).matches("^-?([0-9]*)\\.([0-9]*)+$")) && (params.get(10).matches("^-?\\d+$")|| params.get(10).matches("^-?([0-9]*)\\.([0-9]*)+$")) && (params.get(11).matches("^-?\\d+$")|| params.get(11).matches("^-?([0-9]*)\\.([0-9]*)+$"))){
+			checkList.add(true);
+		} else {
+			checkList.add(false);
+			causes.append("Axis value must be a number!\n");
+		}
+		
+		ArrayList<Object> returnValues = new ArrayList<Object>();
+		boolean check = true;
+		for (int i=0;i<checkList.size()-1;i++){
+			check = checkList.get(i) && check;
+		}
+		returnValues.add(check);
+		returnValues.add(causes);
+
+		return returnValues;
+	}
+
 }
