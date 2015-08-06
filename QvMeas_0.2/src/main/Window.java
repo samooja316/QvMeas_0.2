@@ -29,6 +29,7 @@ import java.io.FileReader;
 
 
 
+
 //JFreeChart imports
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -157,6 +158,9 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	
 	//empty V-T graphFrame for starters
 	private GraphFrame _emptyVT;
+
+	//history select button to view old data
+	private JButton _historySelect;
 	
 	
 	/*
@@ -675,6 +679,10 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_historyBox.setEditable(false);
 		_historyBox.addItem("exp");
 		_historyFrame.getContentPane().add(_historyBox);
+		//history select button
+		_historySelect = new JButton("select");
+		_historySelect.addActionListener(this);
+		_historyFrame.getContentPane().add(_historySelect);
 		//textpane for history meas' data
 		_historyPane = new JTextPane();
 		JScrollPane historyScroll = new JScrollPane(_historyPane);
@@ -710,6 +718,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 					String data = res.getRawData();
 					//print stuff to the history console		
 					try {
+						//tähän remove content muuten kaikki tulee putkeen
 						doc.insertString(doc.getLength(), "Measurement: e"+nbr, null);
 						doc.insertString(doc.getLength(), name, null);
 						doc.insertString(doc.getLength(), comment, null);
@@ -832,6 +841,8 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 				    "Set new default filepath",
 				    JOptionPane.OK_CANCEL_OPTION);
 			*/	    
+		} else if(event.getSource().equals(_historySelect)) {
+			updateHistoryData();
 		}
 		else if(event.getSource().equals(_selectFile)) { //file selection 
 			_controller.chooseFile(generateName());
@@ -898,6 +909,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	
 	@Override
 	public void itemStateChanged(ItemEvent event) {
+		System.out.println("item state changed");
 		if (event.getSource().equals(_historyBox)) {
 			updateHistoryData();
 		}

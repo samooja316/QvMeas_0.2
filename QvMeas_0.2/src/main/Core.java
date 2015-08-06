@@ -170,8 +170,7 @@ public class Core {
 	 * 
 	 */
 	public boolean instrumentCreated() {
-		return true;
-		//return _instrument != null;
+		return _instrument != null;
 	}
 	
 	
