@@ -54,7 +54,7 @@ import flanagan.interpolation.CubicSpline;
  * @since 	0.1
  * 
  */
-public class Window extends JFrame implements ActionListener {
+public class Window extends JFrame implements ActionListener, ItemListener {
 	
 	//The core object to whom window can pass actions occurred
 	private Core _controller;	
@@ -658,11 +658,14 @@ public class Window extends JFrame implements ActionListener {
 	 * @.post 		(ui window's History view on the screen)
 	 */
 	public void initHistoryComponents() {
+		//label for meas history selext box
+		//JLabel historyLabel = new JLabel("exp nbr\n");
+		//_historyFrame.getContentPane().add(historyLabel);
 		//Selectbox for meashistory
 		_historyBox = new JComboBox<String>();
 		_historyBox.setPreferredSize(new Dimension(50,20));		
 		_historyBox.setEditable(false);
-		_historyBox.addItem("test");
+		_historyBox.addItem("exp");
 		_historyFrame.getContentPane().add(_historyBox);
 		//textpane for history meas' data
 		_historyPane = new JTextPane();
@@ -674,30 +677,45 @@ public class Window extends JFrame implements ActionListener {
 	
 	
 	/*
-	 * Method for appending new element to the meas history list 
+	 * Method for appending new element to the meas history list
+	 * @version 	0.1
+	 * @since		0.2
+	 * @.pre		true
+	 * @.post		UI will contain newItem in the measure select box
+	 * 				in the history window
 	 */
 	public void updateHistoryListing(String newItem) {
 		_historyBox.addItem(newItem);
 	}
 	
 	public void updateHistoryData() {
-		String meas = _historyBox.getSelectedItem().toString();
-		ArrayList<Result> resArray = _controller.getResults();
-		for(Result res : resArray) {
-			if (res.getNumber().equals(meas)){
-				Document doc = _historyPane.getDocument();
-				String nbr = res.getNumber() + "\n";
-				String name = res.getName() + "\n";
-				String comment = res.getComment() + "\n";
-				String data = res.getRawData();
-				//print stuff to the history console		
-				try {
-					doc.insertString(doc.getLength(), "Measurement: e"+nbr, null);
-					doc.insertString(doc.getLength(), name, null);
-					doc.insertString(doc.getLength(), comment, null);
-					doc.insertString(doc.getLength(), data, null);
-				} catch (Exception e) {
-					System.out.println("Couldn't insert to the history console");
+		String meas = _historyBox.getSelectedItem().toString();		
+		if(!meas.equals("exp")) { //to check that there really is a meas chosen
+			ArrayList<Result> resArray = _controller.getResults();
+			for(Result res : resArray) {
+				if (res.getNumber().equals(meas)){
+					//init data for the history console
+					Document doc = _historyPane.getDocument();
+					String nbr = res.getNumber() + "\n";
+					String name = res.getName() + "\n";
+					String comment = res.getComment() + "\n";
+					String data = res.getRawData();
+					//print stuff to the history console		
+					try {
+						doc.insertString(doc.getLength(), "Measurement: e"+nbr, null);
+						doc.insertString(doc.getLength(), name, null);
+						doc.insertString(doc.getLength(), comment, null);
+						doc.insertString(doc.getLength(), data, null);
+					} catch (Exception e) {
+						System.out.println("Couldn't insert to the history console");
+					}
+					//remove old graphwindows and produce new ones
+					for (GraphFrame gf : _graphFrames) {						
+						_graphList.remove(gf);
+						gf.setEnabled(false);
+					}
+					drawGraph(res,GraphType.CV);
+					drawGraph(res,GraphType.VT);					
 				}
 			}
 		}
@@ -796,6 +814,7 @@ public class Window extends JFrame implements ActionListener {
 	 * @.post (Core objects corresponding the event handler method will be called) 
 	 *  
 	 */	
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource().equals(_setFilePath)) {
 			System.out.println("new file path setting");
@@ -855,7 +874,12 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	
-	
+	@Override
+	public void itemStateChanged(ItemEvent event) {
+		if (event.getSource().equals(_historyBox)) {
+			updateHistoryData();
+		}
+	}
 	
 	
 	/*
