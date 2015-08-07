@@ -1,6 +1,10 @@
 package main;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
@@ -25,6 +29,10 @@ import java.io.FileOutputStream;
 
 
 import java.io.FileReader;
+
+
+
+
 
 
 
@@ -143,12 +151,20 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	//menubar
 	private JMenuBar _menuBar; 
 	private JMenu _menu; 		
+	private JMenu _winMenu;
 	
 	//File menu item set filepath
 	private JMenuItem _setFilePath;
 	
 	//File menu menuitems
 	private JMenuItem _exit;
+	
+	//Window menu items
+	private JMenuItem _paramContMenuItem;
+	private JMenuItem _controlContMenuItem;
+	private JMenuItem _consoleContMenuItem;
+	private JMenuItem _resultContMenuItem;
+	private JMenuItem _historyContMenuItem;
 	
 	//list of GraphFrame ui-objects
 	private ArrayList<GraphFrame> _graphFrames = new ArrayList<GraphFrame>();
@@ -182,9 +198,13 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		 */
 		_graphList = new ArrayList<JInternalFrame>();
 		/*
-		 * set main menu
+		 * set main menubar
 		 */
 		_menuBar = new JMenuBar();
+		
+		/*
+		 * File menu
+		 */
 		_menu = new JMenu("File");
 		_menu.setMnemonic(KeyEvent.VK_A);
 		_menu.getAccessibleContext().setAccessibleDescription(
@@ -207,6 +227,68 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_menu.add(_exit);
 		
 		_menuBar.add(_menu);
+		
+		
+		/*
+		 * Window
+		 */
+		_winMenu = new JMenu("Window");
+		_winMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {				
+				updateWindowMenu();
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		_winMenu.setMnemonic(KeyEvent.VK_W);
+		_winMenu.getAccessibleContext().setAccessibleDescription("Window handling menu");
+		
+		//show / hide parametrs
+		_paramContMenuItem = new JMenuItem("Parameters");
+		_paramContMenuItem.setPreferredSize(new Dimension(150,20));
+		_paramContMenuItem.addActionListener(this);
+		_winMenu.add(_paramContMenuItem);
+		
+		//show/hide controls
+		_controlContMenuItem = new JMenuItem("Controls");
+		_controlContMenuItem.setPreferredSize(new Dimension(150,20));
+		_controlContMenuItem.addActionListener(this);
+		_winMenu.add(_controlContMenuItem);
+		
+		//show/hide console
+		_consoleContMenuItem = new JMenuItem("Console");
+		_consoleContMenuItem.setPreferredSize(new Dimension(150,20));
+		_consoleContMenuItem.addActionListener(this);
+		_winMenu.add(_consoleContMenuItem);
+		
+		//show/hide result	
+		_resultContMenuItem = new JMenuItem("Result");
+		_resultContMenuItem.setPreferredSize(new Dimension(150,20));
+		_resultContMenuItem.addActionListener(this);
+		_winMenu.add(_resultContMenuItem);
+		
+		//show/hide history
+		_historyContMenuItem = new JMenuItem("History");
+		_historyContMenuItem.setPreferredSize(new Dimension(150,20));
+		_historyContMenuItem.addActionListener(this);
+		_winMenu.add(_historyContMenuItem);
+		
+		//add window menu to the menubar
+		_menuBar.add(_winMenu);
+		
+		
 		this.setJMenuBar(_menuBar);
 		/*
 		 * Parameter main container panel and frame
@@ -636,7 +718,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		 */
 		_console = new JTextPane();
 		_sp1 = new JScrollPane(_console);
-		_sp1.setPreferredSize(new Dimension(220,350));
+		_sp1.setPreferredSize(new Dimension(220,320));
 		_sp1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		_sp1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		_console.setEditable(false);
@@ -718,7 +800,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 					String data = res.getRawData();
 					//print stuff to the history console		
 					try {
-						//tähän remove content muuten kaikki tulee putkeen
+						doc.remove(0,doc.getLength());
 						doc.insertString(doc.getLength(), "Measurement: e"+nbr, null);
 						doc.insertString(doc.getLength(), name, null);
 						doc.insertString(doc.getLength(), comment, null);
@@ -726,23 +808,32 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 					} catch (Exception e) {
 						System.out.println("Couldn't insert to the history console");
 					}
-					//remove old graphwindows and produce new ones
-					for (GraphFrame gf : _graphFrames) {						
-						System.out.println("found graph"+gf.toString());
-						//gf.setEnabled(false);
-						if(gf.getResult().getNumber().equals(meas)) {
-							gf.setVisible(true);
-						} else {
-							gf.setVisible(false);
-						}
-						
-					}
-					drawGraph(res,GraphType.CV);
-					drawGraph(res,GraphType.VT);					
+					//show chosen graphs - hide others
+					showChosenGraphs(meas);
 				}
 			}
 		}
 	}
+	
+	/*
+	 * Method for showing graphs related to the measurement chosen
+	 * 
+	 * @version		0.1
+	 * @since		0.2
+	 * @.pre		true
+	 * @.post		Graphs related to the _historyBox.getSelectedItem.toString()
+	 * 				value (measurement) will be shown and others hidden
+	 */
+	private void showChosenGraphs(String measNumber) {
+		for (GraphFrame gf : _graphFrames) {						
+			if(gf.getResult().getNumber().equals(measNumber)) {
+				gf.setVisible(true);
+			} else {
+				gf.setVisible(false);
+			}
+		}	
+	}
+	
 	
 	/*
 	 * Method for creating basic JInternalFrame without size or position or contents
@@ -757,6 +848,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 */
     private JInternalFrame createFrame(String t) {
     	JInternalFrame f = new JInternalFrame(t);
+    	f.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
     	f.setResizable(true);
     	f.setClosable(true);
     	f.setMaximizable(true);
@@ -827,6 +919,24 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	}
 	
 	/*
+	 * Method for showing and hiding the window specified
+	 * 
+	 * @.post	parameter specified frame will be turned off or on (visibility) depending
+	 * 			its current state. The corresponding menu item text will be changed too
+	 */
+	private void switchWindowState(JInternalFrame frame) {
+		if(frame.isVisible()) {
+			frame.setVisible(false);
+		}
+		else {
+			frame.setVisible(true);
+		}
+	}
+	
+	
+	
+	
+	/*
 	 * ActionListener for ui events. Method will call Core object's corresponding
 	 * event handler methods
 	 * 
@@ -838,7 +948,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 */	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if(event.getSource().equals(_setFilePath)) {
+		if(event.getSource().equals(_setFilePath)) {	//Menuevent setting def filepath
 			System.out.println("new file path setting");
 			_controller.chooseDirectory();			
 			/*
@@ -847,12 +957,39 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 				    "Set new default filepath",
 				    JOptionPane.OK_CANCEL_OPTION);
 			*/	    
-		} else if(event.getSource().equals(_historySelect)) {
+		} 
+		else if (event.getSource().equals(_paramContMenuItem)) { // Menuevent show/hide parameter window
+			switchWindowState(_paramFrame);			
+		} 
+		else if (event.getSource().equals(_controlContMenuItem)) {
+			switchWindowState(_controlFrame);
+		} 
+		else if (event.getSource().equals(_consoleContMenuItem)) {
+			switchWindowState(_consoleFrame);
+		}
+		else if (event.getSource().equals(_resultContMenuItem)) {
+			switchWindowState(_resultFrame);
+		}
+		else if (event.getSource().equals(_historyContMenuItem)) {
+			switchWindowState(_historyFrame);
+		}
+		else if (event.getSource().equals(_controlContMenuItem)) { //menuevent show/hide control window
+			if(_paramFrame.isVisible()) {
+				_paramFrame.setVisible(false);
+				_paramContMenuItem.setText("Show Parameters");
+			}
+			else {
+				_paramFrame.setVisible(true);
+				_paramContMenuItem.setText("Hide Parameters");
+			}
+		} 
+		else if(event.getSource().equals(_historySelect)) { //old measurement selected in history
 			updateHistoryData();
 		}
 		else if(event.getSource().equals(_selectFile)) { //file selection 
 			_controller.chooseFile(generateName());
-		} else if(event.getSource().equals(_generatePath)){ //autogenerate filename 
+		} 
+		else if(event.getSource().equals(_generatePath)){ //autogenerate filename 
 			if (_controller.getDefaultDirectory().equals("")) {
 				JOptionPane.showMessageDialog(new JFrame(),					    
 					    "First choose the default directory for the results",
@@ -862,15 +999,17 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 			}
 			_filePathField.setText(_controller.getDefaultDirectory()+"\\"+generateName());
 		}
-		else if (event.getSource().equals(_measure)){					
+		else if (event.getSource().equals(_measure)){	//Start measurement clicked
 			try {
 				_controller.start();
 			} catch(MeasNotInitException e) {
 				printToConsole("Measurement not initialized!\n");
 			}		
-		} else if(event.getSource().equals(_stop)){
+		} 
+		else if(event.getSource().equals(_stop)){ //stop measurement clicked
 			_controller.stopMeas();
-		} else if(event.getSource().equals(_init)) {
+		} 
+		else if(event.getSource().equals(_init)) { //init measurement clicked
 
 			try{
 				if(_controller.instrumentCreated()){			
@@ -921,6 +1060,24 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 	
+	private void updateWindowMenu() {
+		//parameters
+		if(_paramFrame.isVisible()) _paramContMenuItem.setText("Hide Parameters");
+		else _paramContMenuItem.setText("Show Parameters");
+		//controls
+		if(_controlFrame.isVisible()) _controlContMenuItem.setText("Hide Parameters");
+		else _controlContMenuItem.setText("Show Controls");
+		//console
+		if(_consoleFrame.isVisible()) _consoleContMenuItem.setText("Hide Console");
+		else _consoleContMenuItem.setText("Show Console");
+		//result
+		if(_resultFrame.isVisible()) _resultContMenuItem.setText("Hide Result");
+		else _resultContMenuItem.setText("Show Result");
+		//history
+		if(_historyFrame.isVisible()) _historyContMenuItem.setText("Hide History");
+		else _historyContMenuItem.setText("Show History");
+		
+	}
 	
 	/*
 	 * Method for converting input field values to exponent format
@@ -1007,9 +1164,11 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 */
 	public void drawGraph(Result res, GraphType type) {	
 		GraphFrame gf = new GraphFrame(res, type);
+		//gf.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);		
 		this.getContentPane().add(gf);
 		gf.moveToFront();
 		if(res!=null) {
+			hideLastGraphs();
 			_graphFrames.add(gf);
 			if(type.equals(GraphType.CV)&&_emptyCV!=null) {
 				_emptyCV.setVisible(false);
@@ -1023,6 +1182,21 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 			if(type.equals(GraphType.CV)) _emptyCV = gf;
 			else if(type.equals(GraphType.VT)) _emptyVT = gf;
 		}
+	}
+	
+	/*
+	 * Method for hiding two last graph frames
+	 * 
+	 * @version 	0.1
+	 * @since		0.2
+	 * @.pre		true
+	 * @.post		if _graphFrames.size()>=2 two last graphFrames will be hidden
+	 */
+	private void hideLastGraphs() {
+		if(_graphFrames.size()>=2) {
+			_graphFrames.get(_graphFrames.size()-1).setVisible(false);
+			_graphFrames.get(_graphFrames.size()-2).setVisible(false);
+		}		
 	}
 	
 	/*
