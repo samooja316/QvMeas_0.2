@@ -45,10 +45,11 @@ public class GraphFrame extends JInternalFrame {
     	setClosable(true);
     	setMaximizable(true);
     	setIconifiable(true);
+    	_result = r;
     	setVisible(true);		
 		this.setContentPane(createChartPanel(r, type));
 		this.setVisible(true);
-		_result = r;
+		
 	}
 	
 	

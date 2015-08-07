@@ -183,6 +183,9 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	
 	private JInternalFrame _manual;
 	
+	private GraphFrame _currentCV;
+	private GraphFrame _currentVT;
+	
 	/*
      * constructor which creates the UI window and shows it 
 	 */
@@ -1236,9 +1239,18 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		this.getContentPane().add(gf);
 		gf.moveToFront();
 		if(res!=null) {
-			hideLastGraphs();
+			//hideLastGraphs();
+			/*
+			if(type.equals(GraphType.CV)) {
+				_currentCV.setVisible(false);
+				_currentCV = gf;
+			} else if (type.equals(GraphType.VT)) {
+				_currentVT.setVisible(false);
+				_currentVT = gf;
+			}
+			*/
 			_graphFrames.add(gf);
-			if(type.equals(GraphType.CV)&&_emptyCV!=null) {
+			if(type.equals(GraphType.CV)&&_emptyCV!=null) {				
 				_emptyCV.setVisible(false);
 				_emptyCV = null;
 			}
