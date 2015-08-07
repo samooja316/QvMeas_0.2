@@ -78,7 +78,9 @@ public class IOWrapper {
 		fc.showDialog(new JFrame(), "Open");
 		File f = fc.getSelectedFile();
 		String st = "";
-		st += f.getAbsolutePath();
+		if(f!=null){
+			st += f.getAbsolutePath();
+		}
 		return st;
 	}	
 	
@@ -195,5 +197,20 @@ public class IOWrapper {
 	    finalResData = finalResData+"\n"+resLine;
 		scanner.close();
 		return finalResData;
+	}
+	
+	public String readFile(String path) throws FileNotFoundException {
+		File file = new File(path); 
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String ret = "";
+		try {
+			//add line to return String as long as they exist
+			while((ret+=reader.readLine()) != null) {}
+			reader.close();
+		} catch (IOException e) {
+			System.out.println("couldn't read the helpfile");
+		}
+		
+		return ret;
 	}
 }

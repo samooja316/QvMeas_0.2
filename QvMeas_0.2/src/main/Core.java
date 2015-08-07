@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -427,5 +428,14 @@ public class Core {
 
 		return returnValues;
 	}
-
+	
+	public String helpRequest() {
+		String ret = null;
+		try {
+			ret = _io.readFile("../../qvmeas_ohjeet.txt");
+		} catch (FileNotFoundException e) {
+			System.out.println("Couldn't find the help file");
+		}
+		return ret;
+	}
 }

@@ -152,6 +152,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	private JMenuBar _menuBar; 
 	private JMenu _menu; 		
 	private JMenu _winMenu;
+	private JMenu _helpMenu;
 	
 	//File menu item set filepath
 	private JMenuItem _setFilePath;
@@ -166,6 +167,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	private JMenuItem _resultContMenuItem;
 	private JMenuItem _historyContMenuItem;
 	private JMenuItem _graphContMenuItem;
+	private JMenuItem _manualMenuItem;
 	
 	//list of GraphFrame ui-objects
 	private ArrayList<GraphFrame> _graphFrames = new ArrayList<GraphFrame>();
@@ -179,6 +181,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	//history select button to view old data
 	private JButton _historySelect;
 	
+	private JInternalFrame _manual;
 	
 	/*
      * constructor which creates the UI window and shows it 
@@ -207,20 +210,20 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		 * File menu
 		 */
 		_menu = new JMenu("File");
-		_menu.setMnemonic(KeyEvent.VK_A);
+		_menu.setMnemonic(KeyEvent.VK_F);
 		_menu.getAccessibleContext().setAccessibleDescription(
 		        "File menu");
 		
 		//set default filepath option
-		_setFilePath = new JMenuItem("Set Filepath", KeyEvent.VK_ESCAPE);
+		_setFilePath = new JMenuItem("Set Filepath");
 		_setFilePath.setAccelerator(KeyStroke.getKeyStroke(
-				KeyEvent.VK_F, ActionEvent.ALT_MASK));
+				KeyEvent.VK_P, ActionEvent.CTRL_MASK));
 		_setFilePath.setPreferredSize(new Dimension(150,20));
 		_setFilePath.addActionListener(this);
 		_menu.add(_setFilePath);
 		
 		//exit option
-		_exit = new JMenuItem("Exit", KeyEvent.VK_ESCAPE);
+		_exit = new JMenuItem("Exit");
 		_exit.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
 		_exit.setPreferredSize(new Dimension(150,20));
@@ -231,7 +234,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		
 		
 		/*
-		 * Window
+		 * Window menu
 		 */
 		_winMenu = new JMenu("Window");
 		_winMenu.addMenuListener(new MenuListener() {
@@ -251,7 +254,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_winMenu.setMnemonic(KeyEvent.VK_W);
 		_winMenu.getAccessibleContext().setAccessibleDescription("Window handling menu");
 		
-		//show / hide parametrs
+		//show / hide parameters
 		_paramContMenuItem = new JMenuItem("Parameters");
 		_paramContMenuItem.setPreferredSize(new Dimension(150,20));
 		_paramContMenuItem.addActionListener(this);
@@ -290,7 +293,28 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_menuBar.add(_winMenu);
 		
 		
+		/*
+		 * Help menu
+		 */
+		_helpMenu = new JMenu("Help");
+		_helpMenu.setMnemonic(KeyEvent.VK_H);
+		_helpMenu.getAccessibleContext().setAccessibleDescription("Help menu");
+		
+		//read manual
+		_manualMenuItem = new JMenuItem("Read Manual", KeyEvent.VK_ESCAPE);
+		_manualMenuItem.setPreferredSize(new Dimension(150,20));
+		_manualMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+		_manualMenuItem.addActionListener(this);
+		_helpMenu.add(_manualMenuItem);
+		
+		//attach helpmenu to the menubar
+		_menuBar.add(_helpMenu);
+		
+		//set menubar to the window
 		this.setJMenuBar(_menuBar);
+		
+		
 		/*
 		 * Parameter main container panel and frame
 		 * About the functionality: we're adding small JPanels to large
@@ -351,7 +375,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		initControlComponents();
 		initConsoleComponents();
 		initHistoryComponents();
-		
+		initManual();
 	}
 	
 	
@@ -1003,13 +1027,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource().equals(_setFilePath)) {	//Menuevent setting def filepath
 			System.out.println("new file path setting");
-			_controller.chooseDirectory();			
-			/*
-			JOptionPane.showMessageDialog(new JFrame(),
-				    new JTextField(3),
-				    "Set new default filepath",
-				    JOptionPane.OK_CANCEL_OPTION);
-			*/	    
+			_controller.chooseDirectory();			    
 		} 
 		else if (event.getSource().equals(_paramContMenuItem)) { // Menuevent show/hide parameter window
 			switchWindowState(_paramFrame);			
@@ -1029,16 +1047,10 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		else if (event.getSource().equals(_graphContMenuItem)) {
 			switchGraphWindowState();
 		}
-		else if (event.getSource().equals(_controlContMenuItem)) { //menuevent show/hide control window
-			if(_paramFrame.isVisible()) {
-				_paramFrame.setVisible(false);
-				_paramContMenuItem.setText("Show Parameters");
-			}
-			else {
-				_paramFrame.setVisible(true);
-				_paramContMenuItem.setText("Hide Parameters");
-			}
-		} 
+		else if (event.getSource().equals(_manualMenuItem)) {
+			System.out.println("Manvisib");
+			_manual.setVisible(true);
+		}
 		else if(event.getSource().equals(_historySelect)) { //old measurement selected in history
 			updateHistoryData();
 		}
@@ -1121,7 +1133,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		if(_paramFrame.isVisible()) _paramContMenuItem.setText("Hide Parameters");
 		else _paramContMenuItem.setText("Show Parameters");
 		//controls
-		if(_controlFrame.isVisible()) _controlContMenuItem.setText("Hide Parameters");
+		if(_controlFrame.isVisible()) _controlContMenuItem.setText("Hide Controls");
 		else _controlContMenuItem.setText("Show Controls");
 		//console
 		if(_consoleFrame.isVisible()) _consoleContMenuItem.setText("Hide Console");
@@ -1264,4 +1276,35 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 * @.result		(All graphframes from this session)
 	 */
 	public ArrayList<GraphFrame> getGraphs() { return _graphFrames; } 
+	
+	public void initManual() {
+		_manual = new JInternalFrame();
+    	_manual.setResizable(true);
+    	_manual.setClosable(true);
+    	_manual.setMaximizable(true);
+    	_manual.setIconifiable(true);
+    	_manual.setSize(600, 600);		
+    	_manual.setLocation(100, 100);
+    	_manual.setContentPane(new JPanel());
+    	_manual.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
+    	this.getContentPane().add(_manual);
+		_manual.moveToFront();
+		JTextPane helpText = new JTextPane();
+		JScrollPane helpScroll = new JScrollPane(helpText);
+		helpScroll.setPreferredSize(new Dimension(560,560));
+		helpScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		helpScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		/*
+		try {
+			Document doc = helpText.getDocument();
+			String helpStr = _controller.helpRequest();
+			System.out.println("help: "+helpStr);
+			doc.insertString(doc.getLength(), helpStr, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("insert didn't success");
+		}
+		*/
+		_manual.getContentPane().add(helpScroll);
+	}
 }
