@@ -165,6 +165,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	private JMenuItem _consoleContMenuItem;
 	private JMenuItem _resultContMenuItem;
 	private JMenuItem _historyContMenuItem;
+	private JMenuItem _graphContMenuItem;
 	
 	//list of GraphFrame ui-objects
 	private ArrayList<GraphFrame> _graphFrames = new ArrayList<GraphFrame>();
@@ -241,15 +242,10 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 			}
 			
 			@Override
-			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void menuDeselected(MenuEvent e) {}
 			
 			@Override
 			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		_winMenu.setMnemonic(KeyEvent.VK_W);
@@ -285,6 +281,11 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_historyContMenuItem.addActionListener(this);
 		_winMenu.add(_historyContMenuItem);
 		
+		//show/hide graphs
+		_graphContMenuItem = new JMenuItem("Toggle Graphs");
+		_graphContMenuItem.setPreferredSize(new Dimension(150,20));
+		_graphContMenuItem.addActionListener(this);
+		_winMenu.add(_graphContMenuItem);
 		//add window menu to the menubar
 		_menuBar.add(_winMenu);
 		
@@ -752,24 +753,38 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 * @.post 		(ui window's History view on the screen)
 	 */
 	public void initHistoryComponents() {
-		//label for meas history selext box
-		//JLabel historyLabel = new JLabel("exp nbr\n");
-		//_historyFrame.getContentPane().add(historyLabel);
+		/*
+		 * Panel for the meas selection
+		 */		
+		JPanel historySelectPanel = new JPanel();
+		historySelectPanel.setPreferredSize(new Dimension(100,160));
+		historySelectPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
+				.createEtchedBorder(EtchedBorder.LOWERED)
+				, "Meas"));
 		//Selectbox for meashistory
 		_historyBox = new JComboBox<String>();
-		_historyBox.setPreferredSize(new Dimension(50,20));		
+		_historyBox.setPreferredSize(new Dimension(70,20));		
 		_historyBox.setEditable(false);
-		_historyBox.addItem("exp");
-		_historyFrame.getContentPane().add(_historyBox);
+		_historyBox.addItem("number");
+		historySelectPanel.add(_historyBox);
+		
 		//history select button
 		_historySelect = new JButton("select");
+		_historySelect.setPreferredSize(new Dimension(70,25));
 		_historySelect.addActionListener(this);
-		_historyFrame.getContentPane().add(_historySelect);
+		historySelectPanel.add(_historySelect);
+		
+		_historyFrame.getContentPane().add(historySelectPanel);
+		
+		//panel for measurement text data
+		JPanel historyTextPanel = new JPanel();
+		historyTextPanel.setPreferredSize(new Dimension(350,160));
 		//textpane for history meas' data
 		_historyPane = new JTextPane();
 		JScrollPane historyScroll = new JScrollPane(_historyPane);
-		historyScroll.setPreferredSize(new Dimension(400,160));
-		_historyFrame.getContentPane().add(historyScroll);
+		historyScroll.setPreferredSize(new Dimension(400,155));
+		historyTextPanel.add(historyScroll);
+		_historyFrame.getContentPane().add(historyTextPanel);
 		
 	}
 	
@@ -786,9 +801,10 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_historyBox.addItem(newItem);
 	}
 	
-	public void updateHistoryData() {
-		String meas = _historyBox.getSelectedItem().toString();		
-		if(!meas.equals("exp")) { //to check that there really is a meas chosen
+	public void updateHistoryData() {		
+		String meas = _historyBox.getSelectedItem().toString();
+		System.out.println("measurement "+meas+" selected");
+		if(!meas.equals("number")) { //to check that there really is a meas chosen
 			ArrayList<Result> resArray = _controller.getResults();
 			for(Result res : resArray) {
 				if (res.getNumber().equals(meas)){
@@ -933,8 +949,45 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 	
+	private ArrayList<GraphFrame> getGraph(String measNumber) {
+		ArrayList<GraphFrame> ret = new ArrayList<GraphFrame>();
+		for (GraphFrame gf : _graphFrames) {
+			if(gf.getResult().getNumber().equals(measNumber)) {
+				ret.add(gf);
+			}			
+		}
+		return ret;
+	}
 	
-	
+	private void switchGraphWindowState() {
+		GraphFrame cv = null;
+		GraphFrame vt = null;
+		//get the graphs chosen in the history view
+		ArrayList<GraphFrame> chosenGraphs = getGraph(_historyBox.getSelectedItem().toString());
+		if (chosenGraphs.size()>=2) {
+			cv = chosenGraphs.get(0);
+			vt = chosenGraphs.get(1);			
+		} else { //there is no graphs chosen so let's show the latest	
+			if(_graphFrames.size()>=2) { //some results in the array
+				cv = _graphFrames.get(0);
+				vt = _graphFrames.get(1);
+			} else { //no results at all so pick the empty graphs
+				System.out.println("no results yet");
+				cv = _emptyCV;
+				vt = _emptyVT;
+			}
+		}	
+		//no we'll switch the graphs' visibility whatever they where
+		if(cv.isVisible()&&vt.isVisible()) {
+			System.out.println("hide default graphs");
+			cv.setVisible(false);
+			vt.setVisible(false);
+		} else {
+			System.out.println("show default graphs");
+			cv.setVisible(true);
+			vt.setVisible(true);
+		}	
+	}
 	
 	/*
 	 * ActionListener for ui events. Method will call Core object's corresponding
@@ -972,6 +1025,9 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		}
 		else if (event.getSource().equals(_historyContMenuItem)) {
 			switchWindowState(_historyFrame);
+		}
+		else if (event.getSource().equals(_graphContMenuItem)) {
+			switchGraphWindowState();
 		}
 		else if (event.getSource().equals(_controlContMenuItem)) { //menuevent show/hide control window
 			if(_paramFrame.isVisible()) {
@@ -1164,7 +1220,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 */
 	public void drawGraph(Result res, GraphType type) {	
 		GraphFrame gf = new GraphFrame(res, type);
-		//gf.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);		
+		gf.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);		
 		this.getContentPane().add(gf);
 		gf.moveToFront();
 		if(res!=null) {
