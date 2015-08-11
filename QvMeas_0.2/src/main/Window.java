@@ -166,7 +166,8 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	private JMenuItem _consoleContMenuItem;
 	private JMenuItem _resultContMenuItem;
 	private JMenuItem _historyContMenuItem;
-	private JMenuItem _graphContMenuItem;
+	private JMenuItem _cvGraphMenuItem;
+	private JMenuItem _vtGraphMenuItem;
 	private JMenuItem _manualMenuItem;
 	
 	//list of GraphFrame ui-objects
@@ -287,14 +288,22 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_historyContMenuItem.addActionListener(this);
 		_winMenu.add(_historyContMenuItem);
 		
-		//show/hide graphs
-		_graphContMenuItem = new JMenuItem("Toggle Graphs");
-		_graphContMenuItem.setPreferredSize(new Dimension(150,20));
-		_graphContMenuItem.addActionListener(this);
-		_winMenu.add(_graphContMenuItem);
+		//show/hide cv graph
+		_cvGraphMenuItem = new JMenuItem("C-V Graph");
+		_cvGraphMenuItem.setPreferredSize(new Dimension(150,20));
+		_cvGraphMenuItem.addActionListener(this);
+		_winMenu.add(_cvGraphMenuItem);
+
+		//show/hide vt graph
+		_vtGraphMenuItem = new JMenuItem("V-T Graph");
+		_vtGraphMenuItem.setPreferredSize(new Dimension(150,20));
+		_vtGraphMenuItem.addActionListener(this);
+		_winMenu.add(_vtGraphMenuItem);
+		
 		//add window menu to the menubar
 		_menuBar.add(_winMenu);
 		
+
 		
 		/*
 		 * Help menu
@@ -863,18 +872,18 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 * 
 	 * @version		0.1
 	 * @since		0.2
+	 * @params 		measNumber - number as String specifying the measurement
+	 * 				wanted to be shown
 	 * @.pre		true
-	 * @.post		Graphs related to the _historyBox.getSelectedItem.toString()
-	 * 				value (measurement) will be shown and others hidden
+	 * @.post		Graphs related to the measNumber parameter will be shown
 	 */
 	private void showChosenGraphs(String measNumber) {
-		for (GraphFrame gf : _graphFrames) {						
-			if(gf.getResult().getNumber().equals(measNumber)) {
-				gf.setVisible(true);
-			} else {
-				gf.setVisible(false);
-			}
-		}	
+		GraphFrame cv = getGraphFrame(measNumber, GraphType.CV);
+		_currentCV.setVisible(false);
+		_currentCV = cv;
+		GraphFrame vt = getGraphFrame(measNumber, GraphType.VT);
+		_currentVT.setVisible(false);
+		_currentVT = vt;
 	}
 	
 	
@@ -1016,6 +1025,16 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		}	
 	}
 	
+	public GraphFrame getGraphFrame(String measNumber, GraphType type) {
+		GraphFrame ret = null;
+		for (GraphFrame gf : _graphFrames) {
+			if(gf.getResult().getNumber().equals(measNumber)&&gf.getType()==type) {
+				ret=gf;
+			}			
+		}
+		return ret;	
+	}
+	
 	/*
 	 * ActionListener for ui events. Method will call Core object's corresponding
 	 * event handler methods
@@ -1047,8 +1066,11 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		else if (event.getSource().equals(_historyContMenuItem)) {
 			switchWindowState(_historyFrame);
 		}
-		else if (event.getSource().equals(_graphContMenuItem)) {
-			switchGraphWindowState();
+		else if (event.getSource().equals(_cvGraphMenuItem)) {
+			switchWindowState(_currentCV);
+		}
+		else if (event.getSource().equals(_vtGraphMenuItem)) {
+			switchWindowState(_currentVT);
 		}
 		else if (event.getSource().equals(_manualMenuItem)) {
 			System.out.println("Manvisib");
@@ -1147,7 +1169,12 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		//history
 		if(_historyFrame.isVisible()) _historyContMenuItem.setText("Hide History");
 		else _historyContMenuItem.setText("Show History");
-		
+		//cv graph
+		if(_currentCV.isVisible()) _cvGraphMenuItem.setText("Hide C-V Graph");
+		else _cvGraphMenuItem.setText("Show C-V Graph");
+		//vt graph
+		if(_currentVT.isVisible()) _vtGraphMenuItem.setText("Hide V-T Graph");
+		else _vtGraphMenuItem.setText("Show V-T Graph");
 	}
 	
 	/*
@@ -1234,35 +1261,22 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 * 			AND the last element int the getGraphs() -list will be the Result-parameter
 	 */
 	public void drawGraph(Result res, GraphType type) {	
+		//do GraphWindow initialization
 		GraphFrame gf = new GraphFrame(res, type);
 		gf.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);		
-		this.getContentPane().add(gf);
-		gf.moveToFront();
-		if(res!=null) {
-			//hideLastGraphs();
-			/*
-			if(type.equals(GraphType.CV)) {
-				_currentCV.setVisible(false);
-				_currentCV = gf;
-			} else if (type.equals(GraphType.VT)) {
-				_currentVT.setVisible(false);
-				_currentVT = gf;
-			}
-			*/
-			_graphFrames.add(gf);
-			if(type.equals(GraphType.CV)&&_emptyCV!=null) {				
-				_emptyCV.setVisible(false);
-				_emptyCV = null;
-			}
-			else if(type.equals(GraphType.VT)&&_emptyVT!=null) {
-				_emptyVT.setVisible(false);
-				_emptyVT = null;
-			}
-		} else {
-			if(type.equals(GraphType.CV)) _emptyCV = gf;
-			else if(type.equals(GraphType.VT)) _emptyVT = gf;
+		this.getContentPane().add(gf); //add new graph to the main window
+		gf.moveToFront(); // bring it on top
+		_graphFrames.add(gf);			
+		if(type.equals(GraphType.CV)) {
+			if(_currentCV!=null) _currentCV.setVisible(false); //hide the previous graphs
+			_currentCV = gf; //mark the new GraphFrame drawn to the screen
+		}
+		else if(type.equals(GraphType.VT)) {
+			if(_currentVT!=null) _currentVT.setVisible(false); //hide the previous graphs
+			_currentVT = gf; //mark the new GraphFrame drawn to the screen
 		}
 	}
+	
 	
 	/*
 	 * Method for hiding two last graph frames
@@ -1278,6 +1292,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 			_graphFrames.get(_graphFrames.size()-2).setVisible(false);
 		}		
 	}
+	
 	
 	/*
 	 * Return all GraphFrames representing results measured during the session

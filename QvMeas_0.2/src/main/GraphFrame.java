@@ -34,6 +34,7 @@ public class GraphFrame extends JInternalFrame {
 	private static final Point _VTLOCATION = new Point(500,500);
 	private static final Dimension _SIZE = new Dimension(485,300);
 	private JFreeChart _chart;
+	private GraphType _type;
 	
 	//Result of this frame
 	private Result _result;
@@ -49,7 +50,7 @@ public class GraphFrame extends JInternalFrame {
     	setVisible(true);		
 		this.setContentPane(createChartPanel(r, type));
 		this.setVisible(true);
-		
+		_type = type;
 	}
 	
 	
@@ -196,4 +197,7 @@ public class GraphFrame extends JInternalFrame {
 		return _result;
 	}
 
+	public GraphType getType() {
+		return _type;
+	}
 }
