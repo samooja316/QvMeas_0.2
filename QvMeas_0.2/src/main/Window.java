@@ -891,11 +891,15 @@ public class Window extends JFrame implements ActionListener {
 	 */
 	private void showChosenGraphs(String measNumber) {
 		GraphFrame cv = getGraphFrame(measNumber, GraphType.CV);
+		System.out.println("found: "+cv);
 		_currentCV.setVisible(false);
 		_currentCV = cv;
+		cv.setVisible(true);
 		GraphFrame vt = getGraphFrame(measNumber, GraphType.VT);
+		System.out.println("found: "+vt);
 		_currentVT.setVisible(false);
 		_currentVT = vt;
+		vt.setVisible(true);
 	}
 	
 	
@@ -1018,10 +1022,13 @@ public class Window extends JFrame implements ActionListener {
 	 */
 	public GraphFrame getGraphFrame(String measNumber, GraphType type) {
 		GraphFrame ret = null;
+		System.out.println("found "+_graphFrames.size()+" frames");
 		for (GraphFrame gf : _graphFrames) {
-			if(gf.getResult().getNumber().equals(measNumber)&&gf.getType()==type) {
-				ret=gf;
-			}			
+			if(gf.getResult()!=null) {
+				if(gf.getResult().getNumber().equals(measNumber)&&gf.getType()==type) {
+					ret=gf;
+				}			
+			}
 		}
 		return ret;	
 	}
