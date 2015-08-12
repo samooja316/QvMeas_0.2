@@ -63,7 +63,7 @@ import flanagan.interpolation.CubicSpline;
  * @since 	0.1
  * 
  */
-public class Window extends JFrame implements ActionListener, ItemListener {
+public class Window extends JFrame implements ActionListener {
 	
 	//The core object to whom window can pass actions occurred
 	private Core _controller;	
@@ -837,6 +837,17 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		_historyBox.addItem(newItem);
 	}
 	
+	
+	/*
+	 * Method for showing chosen measurement's data (from the current session)
+	 * in the history console
+	 * @version 	0.1
+	 * @since		0.2
+	 * @.pre		true
+	 * @.post		history console will contain data of the measurement
+	 * 				specified in the select box
+	 * 
+	 */
 	public void updateHistoryData() {		
 		String meas = _historyBox.getSelectedItem().toString();
 		System.out.println("measurement "+meas+" selected");
@@ -866,6 +877,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 			}
 		}
 	}
+	
 	
 	/*
 	 * Method for showing graphs related to the measurement chosen
@@ -936,7 +948,6 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	
 	
 	
-	
 	/*
 	 * Method for giving a reference to a Core object for this
 	 * Then the UI events can be passed for the Core controller object
@@ -953,9 +964,13 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	}
 	
 	
+	
 	/*
 	 * Method for measurement name generation
-	 * 
+	 * @.pre 		true
+	 * @.post		true
+	 * @return		Name for a measurement based on the current date and time
+	 * 				and the user specified parameters
 	 */
 	private String generateName() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -969,6 +984,8 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 				date+".qv";
 		return genPath;
 	}
+	
+	
 	
 	/*
 	 * Method for showing and hiding the window specified
@@ -985,46 +1002,20 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 	
-	private ArrayList<GraphFrame> getGraph(String measNumber) {
-		ArrayList<GraphFrame> ret = new ArrayList<GraphFrame>();
-		for (GraphFrame gf : _graphFrames) {
-			if(gf.getResult().getNumber().equals(measNumber)) {
-				ret.add(gf);
-			}			
-		}
-		return ret;
-	}
 	
-	private void switchGraphWindowState() {
-		GraphFrame cv = null;
-		GraphFrame vt = null;
-		//get the graphs chosen in the history view
-		ArrayList<GraphFrame> chosenGraphs = getGraph(_historyBox.getSelectedItem().toString());
-		if (chosenGraphs.size()>=2) {
-			cv = chosenGraphs.get(0);
-			vt = chosenGraphs.get(1);			
-		} else { //there is no graphs chosen so let's show the latest	
-			if(_graphFrames.size()>=2) { //some results in the array
-				cv = _graphFrames.get(0);
-				vt = _graphFrames.get(1);
-			} else { //no results at all so pick the empty graphs
-				System.out.println("no results yet");
-				cv = _emptyCV;
-				vt = _emptyVT;
-			}
-		}	
-		//no we'll switch the graphs' visibility whatever they where
-		if(cv.isVisible()&&vt.isVisible()) {
-			System.out.println("hide default graphs");
-			cv.setVisible(false);
-			vt.setVisible(false);
-		} else {
-			System.out.println("show default graphs");
-			cv.setVisible(true);
-			vt.setVisible(true);
-		}	
-	}
-	
+	/*
+	 * Method for getting a GraphFrame from a measurement done
+	 * 
+	 * @version				0.1
+	 * @since				0.2
+	 * @param	measNumber	The number of the measurement which graph is wanted to
+	 * 						be drawn to the screen
+	 * @param	type		Type of the graph - each measurement has two: CV and VT graphs		
+	 * @return				GraphFrame of the specified measurement and type
+	 * @.pre				true
+	 * @.post				true
+	 * 
+	 */
 	public GraphFrame getGraphFrame(String measNumber, GraphType type) {
 		GraphFrame ret = null;
 		for (GraphFrame gf : _graphFrames) {
@@ -1034,6 +1025,8 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		}
 		return ret;	
 	}
+	
+	
 	
 	/*
 	 * ActionListener for ui events. Method will call Core object's corresponding
@@ -1070,7 +1063,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 			switchWindowState(_currentCV);
 		}
 		else if (event.getSource().equals(_vtGraphMenuItem)) {
-			switchWindowState(_currentVT);
+			switchWindowState(_currentVT);					
 		}
 		else if (event.getSource().equals(_manualMenuItem)) {
 			System.out.println("Manvisib");
@@ -1145,14 +1138,15 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	}
 	
 	
-	@Override
-	public void itemStateChanged(ItemEvent event) {
-		System.out.println("item state changed");
-		if (event.getSource().equals(_historyBox)) {
-			updateHistoryData();
-		}
-	}
-	
+	/*
+	 * Method for updating Window-menu's components' state
+	 * 
+	 * @version			0.1
+	 * @since			0.2
+	 * @.pre			true
+	 * @.post			Window menu will contain the proper MenuItem texts based on the
+	 * 					current state of the windows' visibility.
+	 */
 	private void updateWindowMenu() {
 		//parameters
 		if(_paramFrame.isVisible()) _paramContMenuItem.setText("Hide Parameters");
@@ -1176,6 +1170,7 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		if(_currentVT.isVisible()) _vtGraphMenuItem.setText("Hide V-T Graph");
 		else _vtGraphMenuItem.setText("Show V-T Graph");
 	}
+	
 	
 	/*
 	 * Method for converting input field values to exponent format
@@ -1304,6 +1299,15 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 	 */
 	public ArrayList<GraphFrame> getGraphs() { return _graphFrames; } 
 	
+	
+	
+	/*
+	 * Method for creating manual window which then can be opened from the menu
+	 * @version 	0.1
+	 * @since 		0.2
+	 * @.pre 		true
+	 * @.post		Manual window will be shown on top of other windows
+	 */
 	public void initManual() {
 		_manual = new JInternalFrame();
     	_manual.setResizable(true);
@@ -1321,17 +1325,6 @@ public class Window extends JFrame implements ActionListener, ItemListener {
 		helpScroll.setPreferredSize(new Dimension(560,560));
 		helpScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		helpScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		/*
-		try {
-			Document doc = helpText.getDocument();
-			String helpStr = _controller.helpRequest();
-			System.out.println("help: "+helpStr);
-			doc.insertString(doc.getLength(), helpStr, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("insert didn't success");
-		}
-		*/
 		_manual.getContentPane().add(helpScroll);
 	}
 }
