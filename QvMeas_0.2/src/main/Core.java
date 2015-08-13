@@ -432,7 +432,8 @@ public class Core {
 	public String helpRequest() {
 		String ret = null;
 		try {
-			ret = _io.readFile("../../qvmeas_ohjeet.txt");
+			
+			ret = _io.readFile("/files/manual.txt");
 		} catch (FileNotFoundException e) {
 			System.out.println("Couldn't find the help file");
 		}

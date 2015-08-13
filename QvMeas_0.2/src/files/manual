@@ -1,0 +1,195 @@
+                                                               
+                                                              
+      @@@             @@     @@                              @@@ 
+     @   @             @     @                              @ C @
+    @     @            @@   @@                               @@@
+    @     @ @@@@  @@@@ @@   @@    @@@     @@@@@     @@@@@    
+    @     @  @@    @@  @ @ @ @  @@   @@       @@   @     @    
+    @     @   @@  @@   @ @ @ @  @     @   @@@@@@   @          
+    @     @   @@  @@   @  @  @  @@@@@@@  @@   @@    @@@@@     
+    @     @    @@@@    @  @  @  @        @@   @@         @    
+     @   @     @@@@    @     @  @@   @@  @@   @@   @     @    
+      @@@       @@    @@@   @@@   @@@     @@@@@@@   @@@@@     
+       @@                                                     
+                                                                                                
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@								 @
+@  HP4145B-puolijohdeanalysaattorin QvMeas -ohjelman k‰yttˆohje  @
+@								 @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+ Tuukka Panula ja Aleksi Oja
+
+ Turun Yliopisto, IT-laitos
+
+ 2015
+
+!!! Huomioitavaa !!!
+
+QvMeas vaatii toimiakseen Javan virtuaalikoneen.
+
+QvMeas k‰ytt‰‰ JPIB-kirjastoa, jonka jpib_32.dll -tiedoston tulee olla k‰ytˆss‰ olevan Java Runtime Environmentin
+bin-kansiossa. Esim. C:\Program Files (x86)\Java\jrex.x.x_xx\bin
+
+QvMeas k‰ytt‰‰ GPIB-v‰yl‰kommunikointiin National Instrumentsin NI488.2-ajuria NIVISA:n sijaan,
+joten varmista ett‰ ajuri on asennettu.
+
+Ohjelma k‰ytt‰‰ HP4145B:n GPIB-osoitteena osoitetta #1.
+
+Ohjelman k‰ynnistyess‰ otetaan yhteys kaikkiin GPIB-v‰yl‰ll‰ oleviin laitteisiin ja l‰hetet‰‰n niille
+*IDN? -tunnistautumiskutsu, mik‰ saattaa aiheuttaa ep‰tavallista k‰ytˆst‰ k‰ynniss‰ olevissa laitteissa.
+
+Siirrytt‰ess‰ QvMeas-mittauksesta Labview-mittaukseen, mittaustulokset vaikuttavat joskus ep‰johdonmukaisilta ja
+virheellisilt‰. Ongelma hoituu yleens‰ k‰ynnist‰m‰ll‰ Labview ja mittalaite uudestaan. Saattaa vaatia myˆs 
+tietokoneen uudelleenk‰ynnistyksen. (Bugi saattaa johtua ajurikonflikteista??)
+
+!!!!!!!!!!!!!!!!!!!!
+
+===========
+Quick Start
+===========
+
+	suomeksi:
+
+	1. Avaa QvMeas_vX.X jar-tiedosto.
+	2. Syˆt‰ Meas parameters -paneeliin asetusarvot.
+	3. Valitse tulostiedoston tiedostopolku ja -nimi.
+	4. Paina INIT-painiketta Controls-paneelista. N‰et asetustiedot konsolissa.
+	5. Paina START.
+	6. Odota kunnes mittaus on ohi tai paina STOP.
+	7. Tulos ilmestyy Result-paneeliin sek‰ kuvaajapaneeleihin.
+	8. Result-paneelista tai vaihtoehtoisesti tallennetusta tiedostosta
+	   voi kopioida tekstin suoraan taulukkolaskentaohjelmaan k‰sittely‰ varten.
+
+	in English:
+
+	1. Execute QvMeas_vX.X jar file.
+	2. Enter setup values to the Meas parameters panel.
+	3. Choose filepath and filename.
+	4. Press INIT on the Controls panel. The setup values are displayed on the console panel
+	5. Press START.
+	6. Wait until the measurement has completed or interrupt it by pressing STOP.
+	7. The result is displayed on the Result panel as well as on the graph panels
+	8. You can copy the data either from the Result panel or the output file and paste it
+	   directly into a spreadsheet program for additional data analysis.
+
+========================
+K‰yttˆliittym‰n paneelit
+========================
+
+Meas Parameters
+---------------
+
+	- Title: syˆtet‰‰n kyseisen mittauksen nimi ja kokeen numero (k‰ytet‰‰n tiedostonimen generoimiseen).
+
+	- Current: asetetaan syˆttˆvirran arvo, joko positiivinen tai negatiivinen. Resoluutio 1 pA.
+
+	- Measurement time: Asetetaan lukemisv‰li sekunneissa sek‰ lukemien m‰‰r‰.
+
+	- Compliance: M‰‰ritet‰‰n k‰ytett‰v‰t virta- ja j‰nniterajat positiivisina.
+
+	- Plot parameters: Asetetaan x- ja y-akselien minimi- ja maksimiarvot plottausta varten. 
+			   Ei vaikuta itse mittaukseen, mutta voidaan k‰ytt‰‰ mittauksen reaaliaikaiseen lukemiseen
+			   HP4145B:n CRT-n‰ytˆlt‰.
+
+	- Comments: T‰h‰n voidaan halutessa syˆtt‰‰ mittauksesta lis‰tietoa, joka tallennetaan tekstimuotoiseen tulostiedostoon.
+
+	- Output file: Syˆtet‰‰n absoluuttinen polku ja tiedostonimi mittauksen tulostiedostolle.
+		       Generate-painikkeella ohjelma generoi syˆttˆtiedoista nimen mittaukselle, ja tallentaa sen k‰ytt‰j‰n
+		       antamaan kansioon. Tiedostonimi on muotoa: [nimi] [numero] [virta] [askellus] [p‰iv‰m‰‰r‰].qv
+
+
+Controls
+--------
+
+	- INIT: Alustaa mittauksen ja antaa virheilmoituksen, mik‰li syˆttˆtiedoissa ilmenee virheit‰.
+		Annetut syˆttˆtiedot tulostetaan konsoliin.
+
+	- START: Aloittaa mittauksen. Analysaattori vastaanottaa ja asettaa syˆttˆtiedot vasta START-painikkeen 
+		 painamisen j‰lkeen, joten INIT-painikkeen painamisen j‰lkeen tehdyt muutoksen eiv‰t ole voimassa.
+		 Ohjelma ilmoittaa, kun mittaus on p‰‰ttynyt ja antaa automaattisesti mittaustiedon tulosikkunaan
+		 suoraan exceliin kopioitavassa muodossa. Ohjelma piirt‰‰ VT-paneeliin j‰nnitteen ajan funktiona, ja 
+		 CV-paneeliin derivaattakuvaajan (kapasitanssi j‰nnitteen funktiona).
+		 
+	- STOP: Lopettaa k‰ynniss‰ olevan mittauksen, tallentaa datan ja piirt‰‰ kuvaajat kuten keskeytt‰m‰ttˆm‰ss‰
+		mittauksessa.
+
+	- AUTO CALIBRATION: Valitaan halutaanko k‰ytt‰‰ analysaattorin kalibrointia (saattaa hidastaa mittausta)
+			    Kalibrointi pysyy p‰‰ll‰, kunnes seuraava mittaus suoritetaan
+
+Console
+-------
+
+	Konsolipaneeliin tulostetaan virheilmoitukset, syˆttˆtiedot ja ohjelman suoritustietoja
+
+Result
+------
+
+	Tulospaneeliin tulostetaan valmistuneen mittauksen tulosdata, joka sis‰lt‰‰ tiedostonimen, kommentit,
+	mittauksen asetustiedot, sek‰ itse mittaustuloksen. Tulos on excel-yhteensopivassa muodossa.
+
+History
+-------
+
+	Historiapaneeli n‰ytt‰‰ samalla istunnolla tehdyt mittaukset koenumeron mukaan. Vetovalikosta valitaan
+	haluttu koenumero(exp) ja painetaan Select. T‰llˆin tekstiruutuun ilmestyy tekstimuotoinen mittausdata ja kyseisen
+	mittauksen kuvaajat n‰kyv‰t kuvaajapaneeleissa.
+
+CV ja VT
+--------
+
+	Kuvaajapaneeleihin piirret‰‰n valmistuneen mittauksen tulokset. VT-paneeli n‰ytt‰‰ j‰nnitteen ajan funktiona
+	eli samoin kuin mittalaitteen n‰ytˆss‰. CV-paneeli n‰ytt‰‰ tuloksista lasketun kapasitanssin j‰nnitteen funktiona.
+	Klikkaamalla kuvaajaa hiiren oikealla painikkeella saadaan esiin valikko:
+
+		- Properties
+		- Copy
+		- Save As -> PNG (tallentaa kuvaajan kuvana)
+		- Print
+		- Zoom in / zoom out
+		- Auto range
+
+	Properties avaa uuden ikkunan, jossa on 3 v‰lilehte‰: Title, Plot ja Other.
+	Title, Other sek‰ Plot -> Appearance antavat k‰ytt‰j‰n muokata graafin ulkoasua.
+	Plot -> Domain Axis ja Plot -> Range Axis -v‰lilehdet antavat k‰ytt‰j‰ muokata x- ja y-akselia
+
+	Kuvaajapaneelit skaalaavat oletusarvoisesti automaattisesti akselit, ja mm. j‰nniterajan tullessa vastaan
+	mittausdatasta lasketun derivaattakuvaajan kapasitanssiarvot kohoavat ‰killisesti. T‰llˆin akselien skaalaa
+	voidaan muuttaa Properties -> Plot -> Domain Axis/Range Axis -> Range.
+
+================
+Navigointipalkki
+================
+
+File
+----
+
+	- Filepath (Alt+F): K‰ytt‰j‰ voi asettaa polun tulostiedoston tallennuskohteelle.
+
+	- Exit (Ctrl+Q)
+
+Window
+------
+
+	- Hide/show -valinnat kullekin paneelille
+
+help
+----
+
+
+========
+L‰hteit‰
+========
+
+QvMeas k‰ytt‰‰ seuraavia lis‰kirjastoja
+ - JFreeChart ; www.jfree.org/jfreechart/
+ - Michael Thomas Flanagan's Java Scientific Library, CubicSpline Class ; http://www.ee.ucl.ac.uk/~mflanaga/java/CubicSpline.html
+ - JPIB API ; http://jpib.sourceforge.net/
+
+
+
+
+
+
+ 

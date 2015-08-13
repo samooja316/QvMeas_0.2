@@ -24,19 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-
-
-
-
 import java.io.FileReader;
-
-
-
-
-
-
-
-
 
 //JFreeChart imports
 import org.jfree.chart.ChartFactory;
@@ -122,17 +110,6 @@ public class Window extends JFrame implements ActionListener {
 	//textpane to view old datas
 	private JTextPane _historyPane;
 	
-	//panel for top graph view
-	private JPanel _graphCont;
-	private JInternalFrame _graphFrame;
-	
-	//panel for bottom graph view
-	private JPanel _graphCont2;
-	private JInternalFrame _graphFrame2;
-	
-	//ArrayList for multiple c-v graphs
-	private ArrayList<JInternalFrame> _graphList;
-	
 	//comments JTextPane
 	private JTextArea _comments;
 	
@@ -172,12 +149,6 @@ public class Window extends JFrame implements ActionListener {
 	
 	//list of GraphFrame ui-objects
 	private ArrayList<GraphFrame> _graphFrames = new ArrayList<GraphFrame>();
-	
-	//empty C-V graphFrame for init
-	private GraphFrame _emptyCV;
-	
-	//empty V-T graphFrame for starters
-	private GraphFrame _emptyVT;
 
 	//history select button to view old data
 	private JButton _historySelect;
@@ -201,10 +172,6 @@ public class Window extends JFrame implements ActionListener {
 		
 		ImageIcon img = new ImageIcon("C:\\Users\\tujupan\\Downloads\\qv_icon.png");
 		this.setIconImage(img.getImage());
-		/*
-		 * init frameList for graphs
-		 */
-		_graphList = new ArrayList<JInternalFrame>();
 		/*
 		 * set main menubar
 		 */
@@ -1279,21 +1246,6 @@ public class Window extends JFrame implements ActionListener {
 		}
 	}
 	
-	
-	/*
-	 * Method for hiding two last graph frames
-	 * 
-	 * @version 	0.1
-	 * @since		0.2
-	 * @.pre		true
-	 * @.post		if _graphFrames.size()>=2 two last graphFrames will be hidden
-	 */
-	private void hideLastGraphs() {
-		if(_graphFrames.size()>=2) {
-			_graphFrames.get(_graphFrames.size()-1).setVisible(false);
-			_graphFrames.get(_graphFrames.size()-2).setVisible(false);
-		}		
-	}
 	
 	
 	/*

@@ -208,7 +208,7 @@ public class IOWrapper {
 			while((ret+=reader.readLine()) != null) {}
 			reader.close();
 		} catch (IOException e) {
-			System.out.println("couldn't read the helpfile");
+			System.out.println("couldn't read the file");
 		}
 		
 		return ret;
