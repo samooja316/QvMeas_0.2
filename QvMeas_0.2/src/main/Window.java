@@ -1311,6 +1311,12 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 	/*
 	 * Method for showing the exit confirmation dialog and 
 	 * exiting if wanted
+	 * 
+	 * @version		0.1
+	 * @since 		0.2
+	 * @.pre		true
+	 * @.post		Depending on user action the system will exit or continue without any change
+	 * 
 	 */
 	public void exitSystem() {
 		 int result = JOptionPane.showConfirmDialog((Component) null, 
@@ -1320,48 +1326,26 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 	}
 
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
+	 *
+	 * Window listener for main window operations (at least exit confirmation is used)
+	 */
 	@Override
-	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	
-
+	public void windowActivated(WindowEvent arg0) {}
 	@Override
 	public void windowClosed(WindowEvent e) {}
-
-
-
-
 	@Override
 	public void windowClosing(WindowEvent e) {
 		exitSystem();
 	}
-
-
-
-
 	@Override
 	public void windowDeactivated(WindowEvent e) {}
-
-
-
-
 	@Override
 	public void windowDeiconified(WindowEvent e) {}
-
-
-
-
 	@Override
 	public void windowIconified(WindowEvent e) {}
-
-
-
-
 	@Override
 	public void windowOpened(WindowEvent e) {}
 }
