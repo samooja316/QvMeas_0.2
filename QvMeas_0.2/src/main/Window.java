@@ -28,6 +28,7 @@ import java.io.FileReader;
 
 
 
+
 //JFreeChart imports
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -53,7 +54,7 @@ import flanagan.interpolation.CubicSpline;
  * @since 	0.1
  * 
  */
-public class Window extends JFrame implements ActionListener {
+public class Window extends JFrame implements ActionListener, WindowListener {
 	
 	//The core object to whom window can pass actions occurred
 	private Core _controller;	
@@ -170,10 +171,11 @@ public class Window extends JFrame implements ActionListener {
 		setTitle("QvMeas");
 		setSize(1000, 860);
 		setLocation(100,100);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setLayout(new GridLayout(1,2));		
 		JDesktopPane mainPane = new JDesktopPane();
 		setContentPane(mainPane);
+		this.addWindowListener(this);
 		
 		ImageIcon img = new ImageIcon("C:\\Users\\tujupan\\Downloads\\qv_icon.png");
 		this.setIconImage(img.getImage());
@@ -1124,7 +1126,7 @@ public class Window extends JFrame implements ActionListener {
 			}
 		
 		} else if(event.getSource().equals(_exit)) {
-			System.exit(0);
+			exitSystem();
 		}
 		
 	}
@@ -1304,4 +1306,62 @@ public class Window extends JFrame implements ActionListener {
 		helpScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		_manual.getContentPane().add(helpScroll);
 	}
+
+	
+	/*
+	 * Method for showing the exit confirmation dialog and 
+	 * exiting if wanted
+	 */
+	public void exitSystem() {
+		 int result = JOptionPane.showConfirmDialog((Component) null, 
+					"QvMeas_0.2 doesn't save your session. Just data is saved. Do you still want to quit?",
+					"alert", JOptionPane.OK_CANCEL_OPTION);
+		 if(result==0) System.exit(0);		
+	}
+
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+
+
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		exitSystem();
+	}
+
+
+
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
+
+
+
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+
+
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+
+
+
+	@Override
+	public void windowOpened(WindowEvent e) {}
 }
