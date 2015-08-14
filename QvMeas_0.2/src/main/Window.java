@@ -784,8 +784,11 @@ public class Window extends JFrame implements ActionListener {
 		historyTextPanel.setPreferredSize(new Dimension(350,160));
 		//textpane for history meas' data
 		_historyPane = new JTextPane();
+		_historyPane.setEditable(false);
 		JScrollPane historyScroll = new JScrollPane(_historyPane);
-		historyScroll.setPreferredSize(new Dimension(400,155));
+		historyScroll.setPreferredSize(new Dimension(350,155));
+		historyScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		historyScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 		historyTextPanel.add(historyScroll);
 		_historyFrame.getContentPane().add(historyTextPanel);
 		

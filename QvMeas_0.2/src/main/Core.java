@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import javax.swing.JDesktopPane;
 
@@ -431,12 +432,15 @@ public class Core {
 	
 	public String helpRequest() {
 		String ret = null;
+		String text = new Scanner(this.getClass().getResourceAsStream("/files/manual.txt"), "UTF-8").useDelimiter("\\A").next();
+		/*
 		try {
 			
 			ret = _io.readFile("/files/manual.txt");
 		} catch (FileNotFoundException e) {
 			System.out.println("Couldn't find the help file");
 		}
-		return ret;
+		*/
+		return text;
 	}
 }
