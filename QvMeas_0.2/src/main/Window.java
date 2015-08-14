@@ -5,6 +5,7 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
@@ -23,8 +24,9 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
 import java.io.FileReader;
+
+
 
 //JFreeChart imports
 import org.jfree.chart.ChartFactory;
@@ -157,6 +159,9 @@ public class Window extends JFrame implements ActionListener {
 	
 	private GraphFrame _currentCV;
 	private GraphFrame _currentVT;
+	
+	//manual textpane
+	private JTextPane _helpText;
 	
 	/*
      * constructor which creates the UI window and shows it 
@@ -1043,8 +1048,18 @@ public class Window extends JFrame implements ActionListener {
 			switchWindowState(_currentVT);					
 		}
 		else if (event.getSource().equals(_manualMenuItem)) {
-			System.out.println("Manvisib");
-			_manual.setVisible(true);
+			System.out.println("Using manual");
+			//init manual text
+			String text = _controller.helpRequest();
+			Document doc = _helpText.getDocument();
+			try {
+				doc.insertString(doc.getLength(), text, null);				
+			} catch (BadLocationException e) {}
+			_helpText.setCaretPosition(0);
+			_helpText.setEditable(false);
+			_helpText.setFont(new Font(Font.MONOSPACED,1,12));
+			//show manual 
+			_manual.setVisible(true);			
 		}
 		else if(event.getSource().equals(_historySelect)) { //old measurement selected in history
 			updateHistoryData();
@@ -1276,15 +1291,15 @@ public class Window extends JFrame implements ActionListener {
     	_manual.setClosable(true);
     	_manual.setMaximizable(true);
     	_manual.setIconifiable(true);
-    	_manual.setSize(600, 600);		
-    	_manual.setLocation(100, 100);
+    	_manual.setSize(985,800);		
+    	_manual.setLocation(0,0);
     	_manual.setContentPane(new JPanel());
     	_manual.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
     	this.getContentPane().add(_manual);
 		_manual.moveToFront();
-		JTextPane helpText = new JTextPane();
-		JScrollPane helpScroll = new JScrollPane(helpText);
-		helpScroll.setPreferredSize(new Dimension(560,560));
+		_helpText = new JTextPane();
+		JScrollPane helpScroll = new JScrollPane(_helpText);
+		helpScroll.setPreferredSize(new Dimension(975,760));
 		helpScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		helpScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		_manual.getContentPane().add(helpScroll);

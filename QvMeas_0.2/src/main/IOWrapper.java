@@ -204,13 +204,20 @@ public class IOWrapper {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		String ret = "";
 		try {
+			System.out.println("trying to read file: "+file);
 			//add line to return String as long as they exist
-			while((ret+=reader.readLine()) != null) {}
+			String newtoken ="";
+			while((newtoken=reader.readLine()) != null) {
+				System.out.println("new token: "+newtoken);
+				newtoken+="\n";
+				ret+=newtoken;	
+				System.out.println("ret on nyt: "+ret);
+			}
 			reader.close();
 		} catch (IOException e) {
 			System.out.println("couldn't read the file");
 		}
-		
+		System.out.println("read text: "+ret);
 		return ret;
 	}
 }
