@@ -1,18 +1,6 @@
 package main;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-
-import javax.swing.JDesktopPane;
-
-import org.jfree.ui.RefineryUtilities;
-
 import be.ac.ulb.gpib.GPIBDeviceIdentifier;
 
 
@@ -29,10 +17,6 @@ import be.ac.ulb.gpib.GPIBDeviceIdentifier;
  * 
  */
 public class Core {
-	
-	
-	//mainframe
-	private JDesktopPane _mainPane;
 	
 	//system main window
 	private Window _window;
@@ -433,23 +417,10 @@ public class Core {
 	
 	public String helpRequest() {
 		String ret = null;
-		//String text = new Scanner(this.getClass().getResourceAsStream("/files/manual.txt"), "UTF-8").useDelimiter("\\A").next();
-		/*
-		Scanner sc = null;
 		try {
-			sc = new Scanner(new File("C:\\Users\\samoja\\git\\QvMeas_0.2\\QvMeas_0.2\\qvmanual.txt"));
-		
-		
-		while(sc.hasNextLine()) {
-			ret+=sc.nextLine();
-		}
-		} catch (Exception e) {System.out.println("no scan");}
-		*/
-		
-		try {
-			ret = _io.readFile("qvmeas_ohjeet.txt");			
-		} catch (FileNotFoundException e) {
-			System.out.println("Couldn't find the help file");
+			ret = _io.readFile("/files/qvmeas_ohjeet.txt");			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		System.out.println("got text "+ret);

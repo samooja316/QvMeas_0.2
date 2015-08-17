@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-
+import java.nio.charset.StandardCharsets;
 
 
 /*
@@ -22,8 +22,6 @@ import javax.swing.JFrame;
 public class IOWrapper {
 
 	private String _defDirPath = "";
-	private String _data;
-	private FileOutputStream _file;
 	private DataOutputStream _dataFile;
 	private Core controller;
 	
@@ -32,7 +30,6 @@ public class IOWrapper {
 	 */
 	public IOWrapper(Core controller) {
 		this.controller = controller;
-		_data = "Testidatateksti";
 	}
 
 	
@@ -199,16 +196,38 @@ public class IOWrapper {
 		return finalResData;
 	}
 	
-	public String readFile(String path) throws FileNotFoundException {
-		File file = new File(path); 
-		BufferedReader reader = new BufferedReader(new FileReader(file));
+	
+	public String readFileStream(String path) throws IOException {
+		InputStream in = getClass().getClassLoader().getResourceAsStream(path);		
+		Reader reader = new InputStreamReader(in);
+		int data = reader.read();
+		String ret = "";
+		while(data != -1){		    
+		    data = reader.read();
+		    char theChar = (char) data;
+		    System.out.println("uusi char "+theChar);
+		    ret+=theChar;
+		}		
+		reader.close();
+		return ret;
+	}
+	
+	public String readFile(String path) throws FileNotFoundException, 
+											UnsupportedEncodingException {
+		//InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+		//InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+		InputStream in = getClass().getResourceAsStream(path);
+		System.out.println(in);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.ISO_8859_1));
+		//BufferedReader reader = new BufferedReader(new FileReader(file));
 		String ret = "";
 		try {
-			System.out.println("trying to read file: "+file);
+			System.out.println("trying to read file: "+path);
 			//add line to return String as long as they exist
 			String newtoken ="";
 			while((newtoken=reader.readLine()) != null) {
 				System.out.println("new token: "+newtoken);
+				newtoken.toString();
 				newtoken+="\n";
 				ret+=newtoken;	
 				System.out.println("ret on nyt: "+ret);

@@ -1,8 +1,6 @@
 package main;
-import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.Enumeration;
 
+import java.io.IOException;
 import be.ac.ulb.gpib.*;
 
 

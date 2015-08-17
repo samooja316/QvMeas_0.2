@@ -16,6 +16,6 @@ public class QvMeas {
 	public static void main(String[] args) {
 		System.out.println("QvMeas launched");
 		GPIBTest.main(null); //use library program GPIBTest to wake instrument up 
-		Core c = new Core(); //create new Core object for executing the logic of the program		
+		new Core(); //create new Core object for executing the logic of the program		
 	}
 }

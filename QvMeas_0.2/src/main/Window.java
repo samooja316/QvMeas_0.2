@@ -1,49 +1,18 @@
 package main;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
+
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.Document;
-import javax.swing.text.html.HTMLDocument;
 
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYDataset;
+import javax.swing.text.Document;
+
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-
-
-
-
-//JFreeChart imports
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
-
-import flanagan.interpolation.CubicSpline;
 
 
 /*
@@ -177,7 +146,7 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 		setContentPane(mainPane);
 		this.addWindowListener(this);
 		
-		ImageIcon img = new ImageIcon("C:\\Users\\tujupan\\Downloads\\qv_icon.png");
+		ImageIcon img = new ImageIcon(getClass().getResource("/files/qv_icon.png"));
 		this.setIconImage(img.getImage());
 		/*
 		 * set main menubar

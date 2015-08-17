@@ -1,7 +1,6 @@
 package main;
 import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.Enumeration;
+
 
 import be.ac.ulb.gpib.*;
 /*
@@ -16,9 +15,7 @@ import be.ac.ulb.gpib.*;
  */
  
 public class Instrument {
-	private GPIBDeviceIdentifier deviceIdentifier;
 	private Core controller;
-	private Enumeration<GPIBDeviceIdentifier> devicesList;
 	private GPIBDevice myDevice;// = new GPIBDevice(13,deviceIdentifier.getDriver());
 	Measurement meas;
 	public Instrument() throws IOException,InterruptedException {
