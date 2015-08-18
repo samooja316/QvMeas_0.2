@@ -133,6 +133,9 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 	//manual textpane
 	private JTextPane _helpText;
 	
+	//boolean to know if manual is initialized
+	private boolean _manInit = false;
+	
 	/*
      * constructor which creates the UI window and shows it 
 	 */
@@ -1020,15 +1023,18 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 		}
 		else if (event.getSource().equals(_manualMenuItem)) {
 			System.out.println("Using manual");
-			//init manual text
-			String text = _controller.helpRequest();
-			Document doc = _helpText.getDocument();
-			try {
-				doc.insertString(doc.getLength(), text, null);				
-			} catch (BadLocationException e) {}
+			//init manual text if not yet initialized
+			if(!_manInit) {
+				String text = _controller.helpRequest();
+				Document doc = _helpText.getDocument();
+				try {
+					doc.insertString(doc.getLength(), text, null);		
+					_manInit=true;
+				} catch (BadLocationException e) {}				
+				_helpText.setEditable(false);
+				_helpText.setFont(new Font(Font.MONOSPACED,1,12));
+			}
 			_helpText.setCaretPosition(0);
-			_helpText.setEditable(false);
-			_helpText.setFont(new Font(Font.MONOSPACED,1,12));
 			//show manual 
 			_manual.setVisible(true);			
 		}
@@ -1100,6 +1106,7 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 		
 	}
 	
+
 	
 	/*
 	 * Method for updating Window-menu's components' state
