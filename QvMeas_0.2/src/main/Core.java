@@ -415,6 +415,16 @@ public class Core {
 		return returnValues;
 	}
 	
+	
+	/*
+	 * Method for getting the manual text from a file
+	 * 
+	 * @version		0.1
+	 * @since		0.2
+	 * @result		Manual text as a String
+	 * @.pre		true
+	 * @.post		true
+	 */
 	public String helpRequest() {
 		String ret = null;
 		try {

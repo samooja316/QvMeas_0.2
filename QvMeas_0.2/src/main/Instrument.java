@@ -1,8 +1,8 @@
 package main;
 import java.io.IOException;
-
-
 import be.ac.ulb.gpib.*;
+
+
 /*
  * This class using a measurement instrument (in tests "HP34401...etc")
  * The class provides methods to do low level operations with the measurement
@@ -34,6 +34,10 @@ public class Instrument {
 		meas.start();
 	}
 	
+	/*
+	 * Method for creating a new measurement and initializing it with a query
+	 * 
+	 */
 	public void init(Query query) {
 		meas = new Measurement(myDevice,this,query,controller);
 		controller.toConsole("Setting up... ");

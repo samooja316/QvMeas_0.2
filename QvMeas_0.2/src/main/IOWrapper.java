@@ -37,12 +37,12 @@ public class IOWrapper {
 	/*
  	* Method for choosing a file to write or read to/from
  	* 
-	* @version 		0.1
-	* @since 		0.1
-	* @return 		path to file in which measurement results will be written
-	* @params		will use String baseName as a suggestion for a filename
-	* @.pre 		true
-	* @.post 		true
+	* @version 			0.1
+	* @since 			0.1
+	* @return 			path to file in which measurement results will be written
+	* @param baseName	a suggestion for a filename
+	* @.pre 			true
+	* @.post 			true
  	*/
 	public String giveFilePath(String baseName) {
 		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);		
@@ -197,29 +197,22 @@ public class IOWrapper {
 	}
 	
 	
-	public String readFileStream(String path) throws IOException {
-		InputStream in = getClass().getClassLoader().getResourceAsStream(path);		
-		Reader reader = new InputStreamReader(in);
-		int data = reader.read();
-		String ret = "";
-		while(data != -1){		    
-		    data = reader.read();
-		    char theChar = (char) data;
-		    System.out.println("uusi char "+theChar);
-		    ret+=theChar;
-		}		
-		reader.close();
-		return ret;
-	}
 	
+	/*
+	 * This method reads a textfile and returns the text as a String
+	 * 
+	 * @version			0.1
+	 * @since			0.2
+	 * @param	path	Path to a file to be reas
+	 * @return			Text from the textfile specified as a ISO_8859_1 encoded String
+	 * @.pre			true
+	 * @.post			true
+	 */
 	public String readFile(String path) throws FileNotFoundException, 
 											UnsupportedEncodingException {
-		//InputStream in = getClass().getClassLoader().getResourceAsStream(path);
-		//InputStream in = getClass().getClassLoader().getResourceAsStream(path);
 		InputStream in = getClass().getResourceAsStream(path);
 		System.out.println(in);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.ISO_8859_1));
-		//BufferedReader reader = new BufferedReader(new FileReader(file));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.ISO_8859_1));		
 		String ret = "";
 		try {
 			System.out.println("trying to read file: "+path);

@@ -138,19 +138,14 @@ public class Result {
 			capacitanceSerie.add(singleCapacitance);
 		}
 	}
+	
 	/*
-	 * 
+	 *	Method for creating name for the Result
 	 */
 	public void generateMeasurementName(){
-		//Date date = new Date();
-		/*
-		 * this arrangement is occasional, will be changed to query date from the query 
-		 */
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 		Date rawdate = new Date();
 		String date= sdf.format(rawdate);
-		//measurementName = id +" "+current+" A "+ date.toString();
-		//measurementName = id +" "+current+" A "+ date;
 		measurementName = query.getName()+" "+current+"A "+query.getNumber()+" "+date;
 	}
 	

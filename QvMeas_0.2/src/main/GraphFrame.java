@@ -100,12 +100,9 @@ public class GraphFrame extends JInternalFrame {
 		}
 		else if (type==GraphType.VT){
 			resSerie = new XYSeries("V-T");
-			//yValues = r.getVoltageSerie();
-			//xValues = r.getTimeSerie();
 			ArrayList<Float> xValues = r.getTimeSerie();
 			// Spline
 			CubicSpline QvSpline = r.getQvSpline();
-			//
 
 			for (float i=xValues.get(0);i<xValues.get(xValues.size()-1);i=i+(xValues.get(xValues.size()-1)-xValues.get(0))/100){
 				resSerie.add(i, QvSpline.interpolate(i));
@@ -147,11 +144,6 @@ public class GraphFrame extends JInternalFrame {
 	        tt.setFont(new Font(Font.MONOSPACED,1,14));
 		}
 
-		
-		//creating series from the result's data
-	/*	for(int i = 0; i <= xValues.size(); i++) {
-			resSerie.add(xValues.get(i), yValues.get(i));										
-		}*/
 		        
         //chart color selections
         _chart.setBackgroundPaint(Color.WHITE);
@@ -183,6 +175,7 @@ public class GraphFrame extends JInternalFrame {
 		return cPanel;
 	}
 	
+	
 	/*
 	 * method for getting result related to this graph 
 	 * 
@@ -196,6 +189,15 @@ public class GraphFrame extends JInternalFrame {
 		return _result;
 	}
 
+	/*
+	 * method for getting the GraphType of the graph
+	 * 
+	 * @version 	0.1
+	 * @since		0.2
+	 * @return 		GraphType-enum
+	 * @.pre		true
+	 * @.post 		true
+	 */	
 	public GraphType getType() {
 		return _type;
 	}

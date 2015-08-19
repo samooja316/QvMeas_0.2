@@ -1217,13 +1217,13 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 	
 	
 	/*
-	 * draw to the screen  
+	 * draw a graph to the screen  
 	 * @version 0.1
 	 * @since 	0.2
 	 * @.pre 	true
 	 * @.post 	graph - type defined by type-param - will be plotted from
 	 * 			the data in the Result-parameter 
-	 * 			AND the last element int the getGraphs() -list will be the Result-parameter
+	 * 			AND the last element int the getGraphs() -list will be the GraphFrame created
 	 */
 	public void drawGraph(Result res, GraphType type) {	
 		//do GraphWindow initialization
@@ -1286,7 +1286,7 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 	
 	/*
 	 * Method for showing the exit confirmation dialog and 
-	 * exiting if wanted
+	 * exiting if that will be confirmed
 	 * 
 	 * @version		0.1
 	 * @since 		0.2
