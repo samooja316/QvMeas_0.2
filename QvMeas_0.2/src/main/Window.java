@@ -817,6 +817,7 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 						doc.insertString(doc.getLength(), name, null);
 						doc.insertString(doc.getLength(), comment, null);
 						doc.insertString(doc.getLength(), data, null);
+						_historyPane.setCaretPosition(0);
 					} catch (Exception e) {
 						System.out.println("Couldn't insert to the history console");
 					}
@@ -1052,7 +1053,9 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 					    JOptionPane.OK_CANCEL_OPTION);
 				_controller.chooseDirectory();
 			}
-			_filePathField.setText(_controller.getDefaultDirectory()+"\\"+generateName());
+			if (!_controller.getDefaultDirectory().equals("")) {
+				_filePathField.setText(_controller.getDefaultDirectory()+"\\"+generateName());
+			}
 		}
 		else if (event.getSource().equals(_measure)){	//Start measurement clicked
 			try {
