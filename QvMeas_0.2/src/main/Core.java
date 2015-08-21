@@ -174,34 +174,70 @@ public class Core {
 	 * 		params != null AND params is right form:
 	 * 		for meas params ArrayList<String>: 
 	 * 			params.get(0) = current, 
-	 * 			params.get(1) =	step, 
-	 * 			params.get(2) = nosteps, 
-	 * 			params.get(3) = currentcompliance, 
-	 * 			params.get(4) = voltagecompliance, 
-	 * 			params.get(5) = xMin, 
-	 * 			params.get(6) = xMax, 
-	 * 			params.get(7) = yMin, 
-	 * 			params.get(8) = yMax, 
-	 * 			params.get(9) = yLinLog
+	 * 			params.get(1) = current scale t.ex pA or nA
+	 * 			params.get(2) =	step, 
+	 * 			params.get(3) = nbr of steps, 
+	 * 			params.get(4) = currentcompliance, 
+	 * 			params.get(5) =	current compliance scale
+	 * 			params.get(6) = voltagecompliance,
+	 * 			params.get(7) = voltage compliance scale 
+	 * 			params.get(8) = xMin graph param, 
+	 * 			params.get(9) = xMax graph param, 
+	 * 			params.get(10) = yMin graph param, 
+	 * 			params.get(11) = yMax graph param, 
+	 * 			params.get(12) = y scale
+	 * 			params.get(13) = y lin/log
+	 * 			params.get(14) = comments
+	 * 			params.get(15) = meas name
+	 * 			params.get(16) = meas number
+	 * 			params.get(17) = autocalibr setting "ON"/"OFF"
 	 * @.post (Measurement will be initialized with proper Query object)
 	 * 
 	 */	
 	public void initMeas(ArrayList<String> params) throws ValuesNotValidException {
+		//First ensure that the input values are correct
 		ArrayList<Object> returnValues = checkValues(params);
 		_validValues = (boolean) (returnValues.get(0));
 		System.out.println((returnValues.get(0)).toString());
 		if (_validValues) {
-		_query = new Query(params);
-		_instrument.init(_query);		
-		_window.setStartStatus(true);
-		toConsole(_query.toString());
-		_measInitialized = true;
+			//Let's check that the meas number is new (if not, show the confirmation message
+			//to ensure that the user really wants to override the old meas or has chosen
+			//a new file name for that
+			String newNum = params.get(16);
+			boolean alreadyExists = false;
+			for (Result r : _results) {
+				if (r.getNumber().equals(newNum)) {
+					alreadyExists = true;
+					break;
+				}
+			}
+			if(alreadyExists){ //case when using an old measnumber
+				toConsole("The measurement number "+newNum+" already exists");
+				boolean proceed = _window.showConfirmDialog("The measurement number "+
+										newNum+" already exists. Do you still want to use it", "alert");
+				if (proceed) { //want to force use the existing meas number - might overwrite an existing result
+					_query = new Query(params);
+					sendInitCommand(_query);
+				}
+			} else { //new meas number as it should be..
+				_query = new Query(params);
+				sendInitCommand(_query);
+			}
 		} else {
 				throw new ValuesNotValidException (returnValues.get(1).toString());
 		}
 	}
 	
 	
+	/*
+	 * Method for sending the query to the instrument for initialization
+	 */
+	private void sendInitCommand(Query query) {
+		_instrument.init(query);		
+		_window.setStartStatus(true);
+		toConsole(query.toString());
+		_measInitialized = true;
+	}
 	
 	
 	/*

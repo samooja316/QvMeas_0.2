@@ -813,7 +813,7 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 					//print stuff to the history console		
 					try {
 						doc.remove(0,doc.getLength());
-						doc.insertString(doc.getLength(), "Measurement: e"+nbr, null);
+						doc.insertString(doc.getLength(), "Measurement: "+nbr, null);
 						doc.insertString(doc.getLength(), name, null);
 						doc.insertString(doc.getLength(), comment, null);
 						doc.insertString(doc.getLength(), data, null);
@@ -1109,7 +1109,23 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 		
 	}
 	
-
+	/*
+	 * Method for showing confirmation dialog and getting userselection
+	 * 
+	 * @version				0.1
+	 * @since				0.2
+	 * @param	message		The message to show in the dialog window
+	 * @param	title		Window's title
+	 * @return 				if(user selects 'ok') true else false
+	 * @.pre				params != null
+	 * @.post				true
+	 */
+	public boolean showConfirmDialog(String message, String title) {
+		 int result = JOptionPane.showConfirmDialog((Component) null, message,
+													title, JOptionPane.OK_CANCEL_OPTION);
+		 if(result==0) return true;
+		 else return false;
+	}
 	
 	/*
 	 * Method for updating Window-menu's components' state
@@ -1163,11 +1179,14 @@ public class Window extends JFrame implements ActionListener, WindowListener {
 		return res;
 	}
 	
+	
+	/*
+	 * Methods for writing and reading to and from the file path JTextField
+	 */
 	public void writeFilePath(String path) {
 		System.out.println(path);
 		_filePathField.setText(path);
-	}
-	
+	}	
 	public String readFilePath() {
 		return _filePathField.getText();
 	}
