@@ -212,9 +212,9 @@ public class Core {
 				}
 			}
 			if(alreadyExists){ //case when using an old measnumber
-				toConsole("The measurement number "+newNum+" already exists");
+				toConsole("The measurement number "+newNum+" already exists\n");
 				boolean proceed = _window.showConfirmDialog("The measurement number "+
-										newNum+" already exists. Do you still want to use it", "alert");
+										newNum+" already exists. Do you still want to use it?", "alert");
 				if (proceed) { //want to force use the existing meas number - might overwrite an existing result
 					_query = new Query(params);
 					sendInitCommand(_query);
